@@ -1,1 +1,0 @@
-// 🌟 Appointments UI with calendar, filters, and hover effects

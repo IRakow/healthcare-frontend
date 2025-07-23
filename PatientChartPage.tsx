@@ -1,1 +1,0 @@
-// 🌟 Full chart with tabbed sections and responsive layout

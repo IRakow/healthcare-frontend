@@ -25,7 +25,6 @@ import {
   Plus,
   Palette,
   Brain,
-  ChartBar,
   UserPlus,
   CreditCard,
   Bell

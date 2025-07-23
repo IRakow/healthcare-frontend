@@ -1,1 +1,0 @@
-// Index mounting React root to DOM

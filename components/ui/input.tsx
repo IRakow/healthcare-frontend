@@ -1,1 +1,0 @@
-// Styled input component

@@ -1,1 +1,0 @@
-// 🌟 AI note interface with split-screen SOAP layout

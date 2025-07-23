@@ -1,1 +1,0 @@
-// 🌟 Grid-based provider calendar view

@@ -1,1 +1,0 @@
-// Styled textarea component
