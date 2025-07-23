@@ -1,0 +1,1 @@
+// 🌟 Navigation bar with mobile drawer + role switching

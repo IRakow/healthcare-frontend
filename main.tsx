@@ -1,0 +1,1 @@
+// Entry script to mount React app

@@ -1,0 +1,1 @@
+// 🌟 Updated RegisterPage with Tailwind and motion

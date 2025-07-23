@@ -1,0 +1,958 @@
+// ✅ AdminDashboard.tsx
+import AdminOnboardingProgress from './AdminOnboardingProgress'
+import { useEffect, useState } from 'react'
+
+export default function AdminDashboard() {
+  return (
+    <div className="space-y-6 px-4 py-6 max-w-7xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+      <AdminOnboardingProgress />
+    </div>
+  )
+}
+
+
+// ✅ AdminOnboardingProgress.tsx
+import { useEffect, useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Table, THead, TBody, Tr, Th, Td } from '@/components/ui/table'
+import { Loader2 } from 'lucide-react'
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL!,
+  import.meta.env.VITE_SUPABASE_ANON_KEY!
+)
+
+export default function AdminOnboardingProgress() {
+  const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      const { data } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, email, onboarding_status, onboarding_step, onboarding_started_at, onboarding_completed_at')
+        .order('onboarding_status', { ascending: false })
+      setUsers(data || [])
+      setLoading(false)
+    }
+    fetchProgress()
+  }, [])
+
+  if (loading) return <Loader2 className="m-4 animate-spin" />
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">🚀 Onboarding Progress</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <THead>
+            <Tr>
+              <Th>Name</Th>
+              <Th>Status</Th>
+              <Th>Step</Th>
+              <Th>Started</Th>
+              <Th>Completed</Th>
+            </Tr>
+          </THead>
+          <TBody>
+            {users.map(u => (
+              <Tr key={u.id}>
+                <Td>{u.first_name} {u.last_name}</Td>
+                <Td>{u.onboarding_status}</Td>
+                <Td>{u.onboarding_step || '-'}</Td>
+                <Td>{u.onboarding_started_at ? new Date(u.onboarding_started_at).toLocaleString() : '-'}</Td>
+                <Td>{u.onboarding_completed_at ? new Date(u.onboarding_completed_at).toLocaleString() : '-'}</Td>
+              </Tr>
+            ))}
+          </TBody>
+        </Table>
+      </CardContent>
+    </Card>
+  )
+}
+
+
+// ✅ PatientDietaryDashboard.tsx
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+
+export default function PatientDietaryDashboard() {
+  const navigate = useNavigate()
+
+  return (
+    <div className="space-y-6 px-4 py-6 max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Your Dietary Health</h1>
+      <Card>
+        <CardHeader>
+          <CardTitle>Set Your Preferences</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-2 text-sm text-muted-foreground">
+            Let’s get started by setting your dietary preferences and goals.
+          </p>
+          <Button onClick={() => navigate('/patient/dietary/setup')}>Begin Setup</Button>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Log a Meal</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-2 text-sm text-muted-foreground">
+            Use voice, photo, or manual entry to track your food intake.
+          </p>
+          <Button onClick={() => navigate('/patient/dietary/log')}>Log a Meal</Button>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+// ✅ DietaryMacroChart.tsx
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
+
+const mockData = [
+  { date: 'Mon', protein: 85, carbs: 220, fat: 65 },
+  { date: 'Tue', protein: 92, carbs: 210, fat: 55 },
+  { date: 'Wed', protein: 88, carbs: 215, fat: 60 },
+  { date: 'Thu', protein: 79, carbs: 230, fat: 72 },
+  { date: 'Fri', protein: 91, carbs: 205, fat: 58 },
+  { date: 'Sat', protein: 83, carbs: 198, fat: 62 },
+  { date: 'Sun', protein: 87, carbs: 202, fat: 64 }
+]
+
+export default function DietaryMacroChart() {
+  return (
+    <div className="p-4 bg-white rounded-xl shadow-md">
+      <h2 className="text-lg font-semibold mb-2">Weekly Macronutrient Breakdown</h2>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={mockData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Line type="monotone" dataKey="protein" stroke="#34d399" name="Protein (g)" />
+          <Line type="monotone" dataKey="carbs" stroke="#60a5fa" name="Carbs (g)" />
+          <Line type="monotone" dataKey="fat" stroke="#fbbf24" name="Fat (g)" />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+// ✅ MealPhotoUpload.tsx
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+
+export default function MealPhotoUpload() {
+  const [file, setFile] = useState<File | null>(null)
+  const [result, setResult] = useState<string>('')
+
+  const handleSubmit = async () => {
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = async () => {
+      const base64 = reader.result?.toString().split(',')[1] || ''
+      const res = await fetch('/api/photo-analysis', {
+        method: 'POST',
+        body: JSON.stringify({ image: base64 }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      const data = await res.json()
+      setResult(JSON.stringify(data, null, 2))
+    }
+    reader.readAsDataURL(file)
+  }
+
+  return (
+    <div className="max-w-xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">Upload a Meal Photo</h2>
+      <Input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} />
+      <Button className="mt-4" onClick={handleSubmit}>Analyze Meal</Button>
+      {result && <pre className="mt-4 bg-gray-100 p-4 rounded text-sm whitespace-pre-wrap">{result}</pre>}
+    </div>
+  )
+}
+
+
+// ✅ VoiceDietaryInput.tsx
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+
+export default function VoiceDietaryInput() {
+  const [transcript, setTranscript] = useState('')
+  const [listening, setListening] = useState(false)
+  const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition
+
+  const startListening = () => {
+    const recognition = new SpeechRecognition()
+    recognition.continuous = false
+    recognition.lang = 'en-US'
+    recognition.onresult = (event: any) => {
+      const spokenText = event.results[0][0].transcript
+      setTranscript(spokenText)
+    }
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error)
+    }
+    recognition.start()
+    setListening(true)
+  }
+
+  return (
+    <div className="max-w-xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">Voice Food Entry</h2>
+      <Button onClick={startListening} disabled={listening}>
+        {listening ? 'Listening…' : 'Start Speaking'}
+      </Button>
+      {transcript && (
+        <p className="mt-4 bg-gray-50 border rounded p-3 text-sm">
+          Transcript: <strong>{transcript}</strong>
+        </p>
+      )}
+    </div>
+  )
+// ✅ MealPhotoUpload.tsx
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+
+export default function MealPhotoUpload() {
+  const [file, setFile] = useState<File | null>(null)
+  const [result, setResult] = useState<string>('')
+
+  const handleSubmit = async () => {
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = async () => {
+      const base64 = reader.result?.toString().split(',')[1] || ''
+      const res = await fetch('/api/photo-analysis', {
+        method: 'POST',
+        body: JSON.stringify({ image: base64 }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      const data = await res.json()
+      setResult(JSON.stringify(data, null, 2))
+    }
+    reader.readAsDataURL(file)
+  }
+
+  return (
+    <div className="max-w-xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">Upload a Meal Photo</h2>
+      <Input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} />
+      <Button className="mt-4" onClick={handleSubmit}>Analyze Meal</Button>
+      {result && <pre className="mt-4 bg-gray-100 p-4 rounded text-sm whitespace-pre-wrap">{result}</pre>}
+    </div>
+  )
+}
+
+
+// ✅ VoiceDietaryInput.tsx
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+
+export default function VoiceDietaryInput() {
+  const [transcript, setTranscript] = useState('')
+  const [listening, setListening] = useState(false)
+  const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition
+
+  const startListening = () => {
+    const recognition = new SpeechRecognition()
+    recognition.continuous = false
+    recognition.lang = 'en-US'
+    recognition.onresult = (event: any) => {
+      const spokenText = event.results[0][0].transcript
+      setTranscript(spokenText)
+    }
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error)
+    }
+    recognition.start()
+    setListening(true)
+  }
+
+  return (
+    <div className="max-w-xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">Voice Food Entry</h2>
+      <Button onClick={startListening} disabled={listening}>
+        {listening ? 'Listening…' : 'Start Speaking'}
+      </Button>
+      {transcript && (
+        <p className="mt-4 bg-gray-50 border rounded p-3 text-sm">
+          Transcript: <strong>{transcript}</strong>
+        </p>
+      )}
+    </div>
+  )
+}
+
+// ✅ MealIdeaGenerator.tsx
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+
+export default function MealIdeaGenerator() {
+  const [ideas, setIdeas] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const fetchIdeas = async () => {
+    setLoading(true)
+    const res = await fetch('/api/meal-ideas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goal: 'mediterranean diet' })
+    })
+    const data = await res.json()
+    setIdeas(data.result || 'No ideas returned.')
+    setLoading(false)
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">AI Meal Ideas</h2>
+      <Button onClick={fetchIdeas} disabled={loading}>
+        {loading ? 'Generating…' : 'Get Mediterranean Meal Ideas'}
+      </Button>
+      {ideas && <Textarea className="mt-4" rows={10} value={ideas} readOnly />}
+    </div>
+  )
+}
+
+
+
+// ✅ PatientMealHistory.tsx
+import { useEffect, useState } from 'react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+
+export default function PatientMealHistory() {
+  const [meals, setMeals] = useState([])
+
+  useEffect(() => {
+    const fetchMeals = async () => {
+      const res = await fetch('/api/meals/history')
+      const data = await res.json()
+      setMeals(data || [])
+    }
+    fetchMeals()
+  }, [])
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <h2 className="text-2xl font-semibold mb-4">Your Logged Meals</h2>
+      {meals.length === 0 ? (
+        <p>No meals logged yet.</p>
+      ) : (
+        meals.map((meal, idx) => (
+          <Card key={idx}>
+            <CardHeader>
+              <CardTitle>{meal.name || 'Meal ' + (idx + 1)}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">{meal.description}</p>
+              <p className="mt-2 text-sm">Calories: {meal.calories}</p>
+              <p className="text-sm">Protein: {meal.protein}g | Carbs: {meal.carbs}g | Fat: {meal.fat}g</p>
+            </CardContent>
+          </Card>
+        ))
+      )}
+    </div>
+  )
+}
+
+// ✅ PatientAllergyManager.tsx
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+
+export default function PatientAllergyManager() {
+  const [allergies, setAllergies] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+
+  const handleSave = () => {
+    if (allergies.trim().length > 0) {
+      // Simulate saving
+      setSubmitted(true)
+    }
+  }
+
+  return (
+    <div className="max-w-lg mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">Food Allergy Preferences</h2>
+      <Input
+        placeholder="e.g. peanuts, shellfish, dairy"
+        value={allergies}
+        onChange={(e) => setAllergies(e.target.value)}
+      />
+      <Button className="mt-4" onClick={handleSave}>Save Allergies</Button>
+      {submitted && <p className="mt-2 text-green-600 text-sm">Your allergies have been saved.</p>}
+    </div>
+  )
+}
+
+// ✅ DailySummaryPanel.tsx
+import { useEffect, useState } from 'react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+
+export default function DailySummaryPanel() {
+  const [summary, setSummary] = useState<any>(null)
+
+  useEffect(() => {
+    const fetchSummary = async () => {
+      const res = await fetch('/api/summary/today')
+      const data = await res.json()
+      setSummary(data)
+    }
+    fetchSummary()
+  }, [])
+
+  if (!summary) return <p className="text-sm text-muted-foreground">Loading today’s summary…</p>
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Today’s Health Summary</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-1">
+        <p className="text-sm">Calories: {summary.calories}</p>
+        <p className="text-sm">Protein: {summary.protein}g</p>
+        <p className="text-sm">Carbs: {summary.carbs}g</p>
+        <p className="text-sm">Fat: {summary.fat}g</p>
+        <p className="text-sm">Meals Logged: {summary.meal_count}</p>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ✅ PatientDietaryOverview.tsx
+import DietaryMacroChart from './DietaryMacroChart'
+import DailySummaryPanel from './DailySummaryPanel'
+import PatientMealHistory from './PatientMealHistory'
+
+export default function PatientDietaryOverview() {
+  return (
+    <div className="space-y-6 px-4 py-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Your Nutrition Dashboard</h1>
+      <DailySummaryPanel />
+      <DietaryMacroChart />
+      <PatientMealHistory />
+    </div>
+  )
+}
+// ✅ PatientDietarySettings.tsx
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+
+export default function PatientDietarySettings() {
+  const [goal, setGoal] = useState('healthy-eating')
+  const [calorieTarget, setCalorieTarget] = useState('2000')
+
+  const handleSubmit = () => {
+    // Save or update settings
+    console.log('Saved:', { goal, calorieTarget })
+  }
+
+  return (
+    <div className="max-w-xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">Update Dietary Settings</h2>
+
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="goal">Goal</Label>
+          <select
+            id="goal"
+            className="w-full border rounded px-3 py-2"
+            value={goal}
+            onChange={(e) => setGoal(e.target.value)}
+          >
+            <option value="healthy-eating">Healthy Eating</option>
+            <option value="weight-loss">Weight Loss</option>
+            <option value="muscle-gain">Muscle Gain</option>
+          </select>
+        </div>
+
+        <div>
+          <Label htmlFor="calories">Calorie Target</Label>
+          <Input
+            id="calories"
+            type="number"
+            value={calorieTarget}
+            onChange={(e) => setCalorieTarget(e.target.value)}
+          />
+        </div>
+
+        <Button className="mt-4" onClick={handleSubmit}>Save Settings</Button>
+      </div>
+    </div>
+  )
+}
+
+// ✅ NutrientBreakdownVisualizer.tsx
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
+
+const COLORS = ['#34d399', '#60a5fa', '#fbbf24']
+
+const sampleData = [
+  { name: 'Protein', value: 90 },
+  { name: 'Carbs', value: 230 },
+  { name: 'Fat', value: 70 }
+]
+
+export default function NutrientBreakdownVisualizer() {
+  return (
+    <div className="max-w-lg mx-auto px-4 py-6">
+      <h2 className="text-xl font-semibold mb-4">Macronutrient Distribution</h2>
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={sampleData}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            fill="#8884d8"
+            label
+          >
+            {sampleData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  )
+
+  // ✅ DietaryAssistantChat.tsx
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+
+export default function DietaryAssistantChat() {
+  const [messages, setMessages] = useState([])
+  const [input, setInput] = useState('')
+
+  const handleSend = async () => {
+    const newMessages = [...messages, { role: 'user', content: input }]
+    setMessages(newMessages)
+    setInput('')
+
+    const res = await fetch('/api/ai/dietary-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: newMessages })
+    })
+    const data = await res.json()
+    setMessages([...newMessages, { role: 'assistant', content: data.response }])
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">AI Dietary Assistant</h2>
+      <div className="space-y-3">
+        <Textarea
+          rows={8}
+          value={messages.map(m => `${m.role === 'user' ? 'You' : 'AI'}: ${m.content}`).join('\n\n')}
+          readOnly
+        />
+        <Input
+          placeholder="Ask something like 'What can I eat for a Mediterranean lunch?'"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <Button onClick={handleSend} disabled={!input.trim()}>Send</Button>
+      </div>
+    </div>
+  )
+}
+
+// ✅ FoodEntryTabs.tsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import MealPhotoUpload from './MealPhotoUpload'
+import PatientMealLogger from './PatientMealLogger'
+import VoiceDietaryInput from './VoiceDietaryInput'
+
+export default function FoodEntryTabs() {
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">Track Your Meals</h2>
+      <Tabs defaultValue="photo" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="photo">📸 Photo</TabsTrigger>
+          <TabsTrigger value="manual">✍️ Manual</TabsTrigger>
+          <TabsTrigger value="voice">🎤 Voice</TabsTrigger>
+        </TabsList>
+        <TabsContent value="photo">
+          <MealPhotoUpload />
+        </TabsContent>
+        <TabsContent value="manual">
+          <PatientMealLogger />
+        </TabsContent>
+        <TabsContent value="voice">
+          <VoiceDietaryInput />
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
+
+
+
+// ✅ MediterraneanDietOverview.tsx
+export default function MediterraneanDietOverview() {
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <h2 className="text-2xl font-semibold">What is the Mediterranean Diet?</h2>
+      <p className="text-sm text-muted-foreground">
+        The Mediterranean diet emphasizes whole, nutrient-rich foods inspired by traditional eating patterns of countries like Greece and Italy.
+      </p>
+      <ul className="list-disc pl-6 text-sm">
+        <li>🌿 High intake of vegetables, fruits, whole grains, legumes, nuts, and olive oil</li>
+        <li>🐟 Moderate intake of fish, poultry, dairy, and wine</li>
+        <li>🚫 Limited intake of red meat, sugar, and processed foods</li>
+      </ul>
+      <p className="text-sm">
+        Benefits of this diet include improved heart health, better weight management, and reduced risk of chronic illnesses like diabetes and certain cancers.
+      </p>
+      <p className="text-sm italic text-muted-foreground">
+        This diet encourages mindful eating and a balanced lifestyle over restrictive calorie counting.
+      </p>
+    </div>
+  )
+}
+
+// ✅ DietaryProgressTracker.tsx
+import { useEffect, useState } from 'react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+
+export default function DietaryProgressTracker() {
+  const [progress, setProgress] = useState(null)
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      const res = await fetch('/api/progress')
+      const data = await res.json()
+      setProgress(data)
+    }
+    fetchProgress()
+  }, [])
+
+  if (!progress) return <p className="text-sm text-muted-foreground">Loading progress data…</p>
+
+  return (
+    <Card className="max-w-3xl mx-auto px-4 py-6">
+      <CardHeader>
+        <CardTitle className="text-lg">📊 Your Weekly Dietary Progress</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-1">
+        <p className="text-sm">Calories Avg: {progress.avg_calories} kcal</p>
+        <p className="text-sm">Protein Avg: {progress.avg_protein} g</p>
+        <p className="text-sm">Carbs Avg: {progress.avg_carbs} g</p>
+        <p className="text-sm">Fat Avg: {progress.avg_fat} g</p>
+        <p className="text-sm">Meals Logged: {progress.total_meals}</p>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ✅ WeeklyMealCompliance.tsx
+import { useEffect, useState } from 'react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+
+export default function WeeklyMealCompliance() {
+  const [compliance, setCompliance] = useState(null)
+
+  useEffect(() => {
+    const fetchCompliance = async () => {
+      const res = await fetch('/api/compliance')
+      const data = await res.json()
+      setCompliance(data)
+    }
+    fetchCompliance()
+  }, [])
+
+  if (!compliance) return <p className="text-sm text-muted-foreground">Loading meal compliance data…</p>
+
+  return (
+    <Card className="max-w-3xl mx-auto px-4 py-6">
+      <CardHeader>
+        <CardTitle className="text-lg">✅ Weekly Meal Compliance</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-1">
+        <p className="text-sm">Target Meals: {compliance.target_meals}</p>
+        <p className="text-sm">Meals Logged: {compliance.logged_meals}</p>
+        <p className="text-sm text-green-600">Compliance Rate: {compliance.rate}%</p>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ✅ HydrationTracker.tsx
+import { useEffect, useState } from 'react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+
+export default function HydrationTracker() {
+  const [hydration, setHydration] = useState(null)
+
+  useEffect(() => {
+    const fetchHydration = async () => {
+      const res = await fetch('/api/hydration')
+      const data = await res.json()
+      setHydration(data)
+    }
+    fetchHydration()
+  }, [])
+
+  if (!hydration) return <p className="text-sm text-muted-foreground">Loading hydration data…</p>
+
+  return (
+    <Card className="max-w-3xl mx-auto px-4 py-6">
+      <CardHeader>
+        <CardTitle className="text-lg">💧 Daily Hydration Summary</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-1">
+        <p className="text-sm">Target Water Intake: {hydration.target_oz} oz</p>
+        <p className="text-sm">Water Consumed: {hydration.current_oz} oz</p>
+        <p className={`text-sm ${hydration.current_oz >= hydration.target_oz ? 'text-green-600' : 'text-yellow-600'}`}>
+          {hydration.current_oz >= hydration.target_oz ? '✅ Goal met!' : '⚠️ Keep sipping!'}
+        </p>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ✅ PatientFoodLogTimeline.tsx
+import { useEffect, useState } from 'react'
+import { Timeline, TimelineItem } from '@/components/ui/timeline'
+
+export default function PatientFoodLogTimeline() {
+  const [log, setLog] = useState([])
+
+  useEffect(() => {
+    const fetchLog = async () => {
+      const res = await fetch('/api/meals/timeline')
+      const data = await res.json()
+      setLog(data || [])
+    }
+    fetchLog()
+  }, [])
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">Meal Log Timeline</h2>
+      <Timeline>
+        {log.map((entry, idx) => (
+          <TimelineItem key={idx}>
+            <div className="text-sm">
+              <span className="font-medium">{entry.meal_name}</span> – {entry.time}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {entry.summary}
+            </div>
+          </TimelineItem>
+        ))}
+      </Timeline>
+    </div>
+  )
+}
+
+// ✅ MealPrepPlanner.tsx
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+
+export default function MealPrepPlanner() {
+  const [mealPlan, setMealPlan] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleGenerate = async () => {
+    setLoading(true)
+    const res = await fetch('/api/meal-prep', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goal: 'mediterranean diet', duration: 7 })
+    })
+    const data = await res.json()
+    setMealPlan(data.plan)
+    setLoading(false)
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-semibold mb-4">AI Meal Prep Planner</h2>
+      <Button onClick={handleGenerate} disabled={loading}>
+        {loading ? 'Planning…' : 'Generate 7-Day Meal Plan'}
+      </Button>
+      {mealPlan && (
+        <Textarea
+          className="mt-4"
+          rows={12}
+          value={mealPlan}
+          readOnly
+        />
+      )}
+    </div>
+  )
+}
+
+// ✅ DietaryOnboardingFlow.tsx
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
+export default function DietaryOnboardingFlow() {
+  const [step, setStep] = useState(1)
+  const [goal, setGoal] = useState('')
+  const [calorieTarget, setCalorieTarget] = useState('2000')
+
+  const handleNext = () => setStep((prev) => prev + 1)
+
+  return (
+    <div className="max-w-xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-bold mb-4">Start Your Dietary Journey</h2>
+      {step === 1 && (
+        <div className="space-y-4">
+          <Label htmlFor="goal">What’s your primary goal?</Label>
+          <select
+            id="goal"
+            className="w-full border rounded px-3 py-2"
+            value={goal}
+            onChange={(e) => setGoal(e.target.value)}
+          >
+            <option value="">Select one</option>
+            <option value="healthy-eating">Healthy Eating</option>
+            <option value="weight-loss">Weight Loss</option>
+            <option value="muscle-gain">Muscle Gain</option>
+          </select>
+          <Button onClick={handleNext} disabled={!goal}>Next</Button>
+        </div>
+      )}
+      {step === 2 && (
+        <div className="space-y-4">
+          <Label htmlFor="calories">Daily Calorie Target</Label>
+          <Input
+            id="calories"
+            type="number"
+            value={calorieTarget}
+            onChange={(e) => setCalorieTarget(e.target.value)}
+          />
+          <Button onClick={handleNext}>Finish</Button>
+        </div>
+      )}
+      {step === 3 && (
+        <div className="text-green-700 text-center">
+          🎉 You're all set! Start tracking meals and exploring your dashboard.
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ✅ NutritionTipsCarousel.tsx
+import { useState, useEffect } from 'react'
+
+const tips = [
+  "Drink water before meals to curb overeating.",
+  "Use olive oil as your primary cooking fat.",
+  "Incorporate legumes like chickpeas and lentils into meals.",
+  "Snack on a handful of nuts instead of chips.",
+  "Aim to fill half your plate with vegetables."
+]
+
+export default function NutritionTipsCarousel() {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % tips.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="max-w-xl mx-auto bg-emerald-50 p-4 rounded-xl shadow-sm text-center">
+      <h3 className="text-lg font-semibold mb-2">🍅 Nutrition Tip</h3>
+      <p className="text-sm text-gray-700">{tips[index]}</p>
+    </div>
+  )
+}
+
+// ✅ NutritionTipsCarousel.tsx
+import { useState, useEffect } from 'react'
+
+const tips = [
+  "Drink water before meals to curb overeating.",
+  "Use olive oil as your primary cooking fat.",
+  "Incorporate legumes like chickpeas and lentils into meals.",
+  "Snack on a handful of nuts instead of chips.",
+  "Aim to fill half your plate with vegetables."
+]
+
+export default function NutritionTipsCarousel() {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % tips.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="max-w-xl mx-auto bg-emerald-50 p-4 rounded-xl shadow-sm text-center">
+      <h3 className="text-lg font-semibold mb-2">🍅 Nutrition Tip</h3>
+      <p className="text-sm text-gray-700">{tips[index]}</p>
+    </div>
+  )
+}
+
+
+// ✅ PatientMealSummaryCard.tsx
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+
+export default function PatientMealSummaryCard({ meal }) {
+  return (
+    <Card className="w-full shadow-sm">
+      <CardHeader>
+        <CardTitle className="text-md font-medium">{meal.name}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-1 text-sm text-muted-foreground">
+        <p>Calories: {meal.calories} kcal</p>
+        <p>Protein: {meal.protein}g</p>
+        <p>Carbs: {meal.carbs}g</p>
+        <p>Fat: {meal.fat}g</p>
+        <p className="italic text-xs text-gray-400">Logged at: {meal.logged_at}</p>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ✅ DailyGoalProgressBar.tsx
+import { Progress } from '@/components/ui/progress'
+
+export default function DailyGoalProgressBar({ label, current, target }) {
+  const percent = Math.min(100, Math.round((current / target) * 100))
+
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between text-sm">
+        <span className="font-medium text-gray-800">{label}</span>
+        <span className="text-muted-foreground">{current}/{target}</span>
+      </div>
+      <Progress value={percent} className="h-2 bg-gray-100" />
+    </div>
+  )
+}

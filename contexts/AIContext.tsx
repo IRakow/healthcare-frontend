@@ -1,0 +1,1 @@
+// Context for AI interaction session state
