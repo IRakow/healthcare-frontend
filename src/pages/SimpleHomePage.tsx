@@ -1,164 +1,264 @@
+import { useNavigate } from 'react-router-dom'
+
 export default function SimpleHomePage() {
+  const navigate = useNavigate()
+
   return (
     <div style={{ 
       minHeight: '100vh', 
-      background: 'linear-gradient(to bottom right, #eff6ff, #e0e7ff)',
-      padding: '4rem 2rem'
+      backgroundColor: '#f3f4f6',
+      padding: '40px 20px'
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <h1 style={{ 
           fontSize: '3rem', 
           fontWeight: 'bold', 
-          textAlign: 'center',
-          marginBottom: '2rem',
-          color: '#1f2937'
+          color: '#111827',
+          marginBottom: '3rem',
+          textAlign: 'center'
         }}>
           AI Healthcare Platform
         </h1>
-        
-        <p style={{ 
-          fontSize: '1.25rem', 
-          textAlign: 'center',
-          marginBottom: '3rem',
-          color: '#6b7280'
-        }}>
-          Transforming healthcare with AI-powered insights and personalized care
-        </p>
 
+        {/* Quick Navigation Section */}
+        <div style={{
+          backgroundColor: 'white',
+          padding: '30px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          marginBottom: '30px'
+        }}>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#1f2937' }}>
+            Quick Navigation (Skip Login)
+          </h2>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <button 
+              onClick={() => navigate('/admin/dashboard')}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer'
+              }}
+            >
+              Admin Dashboard
+            </button>
+            <button 
+              onClick={() => navigate('/owner/dashboard')}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#10b981',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer'
+              }}
+            >
+              Owner Dashboard
+            </button>
+            <button 
+              onClick={() => navigate('/patient/dashboard')}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#8b5cf6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer'
+              }}
+            >
+              Patient Dashboard
+            </button>
+          </div>
+        </div>
+        
+        {/* Login Cards */}
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '2rem',
-          maxWidth: '900px',
-          margin: '0 auto'
+          gap: '20px',
+          marginBottom: '40px'
         }}>
-          {/* Admin Card */}
+          {/* Admin Portal */}
           <div style={{
-            background: 'white',
-            padding: '2rem',
-            borderRadius: '8px',
+            backgroundColor: 'white',
+            padding: '40px',
+            borderRadius: '12px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             textAlign: 'center'
           }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              background: '#dbeafe',
+            <div style={{ 
+              width: '60px', 
+              height: '60px', 
+              backgroundColor: '#3b82f6',
               borderRadius: '50%',
+              margin: '0 auto 20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 1rem',
-              fontSize: '2rem'
+              color: 'white',
+              fontSize: '24px'
             }}>
-              🏢
+              👨‍💼
             </div>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#1f2937' }}>
-              Platform Admin
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '10px', color: '#1f2937' }}>
+              Admin Portal
             </h2>
-            <p style={{ marginBottom: '1.5rem', color: '#6b7280' }}>
-              Manage employers, billing, and system settings
+            <p style={{ color: '#6b7280', marginBottom: '20px' }}>
+              System administration and management
             </p>
-            <a 
-              href="/admin/login"
+            <button 
+              onClick={() => navigate('/admin/login')}
               style={{
-                display: 'block',
-                padding: '0.75rem 1rem',
-                background: '#2563eb',
+                width: '100%',
+                padding: '10px',
+                backgroundColor: '#3b82f6',
                 color: 'white',
-                textDecoration: 'none',
+                border: 'none',
                 borderRadius: '6px',
-                fontWeight: '500'
+                cursor: 'pointer',
+                fontSize: '16px'
               }}
             >
               Admin Login
-            </a>
+            </button>
           </div>
 
-          {/* Owner Card */}
+          {/* Owner Portal */}
           <div style={{
-            background: 'white',
-            padding: '2rem',
-            borderRadius: '8px',
+            backgroundColor: 'white',
+            padding: '40px',
+            borderRadius: '12px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             textAlign: 'center'
           }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              background: '#d1fae5',
+            <div style={{ 
+              width: '60px', 
+              height: '60px', 
+              backgroundColor: '#10b981',
               borderRadius: '50%',
+              margin: '0 auto 20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 1rem',
-              fontSize: '2rem'
+              color: 'white',
+              fontSize: '24px'
             }}>
-              💼
+              🏢
             </div>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#1f2937' }}>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '10px', color: '#1f2937' }}>
               Employer Portal
             </h2>
-            <p style={{ marginBottom: '1.5rem', color: '#6b7280' }}>
-              Manage employees, view analytics, and configure benefits
+            <p style={{ color: '#6b7280', marginBottom: '20px' }}>
+              Manage your organization's healthcare
             </p>
-            <a 
-              href="/owner/login"
+            <button 
+              onClick={() => navigate('/owner/login')}
               style={{
-                display: 'block',
-                padding: '0.75rem 1rem',
-                background: '#059669',
+                width: '100%',
+                padding: '10px',
+                backgroundColor: '#10b981',
                 color: 'white',
-                textDecoration: 'none',
+                border: 'none',
                 borderRadius: '6px',
-                fontWeight: '500'
+                cursor: 'pointer',
+                fontSize: '16px'
               }}
             >
-              Employer Login
-            </a>
+              Owner Login
+            </button>
           </div>
 
-          {/* Patient Card */}
+          {/* Patient Portal */}
           <div style={{
-            background: 'white',
-            padding: '2rem',
-            borderRadius: '8px',
+            backgroundColor: 'white',
+            padding: '40px',
+            borderRadius: '12px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             textAlign: 'center'
           }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              background: '#e9d5ff',
+            <div style={{ 
+              width: '60px', 
+              height: '60px', 
+              backgroundColor: '#8b5cf6',
               borderRadius: '50%',
+              margin: '0 auto 20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 1rem',
-              fontSize: '2rem'
+              color: 'white',
+              fontSize: '24px'
             }}>
               👤
             </div>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#1f2937' }}>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '10px', color: '#1f2937' }}>
               Patient Portal
             </h2>
-            <p style={{ marginBottom: '1.5rem', color: '#6b7280' }}>
-              Access your health records, book appointments, and chat with AI
+            <p style={{ color: '#6b7280', marginBottom: '20px' }}>
+              Access your health information
             </p>
-            <a 
-              href="/patient/login"
+            <button 
+              onClick={() => navigate('/patient/login')}
               style={{
-                display: 'block',
-                padding: '0.75rem 1rem',
-                background: '#7c3aed',
+                width: '100%',
+                padding: '10px',
+                backgroundColor: '#8b5cf6',
                 color: 'white',
-                textDecoration: 'none',
+                border: 'none',
                 borderRadius: '6px',
-                fontWeight: '500'
+                cursor: 'pointer',
+                fontSize: '16px'
               }}
             >
               Patient Login
-            </a>
+            </button>
+          </div>
+        </div>
+
+        {/* Available Routes Section */}
+        <div style={{
+          backgroundColor: 'white',
+          padding: '30px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#1f2937' }}>
+            All Available Routes
+          </h2>
+          
+          <div style={{ marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '1.2rem', color: '#3b82f6', marginBottom: '10px' }}>Admin Routes:</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              <button onClick={() => navigate('/admin/login')} style={{ padding: '5px 10px', backgroundColor: '#e0e7ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/admin/login</button>
+              <button onClick={() => navigate('/admin/dashboard')} style={{ padding: '5px 10px', backgroundColor: '#e0e7ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/admin/dashboard</button>
+              <button onClick={() => navigate('/admin/employers')} style={{ padding: '5px 10px', backgroundColor: '#e0e7ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/admin/employers</button>
+              <button onClick={() => navigate('/admin/settings')} style={{ padding: '5px 10px', backgroundColor: '#e0e7ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/admin/settings</button>
+              <button onClick={() => navigate('/admin/billing')} style={{ padding: '5px 10px', backgroundColor: '#e0e7ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/admin/billing</button>
+              <button onClick={() => navigate('/admin/audit')} style={{ padding: '5px 10px', backgroundColor: '#e0e7ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/admin/audit</button>
+              <button onClick={() => navigate('/admin/backup')} style={{ padding: '5px 10px', backgroundColor: '#e0e7ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/admin/backup</button>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '1.2rem', color: '#10b981', marginBottom: '10px' }}>Owner Routes:</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              <button onClick={() => navigate('/owner/login')} style={{ padding: '5px 10px', backgroundColor: '#d1fae5', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/owner/login</button>
+              <button onClick={() => navigate('/owner/dashboard')} style={{ padding: '5px 10px', backgroundColor: '#d1fae5', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/owner/dashboard</button>
+              <button onClick={() => navigate('/owner/employees')} style={{ padding: '5px 10px', backgroundColor: '#d1fae5', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/owner/employees</button>
+              <button onClick={() => navigate('/owner/analytics')} style={{ padding: '5px 10px', backgroundColor: '#d1fae5', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/owner/analytics</button>
+              <button onClick={() => navigate('/owner/branding')} style={{ padding: '5px 10px', backgroundColor: '#d1fae5', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/owner/branding</button>
+              <button onClick={() => navigate('/owner/invoices')} style={{ padding: '5px 10px', backgroundColor: '#d1fae5', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/owner/invoices</button>
+            </div>
+          </div>
+
+          <div>
+            <h3 style={{ fontSize: '1.2rem', color: '#8b5cf6', marginBottom: '10px' }}>Patient Routes:</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              <button onClick={() => navigate('/patient/login')} style={{ padding: '5px 10px', backgroundColor: '#e9d5ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/patient/login</button>
+              <button onClick={() => navigate('/patient/dashboard')} style={{ padding: '5px 10px', backgroundColor: '#e9d5ff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>/patient/dashboard</button>
+            </div>
           </div>
         </div>
       </div>
