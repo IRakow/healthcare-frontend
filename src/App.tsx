@@ -14,6 +14,7 @@ import OwnerAnalyticsPage from './pages/OwnerAnalyticsPage'
 import OwnerBrandingPage from './pages/OwnerBrandingPage'
 import OwnerInvoicesPage from './pages/OwnerInvoicesPage'
 import PatientLogin from './pages/PatientLogin'
+import PatientDashboard from './pages/patient/Dashboard'
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
         
         {/* Patient routes */}
         <Route path="/patient/login" element={<PatientLogin />} />
+        <Route path="/patient/dashboard" element={<PatientDashboard />} />
       </Routes>
     </Router>
   )
