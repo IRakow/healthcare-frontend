@@ -16,6 +16,6 @@
   "env": {
     "NODE_VERSION": "18"
   },
-  "org": "IRakow",
+  "org": "ian-rakows-projects",
   "project": "healthcare-frontend"
 }
