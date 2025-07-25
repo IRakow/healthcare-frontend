@@ -1,4 +1,5 @@
 // src/lib/supabase.ts
+// Main Supabase client configuration
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co'
