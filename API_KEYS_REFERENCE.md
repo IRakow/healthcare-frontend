@@ -40,7 +40,7 @@ This document lists all the API keys used in the Supabase Edge Functions. These 
   - Meditation audio generation
 
 ### Deepgram
-- **Key Name**: Not explicitly shown, but likely `DEEPGRAM_API_KEY`
+- **Key Name**: `BDInsperityHealthDeepGram`
 - **Used For**:
   - Real-time speech-to-text
   - Audio transcription
@@ -55,6 +55,8 @@ Example usage:
 const openAIKey = Deno.env.get('PurityHealthOpenai')
 const geminiKey = Deno.env.get('PurityHealthGemini')
 const twilioSid = Deno.env.get('TWILIO_ACCOUNT_SID')
+const deepgramKey = Deno.env.get('BDInsperityHealthDeepGram')
+const elevenLabsKey = Deno.env.get('ELEVENLABS_API_KEY')
 ```
 
 ## Deployment
