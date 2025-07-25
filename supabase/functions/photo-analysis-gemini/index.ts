@@ -43,7 +43,7 @@ serve(async (req) => {
     }
 
     // Call Google Gemini API
-    const geminiApiKey = Deno.env.get('GEMINI_API_KEY')
+    const geminiApiKey = Deno.env.get('PurityHealthGemini')
     const geminiResponse = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${geminiApiKey}`,
       {

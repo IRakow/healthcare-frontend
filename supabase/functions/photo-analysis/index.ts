@@ -46,7 +46,7 @@ serve(async (req) => {
     const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
+        'Authorization': `Bearer ${Deno.env.get('PurityHealthOpenai')}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
