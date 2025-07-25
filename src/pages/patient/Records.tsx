@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Tabs } from '@/components/ui/tabs';
+import { SimpleTabs } from '@/components/ui/tabs';
 import { supabase } from '@/lib/supabase';
 import { FileText, Download, Eye, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -73,7 +73,7 @@ export default function Records() {
         </Button>
       </div>
 
-      <Tabs tabs={recordTypes} active={activeTab} onSelect={setActiveTab} />
+      <SimpleTabs tabs={recordTypes} active={activeTab} onSelect={setActiveTab} />
 
       {loading ? (
         <div className="flex justify-center py-12">
