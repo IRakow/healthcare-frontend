@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/contexts/AuthContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { 
   Calendar,
@@ -8,31 +7,20 @@ import {
   FileText,
   MessageSquare,
   Activity,
-  Users,
   Brain,
   Target
 } from 'lucide-react'
 
 export default function PatientDashboard() {
   const navigate = useNavigate()
-  const [userEmail, setUserEmail] = useState('')
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        navigate('/patient/login')
-      } else {
-        setUserEmail(session.user.email || '')
-      }
-    }
-    checkAuth()
-  }, [navigate])
+  const { user, signOut } = useAuth()
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
+    await signOut()
     navigate('/patient/login')
   }
+
+  const userEmail = user?.email || 'Guest User'
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -42,12 +30,22 @@ export default function PatientDashboard() {
             <h1 className="text-3xl font-bold text-gray-900">Patient Dashboard</h1>
             <p className="text-gray-600 mt-1">Welcome back, {userEmail}</p>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
-          >
-            Sign Out
-          </button>
+          {user && (
+            <button
+              onClick={handleSignOut}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+            >
+              Sign Out
+            </button>
+          )}
+          {!user && (
+            <button
+              onClick={() => navigate('/patient/login')}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Sign In
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -111,15 +109,15 @@ export default function PatientDashboard() {
               </button>
               
               <button 
-                onClick={() => navigate('/patient/health-ai-chat')}
+                onClick={() => navigate('/patient/health-dashboard')}
                 className="flex flex-col items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100"
               >
                 <Brain className="h-8 w-8 text-purple-600 mb-2" />
-                <span className="text-sm font-medium">AI Health Chat</span>
+                <span className="text-sm font-medium">Health Dashboard</span>
               </button>
               
               <button 
-                onClick={() => navigate('/patient/medical-records')}
+                onClick={() => navigate('/patient/records')}
                 className="flex flex-col items-center p-4 bg-green-50 rounded-lg hover:bg-green-100"
               >
                 <FileText className="h-8 w-8 text-green-600 mb-2" />

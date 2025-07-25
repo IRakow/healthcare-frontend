@@ -1,20 +1,25 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function PatientLogin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const { signIn } = useAuth()
 
   const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await signIn(email, password)
     if (error) {
       setError(error.message)
     } else {
-      navigate('/patient/dashboard')
+      navigate('/patient')
     }
+  }
+
+  const handleGuestAccess = () => {
+    navigate('/patient')
   }
 
   return (
@@ -37,11 +42,20 @@ export default function PatientLogin() {
         />
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
         <button
-          className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700"
+          className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 mb-3"
           onClick={handleLogin}
         >
           Login
         </button>
+        <div className="text-center">
+          <span className="text-gray-600 text-sm">Don't have an account?</span>
+          <button
+            className="w-full mt-2 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300"
+            onClick={handleGuestAccess}
+          >
+            Continue as Guest
+          </button>
+        </div>
       </div>
     </div>
   )

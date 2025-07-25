@@ -3,15 +3,18 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { AppRoutes } from './components/AppRoutes';
 import TenantRouter from './components/TenantRouter';
+import { AuthProvider } from './contexts/AuthContext';
 
 export default function App() {
   return (
     <HelmetProvider>
       <Router>
         <ErrorBoundary>
-          <TenantRouter>
-            <AppRoutes />
-          </TenantRouter>
+          <AuthProvider>
+            <TenantRouter>
+              <AppRoutes />
+            </TenantRouter>
+          </AuthProvider>
         </ErrorBoundary>
       </Router>
     </HelmetProvider>
