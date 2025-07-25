@@ -1,6 +1,6 @@
 import { ComponentType, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import supabase from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 interface User {
   id: string;

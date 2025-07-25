@@ -6,8 +6,13 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { hasError
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(_: any) {
+  static getDerivedStateFromError(error: any) {
+    console.error('ErrorBoundary caught an error:', error);
     return { hasError: true };
+  }
+  
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error('Error details:', error, errorInfo);
   }
 
   render() {

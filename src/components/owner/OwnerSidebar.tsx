@@ -17,7 +17,7 @@ import {
   Heart
 } from 'lucide-react'
 import { useState } from 'react'
-import supabase from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 
 interface MenuItem {
   id: string
