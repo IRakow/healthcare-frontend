@@ -13,6 +13,16 @@ export default function TenantRouter({ children }: TenantRouterProps) {
   const [isValidTenant, setIsValidTenant] = useState(true);
 
   useEffect(() => {
+    // Check if we're on Vercel or localhost
+    const host = typeof window !== 'undefined' ? window.location.hostname : '';
+    const isVercelOrLocal = host.includes('vercel.app') || host.includes('vercel.sh') || host === 'localhost';
+    
+    // If we're on Vercel/localhost, always consider it valid
+    if (isVercelOrLocal) {
+      setIsValidTenant(true);
+      return;
+    }
+    
     // If there's a subdomain but no branding found, it's invalid
     if (!loading && subdomain && !branding) {
       setIsValidTenant(false);
@@ -36,11 +46,13 @@ export default function TenantRouter({ children }: TenantRouterProps) {
     );
   }
 
-  // Route to marketing site for main domain
-  if (!subdomain) {
-    // This is the main domain (www.insperityhealth.com or insperityhealth.com)
-    // You could redirect to marketing site or show a landing page
-    if (typeof window !== 'undefined' && window.location.pathname === '/') {
+  // Route to marketing site for main domain (but not for Vercel or localhost)
+  if (!subdomain && typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    const isVercelOrLocal = host.includes('vercel.app') || host.includes('vercel.sh') || host === 'localhost';
+    
+    // Only redirect to marketing site if we're on the actual production domain
+    if (!isVercelOrLocal && window.location.pathname === '/') {
       window.location.href = 'https://insperityhealth.com/marketing';
       return null;
     }
