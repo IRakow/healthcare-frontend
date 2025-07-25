@@ -1,4 +1,8 @@
 import OwnerDashboard from '@/pages/owner/OwnerDashboard';
+import PlatformDashboard from '@/pages/owner/PlatformDashboard';
+import UserInvitations from '@/pages/owner/UserInvitations';
+import CompanyManagement from '@/pages/owner/CompanyManagement';
+import OwnerFeatures from '@/pages/OwnerFeatures';
 import OwnerInvoices from '@/pages/owner/Invoices';
 import EmployersPage from '@/pages/owner/Employers';
 import ReportsPage from '@/pages/owner/Reports';
@@ -16,7 +20,12 @@ import AuditLogs from '@/components/admin/AuditLogs';
 import InvoiceDashboard from '@/pages/owner/InvoiceDashboard';
 
 export const ownerRoutes = [
-  { path: '/owner', element: <OwnerDashboard /> },
+  { path: '/owner', element: <PlatformDashboard /> },
+  { path: '/owner/features', element: <OwnerFeatures /> },
+  { path: '/owner/dashboard', element: <OwnerDashboard /> },
+  { path: '/owner/platform', element: <PlatformDashboard /> },
+  { path: '/owner/user-invitations', element: <UserInvitations /> },
+  { path: '/owner/company-management', element: <CompanyManagement /> },
   { path: '/owner/invoices', element: <OwnerInvoices /> },
   { path: '/owner/employers', element: <EmployersPage /> },
   { path: '/owner/reports', element: <ReportsPage /> },
