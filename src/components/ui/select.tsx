@@ -1,45 +1,12 @@
-import * as React from "react"
-
-const Select = ({ children, ...props }: any) => (
-  <div {...props}>{children}</div>
-)
-
-const SelectTrigger = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className = '', children, ...props }, ref) => (
-  <button
-    ref={ref}
-    className={`flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-    {...props}
-  >
-    {children}
-  </button>
-))
-SelectTrigger.displayName = "SelectTrigger"
-
-const SelectContent = ({ children, ...props }: any) => (
-  <div className="relative mt-1 rounded-md bg-popover text-popover-foreground shadow-md" {...props}>
-    {children}
-  </div>
-)
-
-const SelectItem = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { value: string }
->(({ className = '', children, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={`relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${className}`}
-    {...props}
-  >
-    {children}
-  </div>
-))
-SelectItem.displayName = "SelectItem"
-
-const SelectValue = ({ placeholder }: { placeholder?: string }) => (
-  <span>{placeholder}</span>
-)
-
-export { Select, SelectTrigger, SelectContent, SelectItem, SelectValue }
+export function Select({ label, options, ...props }: any) {
+  return (
+    <div className="mb-4">
+      {label && <label className="block text-sm font-medium mb-1 text-gray-700">{label}</label>}
+      <select {...props} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/90 backdrop-blur">
+        {options.map((opt: any) => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
+      </select>
+    </div>
+  );
+}

@@ -1,22 +1,90 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/lib/supabaseClient';
+import { TimelineViewer } from '@/components/patient/TimelineViewer';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Calendar, Filter } from 'lucide-react';
+
+const EVENT_TYPES = [
+  { value: 'all', label: 'All Events' },
+  { value: 'update', label: 'Updates' },
+  { value: 'upload', label: 'Uploads' },
+  { value: 'ai', label: 'AI Interactions' },
+  { value: 'vitals', label: 'Vitals' },
+  { value: 'lab', label: 'Lab Results' },
+  { value: 'visit', label: 'Visits' },
+  { value: 'med', label: 'Medications' }
+];
+
 export default function Timeline() {
-  const events = [
-    { type: 'Visit', desc: 'Virtual visit with Dr. Harper', date: '2025-07-02' },
-    { type: 'Lab Result', desc: 'Lipid panel uploaded', date: '2025-07-03' },
-    { type: 'Message', desc: 'Secure message sent to provider', date: '2025-07-04' },
-  ];
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState<string>('');
+  const [filterType, setFilterType] = useState('all');
+  const [timeRange, setTimeRange] = useState('all');
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  async function loadUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setUserId(user.id);
+    }
+  }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">📆 Health Timeline</h2>
-      <ul className="space-y-4">
-        {events.map((e, i) => (
-          <li key={i} className="border-l-4 border-blue-500 pl-4">
-            <p className="text-sm text-gray-500">{e.date}</p>
-            <p className="font-semibold">{e.type}</p>
-            <p>{e.desc}</p>
-          </li>
-        ))}
-      </ul>
+    <div className="p-6 max-w-4xl mx-auto space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">Medical Timeline</h1>
+          <p className="text-gray-600 mt-1">Your complete medical history and activity</p>
+        </div>
+        <Button variant="ghost" onClick={() => navigate('/patient')}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
+      </div>
+
+      <div className="flex gap-4 items-center bg-gray-50 p-4 rounded-lg">
+        <div className="flex items-center gap-2">
+          <Filter className="h-4 w-4 text-gray-500" />
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="border rounded px-3 py-1 text-sm"
+          >
+            {EVENT_TYPES.map(type => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Calendar className="h-4 w-4 text-gray-500" />
+          <select
+            value={timeRange}
+            onChange={(e) => setTimeRange(e.target.value)}
+            className="border rounded px-3 py-1 text-sm"
+          >
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+      </div>
+
+      {userId && (
+        <TimelineViewer 
+          patientId={userId} 
+          limit={0}
+          showDetails={true}
+        />
+      )}
     </div>
   );
 }

@@ -1,0 +1,1 @@
+alter table employers add column family_member_fee int default 30;

@@ -1,28 +1,13 @@
-import * as React from "react"
+import { AlertTriangle } from 'lucide-react';
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className = '', ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={`relative w-full rounded-lg border p-4 [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg+div]:pl-7 ${className}`}
-    {...props}
-  />
-))
-Alert.displayName = "Alert"
-
-const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className = '', ...props }, ref) => (
-  <div
-    ref={ref}
-    className={`text-sm [&_p]:leading-relaxed ${className}`}
-    {...props}
-  />
-))
-AlertDescription.displayName = "AlertDescription"
-
-export { Alert, AlertDescription }
+export function Alert({ title, message }: { title: string; message: string }) {
+  return (
+    <div className="p-4 bg-gradient-to-r from-red-50 to-white border-l-4 border-red-400 text-red-800 rounded-xl shadow-lg flex items-start gap-3">
+      <AlertTriangle className="w-5 h-5 mt-0.5 text-red-500" />
+      <div>
+        <strong className="block font-semibold mb-1">{title}</strong>
+        <p className="text-sm leading-snug text-gray-700">{message}</p>
+      </div>
+    </div>
+  );
+}
