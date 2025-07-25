@@ -1,4 +1,4 @@
-import{r as o,u as E,s as r,j as e,C as c,A as N,a as v,b as h,V as g,B as d,c as T,d as V,U as z,g as P}from"./index-dt8RRvpA.js";function $(){const[n,x]=o.useState([]),[y,w]=o.useState(!0),[b,_]=o.useState(0),[m,C]=o.useState("today"),p=E();o.useEffect(()=>{k()},[]);async function k(){try{const{data:{user:s}}=await r.auth.getUser();if(!s)return;const{data:t,error:a}=await r.from("appointments").select(`
+import{r as o,u as E,s as r,j as e,C as c,A as N,a as v,b as h,V as g,B as d,c as T,d as V,U as z,g as P}from"./index-VSbfBWhb.js";function $(){const[n,x]=o.useState([]),[y,w]=o.useState(!0),[b,_]=o.useState(0),[m,C]=o.useState("today"),p=E();o.useEffect(()=>{k()},[]);async function k(){try{const{data:{user:s}}=await r.auth.getUser();if(!s)return;const{data:t,error:a}=await r.from("appointments").select(`
           *,
           patient:users!appointments_patient_id_fkey(
             id,

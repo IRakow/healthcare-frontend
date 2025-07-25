@@ -2,6 +2,7 @@ import PatientDashboard from '@/pages/patient/Dashboard';
 import PatientRecords from '@/pages/patient/Records';
 import Meditation from '@/pages/patient/Meditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
+import NutritionDashboard from '@/pages/patient/NutritionDashboard';
 import AppointmentsPage from '@/pages/patient/AppointmentsPage';
 import Labs from '@/pages/patient/Labs';
 import Wearables from '@/pages/patient/Wearables';
@@ -33,7 +34,8 @@ export const patientRoutes = [
   { path: '/patient/meal-feedback', element: <MealQualityFeedback /> },
   { path: '/patient/lifestyle-streaks', element: <LifestyleStreaks /> },
   { path: '/patient/meditation', element: <Meditation /> },
-  { path: '/patient/nutrition', element: <NutritionLog /> },
+  { path: '/patient/nutrition', element: <NutritionDashboard /> },
+  { path: '/patient/nutrition-log', element: <NutritionLog /> },
   { path: '/patient/appointments', element: <AppointmentsPage /> },
   { path: '/patient/labs', element: <Labs /> },
   { path: '/patient/wearables', element: <Wearables /> },
