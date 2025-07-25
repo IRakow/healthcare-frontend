@@ -15,5 +15,7 @@
   ],
   "env": {
     "NODE_VERSION": "18"
-  }
+  },
+  "org": "IRakow",
+  "project": "healthcare-frontend"
 }
