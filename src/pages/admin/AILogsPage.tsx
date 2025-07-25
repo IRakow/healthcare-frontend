@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { formatISO, subDays, format } from 'date-fns';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import Select from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Search, Download, RefreshCw, TrendingUp, Brain } from 'lucide-react';

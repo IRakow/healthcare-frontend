@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Mic, MicOff, Save, Loader2 } from 'lucide-react';
-import { Spinner } from '@/components/ui/spinner';
+import Spinner from '@/components/ui/spinner';
 
 interface TranscriptCaptureProps {
   appointmentId: string;

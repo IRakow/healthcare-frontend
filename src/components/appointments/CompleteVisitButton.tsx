@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
-import { Spinner } from '@/components/ui/spinner';
+import Spinner from '@/components/ui/spinner';
 
 interface CompleteVisitButtonProps {
   appointmentId: string;

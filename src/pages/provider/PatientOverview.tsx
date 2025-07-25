@@ -1,43 +1,42 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Tabs } from '@/components/ui/tabs';
-import { supabase } from '@/lib/supabase';
-import LifestyleStreaks from '@/components/patient/LifestyleStreaks';
-import MealQualityFeedback from '@/components/patient/MealQualityFeedback';
-import WeeklyPlanner from '@/components/patient/WeeklyPlanner';
+import { useState } from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import LifestyleStreaks from '@/pages/patient/LifestyleStreaks';
+import MealQualityFeedback from '@/pages/patient/MealQualityFeedback';
+import WeeklyPlanner from '@/pages/patient/WeeklyPlanner';
+import { Card } from '@/components/ui/card';
 
 export default function PatientOverview() {
-  const { patientId } = useParams<{ patientId: string }>();
-  const [tab, setTab] = useState('Streaks');
-  const [patientName, setPatientName] = useState('');
-
-  useEffect(() => {
-    (async () => {
-      if (!patientId) return;
-      
-      const { data } = await supabase
-        .from('users')
-        .select('full_name')
-        .eq('id', patientId)
-        .single();
-        
-      setPatientName(data?.full_name || 'Patient');
-    })();
-  }, [patientId]);
-
-  if (!patientId) {
-    return <div className="p-6">No patient ID provided</div>;
-  }
+  const [tab, setTab] = useState('streaks');
 
   return (
-    <div className="space-y-4 max-w-6xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-blue-700">👤 Patient Overview: {patientName}</h1>
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <h1 className="text-3xl font-bold text-blue-800 tracking-tight mb-4">👩‍⚕️ Patient Overview</h1>
 
-      <Tabs tabs={['Streaks', 'Meal Scores', 'Planner']} active={tab} onSelect={setTab} />
+      <Tabs defaultValue={tab} onValueChange={setTab}>
+        <TabsList>
+          <TabsTrigger value="streaks">🔥 Streaks</TabsTrigger>
+          <TabsTrigger value="meals">🍽️ Meal Scores</TabsTrigger>
+          <TabsTrigger value="planner">📅 Weekly Plan</TabsTrigger>
+        </TabsList>
 
-      {tab === 'Streaks' && <LifestyleStreaks patientId={patientId} />}
-      {tab === 'Meal Scores' && <MealQualityFeedback patientId={patientId} />}
-      {tab === 'Planner' && <WeeklyPlanner patientId={patientId} readOnly />}
+        <TabsContent value="streaks">
+          <LifestyleStreaks patientId="demo-id" />
+        </TabsContent>
+
+        <TabsContent value="meals">
+          <MealQualityFeedback patientId="demo-id" />
+        </TabsContent>
+
+        <TabsContent value="planner">
+          <WeeklyPlanner patientId="demo-id" readOnly />
+        </TabsContent>
+      </Tabs>
+
+      <Card className="glass-card">
+        <p className="text-sm text-gray-600 italic">
+          Note: You are viewing a read-only summary of this patient's lifestyle data.
+        </p>
+      </Card>
     </div>
   );
 }

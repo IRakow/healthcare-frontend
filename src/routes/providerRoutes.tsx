@@ -2,6 +2,7 @@ import { lazy } from 'react';
 
 const ProviderDashboard = lazy(() => import('@/pages/provider/ProviderDashboard'));
 const PatientFile = lazy(() => import('@/pages/provider/PatientFile'));
+const PatientOverview = lazy(() => import('@/pages/provider/PatientOverview'));
 const CalendarView = lazy(() => import('@/pages/CalendarView'));
 const ProviderTelemedVisit = lazy(() => import('@/pages/provider/TelemedVisit'));
 const ProviderAnalytics = lazy(() => import('@/pages/provider/ProviderAnalytics'));
@@ -19,6 +20,10 @@ export const providerRoutes = [
   {
     path: '/provider/patient/:patientId',
     element: <PatientFile />
+  },
+  {
+    path: '/provider/patient-overview/:patientId',
+    element: <PatientOverview />
   },
   {
     path: '/provider/calendar',

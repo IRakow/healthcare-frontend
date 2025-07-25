@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { MeditationType } from '@/types/meditation';
 import { Brain, Loader2 } from 'lucide-react';

@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { generateInvoicePdf } from '@/utils/generateInvoicePdf';
 
 export default async function handler(req: Request, res: Response) {

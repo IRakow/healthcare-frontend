@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 
 export async function saveTranscriptLine(appointmentId: string, speaker: string, text: string) {
   await supabase.from('appointment_transcripts').insert({

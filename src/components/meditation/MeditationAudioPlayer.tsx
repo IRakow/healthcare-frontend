@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Play, Pause, Volume2, Upload } from 'lucide-react';
-import { Spinner } from '@/components/ui/spinner';
+import Spinner from '@/components/ui/spinner';
 import { MeditationType } from '@/types/meditation';
 
 interface MeditationAudioPlayerProps {

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileText, ChevronDown, ChevronUp, Clock } from 'lucide-react';
 import { format } from 'date-fns';
-import { Spinner } from '@/components/ui/spinner';
+import Spinner from '@/components/ui/spinner';
 
 interface TranscriptViewerProps {
   patientId: string;

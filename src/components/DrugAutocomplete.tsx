@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 
 interface DrugOption {
   name: string;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Mic, Send, Sparkles, Brain } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Select from '@/components/ui/select';
 import { supabase } from '@/lib/supabase';
 
 type AIProvider = 'openai' | 'gemini';
@@ -109,25 +109,15 @@ export function AIProviderSelector() {
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-lg border shadow-2xl w-[95%] sm:w-[750px] rounded-3xl px-6 py-4 z-50">
       <div className="flex items-center gap-3 mb-3">
-        <Select value={provider} onValueChange={(v) => setProvider(v as AIProvider)}>
-          <SelectTrigger className="w-[140px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="openai">
-              <div className="flex items-center gap-2">
-                <Brain className="w-4 h-4" />
-                <span>OpenAI</span>
-              </div>
-            </SelectItem>
-            <SelectItem value="gemini">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4" />
-                <span>Gemini</span>
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <Select
+          value={provider}
+          onChange={(v) => setProvider(v as AIProvider)}
+          options={[
+            { value: 'openai', label: 'OpenAI' },
+            { value: 'gemini', label: 'Gemini' }
+          ]}
+          className="w-[140px]"
+        />
         
         <Input
           placeholder={`Ask ${provider === 'openai' ? 'GPT-4' : 'Gemini'} anything...`}

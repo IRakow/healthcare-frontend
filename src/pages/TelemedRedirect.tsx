@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabaseClient';
-import { Spinner } from '@/components/ui/spinner';
+import { supabase } from '@/lib/supabase';
+import Spinner from '@/components/ui/spinner';
 
 export default function TelemedRedirect() {
   const { appointmentId } = useParams();

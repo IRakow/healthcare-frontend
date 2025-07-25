@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Employer } from '@/types/employer';
 
 export function useEmployerBranding(employerId?: string) {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabaseClient';
-import { TimelineViewer } from '@/components/patient/TimelineViewer';
+import { supabase } from '@/lib/supabase';
+import TimelineViewer from '@/components/patient/TimelineViewer';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Calendar, Filter } from 'lucide-react';
 
@@ -81,8 +81,6 @@ export default function Timeline() {
       {userId && (
         <TimelineViewer 
           patientId={userId} 
-          limit={0}
-          showDetails={true}
         />
       )}
     </div>

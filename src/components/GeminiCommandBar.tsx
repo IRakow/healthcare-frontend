@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { handleSearchIntent } from '@/ai/actions/handleSearchIntent';
 import { Mic, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

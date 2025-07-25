@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { generateJitsiLink } from '@/utils/videoCall';
-import { Spinner } from '@/components/ui/spinner';
+import Spinner from '@/components/ui/spinner';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, Clock, FileText } from 'lucide-react';

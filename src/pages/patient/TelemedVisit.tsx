@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { generateJitsiLink } from '@/utils/videoCall';
-import { Spinner } from '@/components/ui/spinner';
+import Spinner from '@/components/ui/spinner';
 import { TranscriptionControls } from '@/components/TranscriptionControls';
 import { CompleteVisitButton } from '@/components/CompleteVisitButton';
 import { useRole } from '@/hooks/useRole';

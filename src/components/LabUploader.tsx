@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { saveLabResults } from '@/utils/labUtils';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Plus, Trash2, Upload } from 'lucide-react';
 
 interface LabResultInput {

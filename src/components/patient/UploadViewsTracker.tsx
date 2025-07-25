@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Eye, Users, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 

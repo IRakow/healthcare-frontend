@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Home, Calendar, Pill, Users, FileText, TrendingUp, Settings, LogOut } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
 
 interface Route {

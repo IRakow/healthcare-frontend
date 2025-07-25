@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 
 export default function ExportPDF() {
   const ref = useRef(null);

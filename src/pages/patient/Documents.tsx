@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { FileUpload } from '@/components/patient/FileUpload';
 import { FileViewer } from '@/components/patient/FileViewer';
 import { Button } from '@/components/ui/button';

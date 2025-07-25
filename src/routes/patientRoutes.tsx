@@ -16,10 +16,22 @@ import TelemedVisit from '@/pages/patient/TelemedVisit';
 import ShareAccess from '@/pages/patient/ShareAccess';
 import SharedPatientView from '@/pages/patient/SharedPatientView';
 import ExportPDF from '@/pages/patient/ExportPDF';
+import HealthDashboard from '@/pages/patient/HealthDashboard';
+import VoiceScreen from '@/pages/patient/VoiceScreen';
+import VideoAssessment from '@/pages/patient/VideoAssessment';
+import WeeklyPlanner from '@/pages/patient/WeeklyPlanner';
+import MealQualityFeedback from '@/pages/patient/MealQualityFeedback';
+import LifestyleStreaks from '@/pages/patient/LifestyleStreaks';
 
 export const patientRoutes = [
   { path: '/patient', element: <PatientDashboard /> },
   { path: '/patient/records', element: <PatientRecords /> },
+  { path: '/patient/health-dashboard', element: <HealthDashboard /> },
+  { path: '/patient/voice-screen', element: <VoiceScreen /> },
+  { path: '/patient/video-assessment', element: <VideoAssessment /> },
+  { path: '/patient/weekly-planner', element: <WeeklyPlanner /> },
+  { path: '/patient/meal-feedback', element: <MealQualityFeedback /> },
+  { path: '/patient/lifestyle-streaks', element: <LifestyleStreaks /> },
   { path: '/patient/meditation', element: <Meditation /> },
   { path: '/patient/nutrition', element: <NutritionLog /> },
   { path: '/patient/appointments', element: <AppointmentsPage /> },

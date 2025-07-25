@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Volume2, Settings, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Select from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 
@@ -81,37 +81,28 @@ export function VoiceSettings({ onVoiceChange, onModelChange }: VoiceSettingsPro
             <div className="space-y-4">
               <div>
                 <Label htmlFor="voice-select">Voice</Label>
-                <Select value={selectedVoice} onValueChange={handleVoiceChange}>
-                  <SelectTrigger id="voice-select" className="mt-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {VOICES.map(voice => (
-                      <SelectItem key={voice.id} value={voice.id}>
-                        <div>
-                          <div className="font-medium">{voice.name}</div>
-                          <div className="text-xs text-gray-500">{voice.description}</div>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Select
+                  value={selectedVoice}
+                  onChange={handleVoiceChange}
+                  options={VOICES.map(voice => ({
+                    value: voice.id,
+                    label: `${voice.name} - ${voice.description}`
+                  }))}
+                  className="mt-1"
+                />
               </div>
 
               <div>
                 <Label htmlFor="model-select">Model</Label>
-                <Select value={selectedModel} onValueChange={handleModelChange}>
-                  <SelectTrigger id="model-select" className="mt-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {MODELS.map(model => (
-                      <SelectItem key={model.id} value={model.id}>
-                        {model.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Select
+                  value={selectedModel}
+                  onChange={handleModelChange}
+                  options={MODELS.map(model => ({
+                    value: model.id,
+                    label: model.name
+                  }))}
+                  className="mt-1"
+                />
               </div>
 
               <Button

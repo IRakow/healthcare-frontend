@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { useBranding } from '@/hooks/useBranding';
 import { AlertCircle, TrendingUp, Clock, Pill } from 'lucide-react';
 

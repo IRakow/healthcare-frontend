@@ -4,7 +4,7 @@ import supabase from '@/lib/supabase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Select from '@/components/ui/select'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import {
   Shield,
@@ -279,30 +279,28 @@ export default function AuditLog() {
                     className="pl-10"
                   />
                 </div>
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="auth">Authentication</SelectItem>
-                    <SelectItem value="user">User Management</SelectItem>
-                    <SelectItem value="payment">Payments</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
-                    <SelectItem value="security">Security</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="success">Success</SelectItem>
-                    <SelectItem value="warning">Warning</SelectItem>
-                    <SelectItem value="error">Error</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Select
+                  value={categoryFilter}
+                  onChange={setCategoryFilter}
+                  options={[
+                    { value: 'all', label: 'All Categories' },
+                    { value: 'auth', label: 'Authentication' },
+                    { value: 'user', label: 'User Management' },
+                    { value: 'payment', label: 'Payments' },
+                    { value: 'system', label: 'System' },
+                    { value: 'security', label: 'Security' }
+                  ]}
+                />
+                <Select
+                  value={statusFilter}
+                  onChange={setStatusFilter}
+                  options={[
+                    { value: 'all', label: 'All Status' },
+                    { value: 'success', label: 'Success' },
+                    { value: 'warning', label: 'Warning' },
+                    { value: 'error', label: 'Error' }
+                  ]}
+                />
               </div>
             </CardContent>
           </Card>

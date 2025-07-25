@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 
 export type TimelineEventType = 'visit' | 'med' | 'upload' | 'ai' | 'update' | 'vitals' | 'lab';
 

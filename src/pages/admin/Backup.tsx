@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import Alert from '@/components/ui/alert'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import VoiceAssistant from '@/components/voice/DeepgramAssistant'
 import {
@@ -30,7 +30,8 @@ import {
   Info,
   XCircle,
   Server,
-  BarChart3
+  BarChart3,
+  Plus
 } from 'lucide-react'
 
 interface BackupItem {
@@ -420,12 +421,11 @@ export default function Backup() {
 
               {/* Backup Progress Alert */}
               {backupInProgress && (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    Backup in progress... This may take several minutes depending on database size.
-                  </AlertDescription>
-                </Alert>
+                <Alert
+                  type="info"
+                  title="Backup in Progress"
+                  message="This may take several minutes depending on database size."
+                />
               )}
 
               {/* Backups Table */}
