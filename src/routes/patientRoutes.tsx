@@ -1,5 +1,5 @@
 import PatientDashboard from '@/pages/patient/Dashboard';
-import PatientRecords from '@/pages/patient/Records';
+import PatientRecords from '@/pages/patient/MedicalRecords';
 import Meditation from '@/pages/patient/Meditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
 import AppointmentsPage from '@/pages/patient/AppointmentsPage';
