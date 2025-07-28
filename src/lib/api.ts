@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/api'
+import { formatDistanceToNow } from 'date-fns'
 
 export type TimelineItem = {
   id: string
@@ -17,19 +18,24 @@ export async function getPatientTimelineData(patientId: string): Promise<Timelin
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.error('❌ Error fetching patient timeline:', error.message)
+      console.error('❌ Supabase error fetching patient timeline:', error.message)
       return []
     }
 
-    return (data || []).map(item => ({
+    if (!data || data.length === 0) {
+      console.warn('ℹ️ No timeline data found for patient:', patientId)
+      return []
+    }
+
+    return data.map(item => ({
       id: item.id,
       type: item.type,
-      timestamp: new Date(item.created_at).toLocaleString(), // format as needed
       title: item.title,
-      description: item.description
+      description: item.description,
+      timestamp: formatDistanceToNow(new Date(item.created_at), { addSuffix: true })
     }))
-  } catch (error) {
-    console.error('❌ Exception in getPatientTimelineData:', error)
+  } catch (err) {
+    console.error('❌ Unexpected exception in getPatientTimelineData:', err)
     return []
   }
 }
