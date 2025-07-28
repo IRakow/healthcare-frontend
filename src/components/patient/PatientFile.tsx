@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { usePatientAccess } from '@/hooks/usePatientAccess';
 import { auditService } from '@/services/auditService';
-import { TimelineViewer } from '@/components/patient/TimelineViewer';
+import { TimelineViewer } from '@/components/patient/TimelineView';
 
 export default function PatientFile({ patientId }: { patientId: string }) {
   const { isAllowed, loading } = usePatientAccess(patientId);

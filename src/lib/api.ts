@@ -1,28 +1,11 @@
-import { useEffect, useState } from 'react'
-import { getPatientTimelineData, TimelineItem } from '@/services/timelineService'
+// src/lib/api.ts
+import { createClient } from '@supabase/supabase-js'
 
-export default function TimelineView({ patientId }: { patientId: string }) {
-  const [timeline, setTimeline] = useState<TimelineItem[]>([])
-  const [loading, setLoading] = useState(true)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-  useEffect(() => {
-    getPatientTimelineData(patientId).then(data => {
-      setTimeline(data)
-      setLoading(false)
-    })
-  }, [patientId])
-
-  if (loading) return <p>Loading timeline...</p>
-  if (timeline.length === 0) return <p>No timeline entries yet.</p>
-
-  return (
-    <ul>
-      {timeline.map(item => (
-        <li key={item.id}>
-          <strong>{item.title}</strong> – {item.timestamp}
-          <p>{item.description}</p>
-        </li>
-      ))}
-    </ul>
-  )
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables')
 }
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)

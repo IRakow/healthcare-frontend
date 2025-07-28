@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
-import TimelineViewer from '@/components/patient/TimelineViewer';
+import TimelineViewer from '@/components/patient/TimelineView';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Calendar, Filter } from 'lucide-react';
 
