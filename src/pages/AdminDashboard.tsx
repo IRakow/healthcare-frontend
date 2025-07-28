@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { useRoleGuard } from '@/hooks/useRoleGuard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
@@ -22,6 +23,7 @@ import {
   BarChart3,
   Zap
 } from 'lucide-react'
+import { EmployerInvoiceSummary } from '@/components/owner/EmployerInvoiceSummary'
 
 interface SystemStats {
   totalEmployers: number
@@ -47,6 +49,7 @@ interface RecentActivity {
 }
 
 export default function AdminDashboard() {
+  useRoleGuard('admin')
   const [adminEmail, setAdminEmail] = useState('')
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<SystemStats>({
@@ -489,6 +492,12 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         </div>
+      </div>
+
+      {/* Employer Invoice Summary */}
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold mb-4">Employer Invoices</h2>
+        <EmployerInvoiceSummary />
       </div>
     </div>
   )

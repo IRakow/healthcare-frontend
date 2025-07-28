@@ -1,128 +1,97 @@
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Link, useNavigate } from 'react-router-dom';
+import AssistantBar from '@/components/assistant/AssistantBar';
+import { HealthGoalWizard } from '@/components/patient/HealthGoalWizard';
+import { TrendChartPanel } from '@/components/patient/TrendChartPanel';
+import { WeeklyGoalsTracker } from '@/components/patient/WeeklyGoalsTracker';
+import { AutoInsightsPanel } from '@/components/patient/AutoInsightsPanel';
+import { PhotoLogger } from '@/components/patient/PhotoLogger';
+import { GroceryScannerAI } from '@/components/patient/GroceryScannerAI';
+import { SmartGroceryList } from '@/components/patient/SmartGroceryList';
+import { NotificationCenter } from '@/components/patient/NotificationCenter';
+import { RefreshCw } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
-interface AILog {
-  id: string;
-  output: string;
-  created_at: string;
-}
-
 export default function HealthDashboard() {
-  const [logs, setLogs] = useState<AILog[]>([]);
-  const navigate = useNavigate();
+  const [showWizard, setShowWizard] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      
-      const { data } = await supabase
-        .from('ai_logs')
-        .select('id, output, created_at')
-        .eq('patient_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(5);
-      
-      setLogs(data || []);
+      if (user) setUserId(user.id);
     })();
   }, []);
 
-  async function sendEmailPlan() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    
-    try {
-      const response = await fetch('/api/email-weekly-plan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id })
-      });
-      
-      const result = await response.json();
-      if (result.success) {
-        alert('📧 Meal plan sent to your email!');
-      } else {
-        alert('⚠️ Could not send email.');
-      }
-    } catch (error) {
-      alert('⚠️ Error sending email.');
-    }
-  }
-
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold text-blue-800 tracking-tight">🧬 Your Lifestyle Hub</h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6"
+    >
+      {/* Floating Assistant Bar */}
+      <AssistantBar role="patient" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <FeatureCard
-            emoji="📊"
-            title="Streak Tracker & Coach"
-            text="Track your sleep, hydration, and protein streaks. Get weekly AI coaching tips."
-            href="/patient/lifestyle-streaks"
-          />
+      {/* Show wizard on first load */}
+      {showWizard && (
+        <HealthGoalWizard onFinish={() => setShowWizard(false)} />
+      )}
 
-          <FeatureCard
-            emoji="🍽️"
-            title="Meal Quality Feedback"
-            text="Score your meals based on Mediterranean health guidelines and receive daily insights."
-            href="/patient/meal-quality-feedback"
-          />
+      {/* Main Dashboard Content (hidden while wizard is active) */}
+      {!showWizard && (
+        <>
+          {/* Header with rerun button */}
+          <div className="max-w-7xl mx-auto mb-8 flex items-center justify-between">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Your Health Command Center
+            </h1>
+            <Button
+              onClick={() => setShowWizard(true)}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Update Goals
+            </Button>
+          </div>
 
-          <FeatureCard
-            emoji="📅"
-            title="Weekly Planner"
-            text="See your AI-curated meal plan for the week. Edit, reorder, or regenerate anytime."
-            href="/patient/weekly-planner"
-          />
+          {/* Main Grid Layout */}
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Column - Charts & Goals */}
+            <div className="lg:col-span-2 space-y-6">
+              <TrendChartPanel vitals={[]} />
+              <WeeklyGoalsTracker />
+            </div>
 
-          <FeatureCard
-            emoji="🛒"
-            title="Smart Grocery Mode"
-            text="Generate categorized shopping lists from your plan, with AI tips and voice entry."
-            href="/patient/grocery-mode"
-          />
+            {/* Right Column - AI Insights */}
+            <div className="space-y-6">
+              <AutoInsightsPanel />
+            </div>
+          </div>
 
-          <FeatureCard
-            emoji="🧠"
-            title="Provider Review Summary"
-            text="Secure summary card visible to your provider — tracks weekly trends and risk flags."
-            href="/patient/review-panel"
-          />
-        </div>
+          {/* Secondary Grid - Interactive Features */}
+          <div className="max-w-7xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <PhotoLogger userId={userId || ''} />
+            <GroceryScannerAI />
+            <div className="md:col-span-2 lg:col-span-1">
+              <SmartGroceryList />
+            </div>
+          </div>
 
-        {/* AI Summary Feed Sidebar */}
-        <div className="bg-white border rounded-2xl p-4 shadow-sm space-y-2 h-fit">
-          <h2 className="text-lg font-semibold text-blue-700">🧠 Recent AI Insights</h2>
-          {logs.length === 0 && <p className="text-sm text-gray-500">No insights yet.</p>}
-          {logs.map((log) => (
-            <p key={log.id} className="text-sm text-gray-700 border-b pb-2">{log.output}</p>
-          ))}
-        </div>
-      </div>
-
-      {/* PDF + Email Download Block */}
-      <div className="flex justify-end gap-3 pt-6">
-        <Button onClick={() => navigate('/patient/weekly-planner')} variant="secondary">
-          📄 Download Planner PDF
-        </Button>
-        <Button onClick={sendEmailPlan} variant="secondary">
-          📧 Email My Plan
-        </Button>
-      </div>
-    </div>
+          {/* Notification Center */}
+          <div className="max-w-7xl mx-auto mt-8">
+            <NotificationCenter />
+          </div>
+        </>
+      )}
+    </motion.div>
   );
 }
 
-function FeatureCard({ emoji, title, text, href }: { emoji: string; title: string; text: string; href: string }) {
-  return (
-    <Link to={href} className="block bg-white hover:bg-blue-50 border border-gray-200 rounded-2xl shadow transition-all p-5 space-y-2 transform transition-transform duration-300 hover:scale-[1.02]">
-      <div className="text-3xl">{emoji}</div>
-      <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
-      <p className="text-sm text-gray-600 leading-snug">{text}</p>
-    </Link>
-  );
-}
+// Usage:
+// This dashboard now includes the wizard on first load.
+// After completing the wizard, users see their personalized dashboard.
+// They can rerun the wizard anytime to update their goals.

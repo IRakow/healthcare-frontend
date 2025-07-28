@@ -1,60 +1,33 @@
-import { lazy } from 'react';
+// File: src/routes/providerRoutes.tsx
 
-const ProviderDashboard = lazy(() => import('@/pages/provider/ProviderDashboard'));
-const PatientFile = lazy(() => import('@/pages/provider/PatientFile'));
-const PatientOverview = lazy(() => import('@/pages/provider/PatientOverview'));
-const CalendarView = lazy(() => import('@/pages/CalendarView'));
-const ProviderTelemedVisit = lazy(() => import('@/pages/provider/TelemedVisit'));
-const ProviderAnalytics = lazy(() => import('@/pages/provider/ProviderAnalytics'));
-const VisitReviewQueue = lazy(() => import('@/pages/provider/VisitReviewQueue'));
-const ProviderNotifications = lazy(() => import('@/pages/provider/ProviderNotifications'));
-const SOAPNotes = lazy(() => import('@/pages/provider/SOAPNotes'));
-const LabReview = lazy(() => import('@/pages/provider/LabReview'));
-const ProviderMessages = lazy(() => import('@/pages/provider/ProviderMessages'));
+import ProviderDashboard from '@/pages/provider/index';
+import VisitSchedulePage from '@/pages/provider/visits';
+import PatientDirectoryPage from '@/pages/provider/patients';
+import SOAPNotesPage from '@/pages/provider/soap';
+import LabReviewPage from '@/pages/provider/labs';
+import RiskFlagsPage from '@/pages/provider/risk-flags';
+import TelemedPage from '@/pages/provider/video';
+import ProviderMessagesPage from '@/pages/provider/messages/inbox';
+import ProviderSettingsPage from '@/pages/provider/settings';
+import AssistantLogsPage from '@/pages/provider/AssistantLogs';
+import VideoVisitPage from '@/pages/provider/video-session';
+import ChartExportPage from '@/pages/provider/ChartExport';
+import VisitReviewQueue from '@/pages/provider/VisitReviewQueue';
+import PatientOverview from '@/pages/provider/PatientOverview';
 
 export const providerRoutes = [
-  {
-    path: '/provider',
-    element: <ProviderDashboard />
-  },
-  {
-    path: '/provider/patient/:patientId',
-    element: <PatientFile />
-  },
-  {
-    path: '/provider/patient-overview/:patientId',
-    element: <PatientOverview />
-  },
-  {
-    path: '/provider/calendar',
-    element: <CalendarView />
-  },
-  {
-    path: '/provider/telemed/:appointmentId',
-    element: <ProviderTelemedVisit />
-  },
-  {
-    path: '/provider/analytics',
-    element: <ProviderAnalytics />
-  },
-  {
-    path: '/provider/review',
-    element: <VisitReviewQueue />
-  },
-  {
-    path: '/provider/notifications',
-    element: <ProviderNotifications />
-  },
-  {
-    path: '/provider/soap-notes',
-    element: <SOAPNotes />
-  },
-  {
-    path: '/provider/lab-review',
-    element: <LabReview />
-  },
-  {
-    path: '/provider/messages',
-    element: <ProviderMessages />
-  }
+  { path: '/provider', element: <ProviderDashboard /> },
+  { path: '/provider/visits', element: <VisitSchedulePage /> },
+  { path: '/provider/patients', element: <PatientDirectoryPage /> },
+  { path: '/provider/soap', element: <SOAPNotesPage /> },
+  { path: '/provider/labs', element: <LabReviewPage /> },
+  { path: '/provider/risk-flags', element: <RiskFlagsPage /> },
+  { path: '/provider/video', element: <TelemedPage /> },
+  { path: '/provider/messages/inbox', element: <ProviderMessagesPage /> },
+  { path: '/provider/settings', element: <ProviderSettingsPage /> },
+  { path: '/provider/assistant-logs', element: <AssistantLogsPage /> },
+  { path: '/provider/video-session', element: <VideoVisitPage /> },
+  { path: '/provider/chart-export', element: <ChartExportPage /> },
+  { path: '/provider/review-queue', element: <VisitReviewQueue /> },
+  { path: '/provider/patient/:id', element: <PatientOverview /> }
 ];

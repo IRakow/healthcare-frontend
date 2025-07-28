@@ -1,47 +1,53 @@
-import { Routes, Route } from 'react-router-dom';
-import SimpleHomePage from '@/pages/SimpleHomePage';
-import { adminRoutes } from '@/routes/adminRoutes';
-import { ownerRoutes } from '@/routes/ownerRoutes';
-import { patientRoutes } from '@/routes/patientRoutes';
-import { providerRoutes } from '@/routes/providerRoutes';
-import { employerRoutes } from '@/routes/employerRoutes';
-import PatientLogin from '@/pages/PatientLogin';
-import TelemedRedirect from '@/pages/TelemedRedirect';
+// File: src/components/AppRoutes.tsx
 
-export function AppRoutes() {
+import * as React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Suspense } from 'react';
+
+// Route Modules
+import { adminRoutes } from '@/routes/adminRoutes';
+import { providerRoutes } from '@/routes/providerRoutes';
+import { patientRoutes } from '@/routes/patientRoutes';
+import { employerRoutes } from '@/routes/employerRoutes';
+import { ownerRoutes } from '@/routes/ownerRoutes';
+
+// Universal Pages
+import LoginPortalSelector from '@/pages/LoginPortalSelector';
+import ErrorPage from '@/pages/ErrorPage';
+import UnauthorizedPage from '@/pages/UnauthorizedPage';
+
+export default function AppRoutes() {
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<SimpleHomePage />} />
-      
-      {/* Telemed redirect - detects user role and redirects appropriately */}
-      <Route path="/telemed/:appointmentId" element={<TelemedRedirect />} />
-      
-      {/* Admin routes */}
-      {adminRoutes.map((route) => (
-        <Route key={route.path} path={route.path} element={route.element} />
-      ))}
-      
-      {/* Owner routes */}
-      {ownerRoutes.map((route) => (
-        <Route key={route.path} path={route.path} element={route.element} />
-      ))}
-      
-      {/* Patient routes */}
-      <Route path="/patient/login" element={<PatientLogin />} />
-      {patientRoutes.map((route) => (
-        <Route key={route.path} path={route.path} element={route.element} />
-      ))}
-      
-      {/* Provider routes */}
-      {providerRoutes.map((route) => (
-        <Route key={route.path} path={route.path} element={route.element} />
-      ))}
-      
-      {/* Employer routes */}
-      {employerRoutes.map((route) => (
-        <Route key={route.path} path={route.path} element={route.element} />
-      ))}
-    </Routes>
+    <Router>
+      <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
+        <Routes>
+          {/* Universal Entry Points */}
+          <Route path="/" element={<LoginPortalSelector />} />
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="*" element={<ErrorPage />} />
+
+          {/* Role-Based Routing */}
+          {adminRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+
+          {providerRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+
+          {patientRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+
+          {employerRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+
+          {ownerRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+        </Routes>
+      </Suspense>
+    </Router>
   );
 }

@@ -1,4 +1,7 @@
+// File: src/services/conversationService.ts
+
 import { supabase } from '@/lib/supabase';
+import { getCurrentUserRole } from '@/utils/auth'; // Utility to fetch role from metadata or session
 
 interface Conversation {
   id?: string;
@@ -9,15 +12,19 @@ interface Conversation {
 }
 
 export const conversationService = {
-  // Save a new conversation
+  // Save only for patients and providers
   async saveConversation(input: string, output: string) {
     try {
-      const { data: user } = await supabase.auth.getUser();
-      
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+
+      const role = user.user_metadata?.role || (await getCurrentUserRole(user.id));
+      if (!['patient', 'provider'].includes(role)) return null;
+
       const { data, error } = await supabase
         .from('ai_conversations')
         .insert({
-          user_id: user.user?.id,
+          user_id: user.id,
           input,
           output
         })
@@ -32,13 +39,29 @@ export const conversationService = {
     }
   },
 
+
+};
+
+
   // Get user's conversation history
   async getUserConversations(limit: number = 50) {
     try {
       const { data: user } = await supabase.auth.getUser();
-      
+
       const { data, error } = await supabase
         .from('ai_conversations')
+        .select('*')
+        .eq('user_id', user.user?.id)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error fetching user conversations:', error);
+      return [];
+    }
+  },
         .select('*')
         .eq('user_id', user.user?.id)
         .order('created_at', { ascending: false })

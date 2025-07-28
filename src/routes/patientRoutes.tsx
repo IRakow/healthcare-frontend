@@ -1,4 +1,4 @@
-import PatientDashboard from '@/pages/patient/Dashboard';
+import PatientDashboard from '@/pages/patient/PatientHealthDashboard';
 import PatientRecords from '@/pages/patient/Records';
 import Meditation from '@/pages/patient/Meditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
@@ -23,9 +23,21 @@ import VideoAssessment from '@/pages/patient/VideoAssessment';
 import WeeklyPlanner from '@/pages/patient/WeeklyPlanner';
 import MealQualityFeedback from '@/pages/patient/MealQualityFeedback';
 import LifestyleStreaks from '@/pages/patient/LifestyleStreaks';
+import Meditate from '@/pages/patient/Meditate';
+import Goals from '@/pages/patient/Goals';
+import Grocery from '@/pages/patient/Grocery';
+import Notifications from '@/pages/patient/Notifications';
+import Allergies from '@/pages/patient/Allergies';
+import AIHistory from '@/pages/patient/AIHistory';
+import MealPlan from '@/pages/patient/MealPlan';
+import UnifiedGlassDashboard from '@/pages/patient/UnifiedGlassDashboard';
+import Scan from '@/pages/patient/Scan';
+import FoodIntel from '@/pages/patient/FoodIntel';
+import ProgressPhotos from '@/pages/patient/ProgressPhotos';
 
 export const patientRoutes = [
   { path: '/patient', element: <PatientDashboard /> },
+  { path: '/patient/dashboard', element: <PatientDashboard /> },
   { path: '/patient/records', element: <PatientRecords /> },
   { path: '/patient/health-dashboard', element: <HealthDashboard /> },
   { path: '/patient/voice-screen', element: <VoiceScreen /> },
@@ -50,4 +62,15 @@ export const patientRoutes = [
   { path: '/patient/share-access', element: <ShareAccess /> },
   { path: '/patient/shared/:patientId', element: <SharedPatientView /> },
   { path: '/patient/export-pdf', element: <ExportPDF /> },
+  { path: '/patient/meditate', element: <Meditate /> },
+  { path: '/patient/goals', element: <Goals /> },
+  { path: '/patient/grocery', element: <Grocery /> },
+  { path: '/patient/notifications', element: <Notifications /> },
+  { path: '/patient/allergies', element: <Allergies /> },
+  { path: '/patient/ai-history', element: <AIHistory /> },
+  { path: '/patient/meal-plan', element: <MealPlan /> },
+  { path: '/patient/unified-dashboard', element: <UnifiedGlassDashboard /> },
+  { path: '/patient/scan', element: <Scan /> },
+  { path: '/patient/food-intel', element: <FoodIntel /> },
+  { path: '/patient/progress', element: <ProgressPhotos /> },
 ];

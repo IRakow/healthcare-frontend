@@ -1,4 +1,5 @@
-// src/routes/adminRoutes.tsx
+// File: src/routes/adminRoutes.tsx
+
 import AdminLogin from '@/pages/AdminLogin';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AdminEmployersPage from '@/pages/AdminEmployersPage';
@@ -9,7 +10,13 @@ import Backup from '@/pages/admin/Backup';
 import SuperPanel from '@/pages/admin/SuperPanelSimple';
 import AILogsPage from '@/pages/admin/AILogsPage';
 import AuditDashboard from '@/pages/admin/AuditDashboard';
+import ComplianceDashboard from '@/pages/admin/ComplianceDashboard';
 import CalendarView from '@/pages/CalendarView';
+import { ChartLogsPage } from '@/pages/admin/ChartLogs';
+import { ChartExportPage } from '@/pages/admin/ChartExport';
+import { ChartDashboardPage } from '@/pages/admin/ChartDashboard';
+import { adminRoutes } from '@/routes/adminRoutes';
+
 
 export const adminRoutes = [
   { path: '/admin/login', element: <AdminLogin /> },
@@ -22,5 +29,9 @@ export const adminRoutes = [
   { path: '/admin/superpanel', element: <SuperPanel /> },
   { path: '/admin/ai-logs', element: <AILogsPage /> },
   { path: '/admin/audit-dashboard', element: <AuditDashboard /> },
+  { path: '/admin/compliance', element: <ComplianceDashboard /> },
   { path: '/admin/calendar', element: <CalendarView /> },
+  { path: '/admin/chart-logs', element: <ChartLogsPage /> },
+  { path: '/admin/chart-export', element: <ChartExportPage /> },
+  { path: '/admin/chart-dashboard', element: <ChartDashboardPage /> }
 ];

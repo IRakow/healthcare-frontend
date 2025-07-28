@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
-import { CommandBar } from '@/components/CommandBar';
+import { CommandBar } from '@/components/ai/CommandBar';
 
 export function AppLayout() {
   const [user, setUser] = useState<any>(null);
@@ -23,7 +23,7 @@ export function AppLayout() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Outlet />
-      {user && <CommandBar role={user?.user_metadata?.role || 'patient'} />}
+      {user && <CommandBar />}
     </div>
   );
 }

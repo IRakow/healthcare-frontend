@@ -3,49 +3,40 @@ import { supabase } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { FamilyMemberManager } from '@/components/patient/FamilyMemberManager';
+import { SecureLayout } from '@/components/layout/SecureLayout';
+import { CommandBar } from '@/components/ai/CommandBar';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 export default function Family() {
-  const [family, setFamily] = useState<any[]>([]);
-  const [newMember, setNewMember] = useState({ full_name: '', birthdate: '', relation: '' });
-
-  useEffect(() => {
-    (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      const { data } = await supabase.from('family_members').select('*').eq('account_holder_id', user?.id);
-      setFamily(data || []);
-    })();
-  }, []);
-
-  async function addFamilyMember() {
-    const { data: { user } } = await supabase.auth.getUser();
-    const { data, error } = await supabase.from('family_members').insert({
-      ...newMember,
-      account_holder_id: user?.id,
-    }).select();
-
-    if (!error && data) {
-      setFamily([...family, data[0]]);
-      setNewMember({ full_name: '', birthdate: '', relation: '' });
-    }
-  }
+  const navigate = useNavigate();
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Family Members</h1>
+    <SecureLayout>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+        <CommandBar />
+        
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/patient/dashboard')}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </Button>
+        </div>
 
-      {family.map((f, i) => (
-        <Card key={i} title={f.full_name}>
-          <p className="text-sm">DOB: {f.birthdate}</p>
-          <p className="text-sm">Relation: {f.relation}</p>
-        </Card>
-      ))}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Family Members</h1>
+          <p className="text-gray-600 mt-2">Manage your family members and dependents</p>
+        </div>
 
-      <Card title="Add Family Member" className="mt-6">
-        <Input label="Full Name" value={newMember.full_name} onChange={(e) => setNewMember({ ...newMember, full_name: e.target.value })} />
-        <Input label="Birthdate" type="date" value={newMember.birthdate} onChange={(e) => setNewMember({ ...newMember, birthdate: e.target.value })} />
-        <Input label="Relation" value={newMember.relation} onChange={(e) => setNewMember({ ...newMember, relation: e.target.value })} />
-        <Button className="mt-3" onClick={addFamilyMember}>Add</Button>
-      </Card>
-    </div>
+        <div className="grid gap-6">
+          <FamilyMemberManager />
+        </div>
+      </div>
+    </SecureLayout>
   );
 }

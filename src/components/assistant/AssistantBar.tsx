@@ -1,108 +1,147 @@
-import { useState } from 'react';
-import { Card } from '@/components/ui/card';
+// File: src/components/assistant/AssistantBar.tsx
+
+import { useEffect, useState, useRef } from 'react';
+import { Mic, Send, Loader2, Sparkles, Menu } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import { voiceAPI } from '@/services/voiceAPI';
+import { conversationService } from '@/services/conversationService';
+import { motion } from 'framer-motion';
 
 interface AssistantBarProps {
-  role: 'patient' | 'provider' | 'owner';
-  patientId?: string;
-  mode?: 'info_synth' | 'chat' | 'command';
+  role: 'patient' | 'provider';
 }
 
-export default function AssistantBar({ role, patientId, mode = 'chat' }: AssistantBarProps) {
-  const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([]);
-  const [loading, setLoading] = useState(false);
+export default function AssistantBar({ role }: AssistantBarProps) {
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const [navOpen, setNavOpen] = useState(false);
 
-  const handleSubmit = async () => {
-    if (!input.trim()) return;
-
-    const userMessage = { role: 'user', content: input };
-    setMessages([...messages, userMessage]);
-    setInput('');
-    setLoading(true);
-
+  const speak = async (text: string) => {
     try {
-      // TODO: Integrate with your AI service
-      // For now, just echo back
-      const assistantMessage = {
-        role: 'assistant',
-        content: `I'm here to help you with your ${role === 'patient' ? 'health' : 'work'} needs. You said: "${input}"`
-      };
-      
-      setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Assistant error:', error);
-    } finally {
-      setLoading(false);
+      const audioBuffer = await voiceAPI.textToSpeech(text);
+      const audio = new Audio(URL.createObjectURL(new Blob([audioBuffer])));
+      audio.play();
+    } catch (err) {
+      console.error('Voice playback failed:', err);
     }
   };
 
+  const sendToAI = async (inputText: string) => {
+    if (!inputText.trim()) return;
+    setIsLoading(true);
+
+    try {
+      let output = '';
+      await voiceAPI.streamAIResponse(inputText, (chunk) => {
+        output += chunk;
+      });
+      await speak(output);
+      await conversationService.saveConversation(inputText, output);
+    } catch (err) {
+      console.error('AI error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVoice = async () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) return alert('Speech Recognition not supported');
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setMessage(transcript);
+      sendToAI(transcript);
+    };
+
+    recognition.onerror = (e: any) => console.error('Speech error:', e);
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
+  };
+
+  const handleSend = () => {
+    if (message.trim()) {
+      sendToAI(message);
+      setMessage('');
+    }
+  };
+
+  const navLinks = {
+    patient: [
+      { name: 'Dashboard', href: '/patient/dashboard' },
+      { name: 'Health', href: '/patient/health-dashboard' },
+      { name: 'Appointments', href: '/patient/appointments' },
+      { name: 'Medications', href: '/patient/medications' },
+      { name: 'Labs', href: '/patient/labs' },
+      { name: 'Settings', href: '/patient/settings' },
+    ],
+    provider: [
+      { name: 'Dashboard', href: '/provider/dashboard' },
+      { name: 'Patients', href: '/provider/patients' },
+      { name: 'Visits', href: '/provider/visits' },
+      { name: 'Analytics', href: '/provider/analytics' },
+      { name: 'Messages', href: '/provider/messages/inbox' },
+      { name: 'Settings', href: '/provider/settings' },
+    ]
+  }[role];
+
   return (
-    <Card className="fixed bottom-4 right-4 w-96 h-[500px] shadow-xl flex flex-col">
-      <div className="p-4 border-b bg-blue-50">
-        <h3 className="font-semibold">AI Assistant</h3>
-        <p className="text-xs text-gray-600">
-          {mode === 'info_synth' ? 'Information Synthesis Mode' : 
-           mode === 'command' ? 'Command Mode' : 'Chat Mode'}
-        </p>
-        {patientId && (
-          <p className="text-xs text-gray-500 mt-1">Patient context loaded</p>
-        )}
-      </div>
+    <>
+      {navOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 30 }}
+          className="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md border shadow-xl rounded-xl px-6 py-4 space-y-2 max-w-md w-[90%]"
+        >
+          {navLinks.map(({ name, href }) => (
+            <a
+              key={href}
+              href={href}
+              className="block text-sm font-medium text-gray-800 hover:text-emerald-600 transition"
+            >
+              {name}
+            </a>
+          ))}
+        </motion.div>
+      )}
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.length === 0 && (
-          <p className="text-gray-500 text-sm">
-            {mode === 'info_synth' 
-              ? 'I can help you understand your health data and records.'
-              : 'How can I assist you today?'}
-          </p>
-        )}
-        {messages.map((msg, idx) => (
-          <div key={idx} className={`${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-            <div className={`inline-block p-3 rounded-lg max-w-[80%] ${
-              msg.role === 'user' 
-                ? 'bg-blue-500 text-white' 
-                : 'bg-gray-100 text-gray-800'
-            }`}>
-              {msg.content}
-            </div>
-          </div>
-        ))}
-        {loading && (
-          <div className="text-left">
-            <div className="inline-block p-3 rounded-lg bg-gray-100">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="p-4 border-t">
-        <div className="flex space-x-2">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={mode === 'command' ? 'Enter command...' : 'Type your message...'}
-            className="flex-1"
-            rows={2}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit();
-              }
-            }}
-          />
-          <Button onClick={handleSubmit} disabled={loading || !input.trim()}>
-            Send
-          </Button>
-        </div>
-      </div>
-    </Card>
+      <motion.div
+        className="fixed bottom-5 left-5 right-5 z-50 max-w-4xl mx-auto flex items-center gap-3 bg-white/90 backdrop-blur border rounded-full shadow-lg p-4 transition-all"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+      >
+        <Button size="icon" variant="ghost" onClick={() => setNavOpen(!navOpen)}>
+          <Menu className="w-5 h-5 text-gray-700" />
+        </Button>
+        <Sparkles className="text-emerald-500 h-4 w-4 shrink-0 animate-pulse" />
+        <Input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Ask anything..."
+          className="flex-1 bg-white/50 backdrop-blur-sm rounded-xl border-none focus-visible:ring-0 text-sm"
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') handleSend();
+          }}
+        />
+        <Button variant="ghost" size="icon" onClick={handleVoice}>
+          <Mic className={`w-5 h-5 ${isListening ? 'text-red-600 animate-pulse' : 'text-emerald-600'}`} />
+        </Button>
+        <Button variant="ghost" size="icon" onClick={handleSend} disabled={isLoading}>
+          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5 text-emerald-600" />}
+        </Button>
+      </motion.div>
+    </>
   );
 }

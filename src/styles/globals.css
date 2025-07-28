@@ -1,0 +1,33 @@
+/* globals.css */
+
+/* Tailwind base reset */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Beautiful custom polish */
+html, body {
+  @apply bg-white text-gray-900 antialiased;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+a {
+  @apply text-blue-600 hover:text-blue-800 transition-colors;
+}
+
+button {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+input, textarea, select {
+  @apply border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+/* Utility helpers */
+.card-glass {
+  @apply backdrop-blur bg-white/70 border border-gray-200 rounded-2xl shadow-md;
+}
+
+.section-heading {
+  @apply text-xl font-semibold mb-2 text-gray-800;
+}
