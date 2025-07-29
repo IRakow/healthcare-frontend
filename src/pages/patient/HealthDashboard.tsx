@@ -1,97 +1,81 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import AssistantBar from '@/components/assistant/AssistantBar';
-import { HealthGoalWizard } from '@/components/patient/HealthGoalWizard';
-import { TrendChartPanel } from '@/components/patient/TrendChartPanel';
-import { WeeklyGoalsTracker } from '@/components/patient/WeeklyGoalsTracker';
-import { AutoInsightsPanel } from '@/components/patient/AutoInsightsPanel';
-import { PhotoLogger } from '@/components/patient/PhotoLogger';
-import { GroceryScannerAI } from '@/components/patient/GroceryScannerAI';
-import { SmartGroceryList } from '@/components/patient/SmartGroceryList';
-import { NotificationCenter } from '@/components/patient/NotificationCenter';
-import { RefreshCw } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+// File: src/pages/patient/HealthDashboard.tsx
+
+import React from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { useNavigate } from 'react-router-dom';
+import {
+  Stethoscope,
+  FileText,
+  Apple,
+  Droplet,
+  ShieldPlus,
+  ActivitySquare
+} from 'lucide-react';
 
 export default function HealthDashboard() {
-  const [showWizard, setShowWizard] = useState(true);
-  const [userId, setUserId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) setUserId(user.id);
-    })();
-  }, []);
+  const tiles = [
+    {
+      title: 'Health Records',
+      icon: <FileText className="w-5 h-5 text-emerald-600" />,
+      description: 'View lab results, medications, and uploads.',
+      path: '/patient/records'
+    },
+    {
+      title: 'Nutrition Log',
+      icon: <Apple className="w-5 h-5 text-orange-500" />,
+      description: 'Track meals with photo, voice, or manual entry.',
+      path: '/patient/nutrition-log'
+    },
+    {
+      title: 'Hydration',
+      icon: <Droplet className="w-5 h-5 text-blue-400" />,
+      description: 'Monitor your daily water intake and stay hydrated.',
+      path: '/patient/health-dashboard#hydration'
+    },
+    {
+      title: 'Vitals & Trends',
+      icon: <ActivitySquare className="w-5 h-5 text-purple-500" />,
+      description: 'Track weight, heart rate, blood pressure, and sleep.',
+      path: '/patient/wearables'
+    },
+    {
+      title: 'Wellness Goals',
+      icon: <ShieldPlus className="w-5 h-5 text-pink-500" />,
+      description: 'Set and review personalized weekly goals.',
+      path: '/patient/goals'
+    },
+    {
+      title: 'AI Consults',
+      icon: <Stethoscope className="w-5 h-5 text-cyan-600" />,
+      description: 'Review conversations and insights from your AI assistant.',
+      path: '/patient/ai-history'
+    }
+  ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6"
-    >
-      {/* Floating Assistant Bar */}
-      <AssistantBar role="patient" />
-
-      {/* Show wizard on first load */}
-      {showWizard && (
-        <HealthGoalWizard onFinish={() => setShowWizard(false)} />
-      )}
-
-      {/* Main Dashboard Content (hidden while wizard is active) */}
-      {!showWizard && (
-        <>
-          {/* Header with rerun button */}
-          <div className="max-w-7xl mx-auto mb-8 flex items-center justify-between">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Your Health Command Center
-            </h1>
-            <Button
-              onClick={() => setShowWizard(true)}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Update Goals
-            </Button>
-          </div>
-
-          {/* Main Grid Layout */}
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Charts & Goals */}
-            <div className="lg:col-span-2 space-y-6">
-              <TrendChartPanel vitals={[]} />
-              <WeeklyGoalsTracker />
-            </div>
-
-            {/* Right Column - AI Insights */}
-            <div className="space-y-6">
-              <AutoInsightsPanel />
-            </div>
-          </div>
-
-          {/* Secondary Grid - Interactive Features */}
-          <div className="max-w-7xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <PhotoLogger userId={userId || ''} />
-            <GroceryScannerAI />
-            <div className="md:col-span-2 lg:col-span-1">
-              <SmartGroceryList />
-            </div>
-          </div>
-
-          {/* Notification Center */}
-          <div className="max-w-7xl mx-auto mt-8">
-            <NotificationCenter />
-          </div>
-        </>
-      )}
-    </motion.div>
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+      <h1 className="text-3xl font-bold text-emerald-900">🩺 Your Health Hub</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tiles.map(({ title, icon, description, path }) => (
+          <Card
+            key={title}
+            onClick={() => navigate(path)}
+            className="cursor-pointer transition hover:shadow-xl bg-white/70 backdrop-blur border border-white/20 rounded-2xl"
+          >
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2 text-lg text-emerald-800">
+                {icon}
+                <span>{title}</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-gray-600">
+              {description}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
   );
 }
-
-// Usage:
-// This dashboard now includes the wizard on first load.
-// After completing the wizard, users see their personalized dashboard.
-// They can rerun the wizard anytime to update their goals.

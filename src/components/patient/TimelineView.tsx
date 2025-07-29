@@ -1,52 +1,35 @@
-import { useEffect, useState } from 'react'
-import { getPatientTimelineData, TimelineItem } from '@/services/timelineService'
-import { Card } from '@/components/ui/card'
-import { Loader2 } from 'lucide-react'
+import { useEffect, useState } from 'react';
+import { getPatientTimelineData, TimelineItem } from '@/services/timelineService';
+import { useUser } from '@/hooks/useUser';
+import { Card } from '@/components/ui/card';
 
-interface Props {
-  patientId: string
-}
-
-export default function TimelineViewer({ patientId }: Props) {
-  const [timeline, setTimeline] = useState<TimelineItem[]>([])
-  const [loading, setLoading] = useState(true)
+export default function TimelineView() {
+  const { user } = useUser();
+  const [timeline, setTimeline] = useState<TimelineItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadTimeline() {
-      setLoading(true)
-      const data = await getPatientTimelineData(patientId)
-      setTimeline(data)
-      setLoading(false)
-    }
-    loadTimeline()
-  }, [patientId])
+    if (!user?.id) return;
+    getPatientTimelineData(user.id).then((data) => {
+      setTimeline(data);
+      setLoading(false);
+    });
+  }, [user]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-10 text-blue-500">
-        <Loader2 className="animate-spin w-6 h-6 mr-2" />
-        <span>Loading timeline...</span>
-      </div>
-    )
-  }
+  if (loading) return <p className="text-gray-500 text-sm italic">Loading timeline...</p>;
 
-  if (timeline.length === 0) {
-    return (
-      <div className="text-center py-10 text-muted-foreground">
-        <p>No timeline entries yet.</p>
-      </div>
-    )
-  }
+  if (timeline.length === 0)
+    return <p className="text-sm text-muted-foreground italic">No timeline entries found.</p>;
 
   return (
-    <div className="space-y-4 max-w-3xl mx-auto px-4 py-6">
-      {timeline.map(item => (
-        <Card key={item.id} className="bg-white/80 backdrop-blur border border-white/20 rounded-xl p-4 shadow">
-          <div className="text-sm text-gray-500">{item.timestamp}</div>
-          <div className="text-base font-semibold text-gray-800">{item.title}</div>
-          <div className="text-sm text-gray-700 mt-1">{item.description}</div>
+    <div className="space-y-4">
+      {timeline.map((item) => (
+        <Card key={item.id} className="p-4 bg-white/90 border border-gray-100 shadow-md rounded-xl">
+          <p className="text-xs text-gray-500 mb-1">{new Date(item.created_at).toLocaleString()}</p>
+          <h4 className="font-semibold text-gray-800 text-sm">{item.label}</h4>
+          <p className="text-sm text-muted-foreground">{JSON.stringify(item.data)}</p>
         </Card>
       ))}
     </div>
-  )
+  );
 }

@@ -10,10 +10,6 @@ export type ConversationMessage = {
 
 export type MessageCallback = (message: ConversationMessage) => void
 
-/**
- * Subscribes to new messages for a given conversation.
- * Fires the callback whenever a new message is inserted.
- */
 export function subscribeToConversation(
   conversationId: string,
   callback: MessageCallback
@@ -38,4 +34,8 @@ export function subscribeToConversation(
   return () => {
     supabase.removeChannel(channel)
   }
+}
+
+export const conversationService = {
+  subscribeToConversation
 }

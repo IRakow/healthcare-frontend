@@ -1,21 +1,105 @@
-import { useState } from 'react';
+// File: src/components/patient/AppointmentBooking.tsx
 
-export default function AppointmentBooking() {
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { CalendarDays, Clock, Pencil } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+
+interface Props {
+  onSuccess?: () => void;
+}
+
+export default function AppointmentBooking({ onSuccess }: Props) {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [reason, setReason] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleBook = () => {
-    alert(`Appointment booked for ${date} at ${time}. Reason: ${reason}`);
+  const handleBook = async () => {
+    if (!date || !time || !reason.trim()) {
+      toast.error('Please complete all fields to book an appointment.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) throw new Error('Unable to fetch user info.');
+
+      const { error } = await supabase.from('appointments').insert({
+        patient_id: user.id,
+        date,
+        time,
+        reason,
+        status: 'pending',
+        type: 'telemed'
+      });
+
+      if (error) throw error;
+
+      toast.success('✅ Appointment booked successfully!');
+      setDate('');
+      setTime('');
+      setReason('');
+      onSuccess?.();
+    } catch (err: any) {
+      console.error(err);
+      toast.error('Failed to book appointment. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4">📅 Book Appointment</h2>
-      <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="input mb-2 w-full" />
-      <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="input mb-2 w-full" />
-      <input type="text" placeholder="Reason for visit" value={reason} onChange={(e) => setReason(e.target.value)} className="input mb-4 w-full" />
-      <button onClick={handleBook} className="btn-primary w-full">Book Now</button>
-    </div>
+    <Card className="p-6 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 max-w-xl mx-auto space-y-5">
+      <h2 className="text-2xl font-bold text-sky-800 flex items-center gap-2">
+        📅 Book Appointment
+      </h2>
+
+      <div className="space-y-3">
+        <div className="relative">
+          <Input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="pl-10"
+          />
+          <CalendarDays className="absolute left-3 top-2.5 h-5 w-5 text-sky-500" />
+        </div>
+
+        <div className="relative">
+          <Input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="pl-10"
+          />
+          <Clock className="absolute left-3 top-2.5 h-5 w-5 text-sky-500" />
+        </div>
+
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Reason for visit"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            className="pl-10"
+          />
+          <Pencil className="absolute left-3 top-2.5 h-5 w-5 text-sky-500" />
+        </div>
+      </div>
+
+      <Button
+        onClick={handleBook}
+        disabled={loading}
+        className="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 rounded-xl"
+      >
+        {loading ? 'Booking...' : 'Book Now'}
+      </Button>
+    </Card>
   );
 }

@@ -1,8 +1,7 @@
 import { supabase } from '@/lib/api'
 
 export async function getEmployerBySubdomain() {
-  const rawHostname = window.location.hostname
-  const subdomain = rawHostname.split('.')[0]
+  const subdomain = window.location.hostname.split('.')[0]
 
   const { data, error } = await supabase
     .from('employers')
@@ -11,7 +10,7 @@ export async function getEmployerBySubdomain() {
     .maybeSingle()
 
   if (error) {
-    console.error('❌ Failed to fetch employer:', error.message)
+    console.error('❌ Failed to load employer:', error.message)
     return null
   }
 

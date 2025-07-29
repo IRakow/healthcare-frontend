@@ -73,4 +73,5 @@ export const patientRoutes = [
   { path: '/patient/scan', element: <Scan /> },
   { path: '/patient/food-intel', element: <FoodIntel /> },
   { path: '/patient/progress', element: <ProgressPhotos /> },
+  { path: '/patient/appointments', element: <AppointmentsPage /> },
 ];
