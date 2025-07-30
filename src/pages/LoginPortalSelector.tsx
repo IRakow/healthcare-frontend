@@ -3,6 +3,19 @@ import { useNavigate } from "react-router-dom"
 import { Mic, User, ShieldCheck, Stethoscope, Briefcase } from "lucide-react"
 
 export default function LoginPortalSelector() {
+  console.log('[LoginPortalSelector] Component rendering');
+  
+  // Temporary test - show a simple div first
+  return (
+    <div style={{padding: '50px', textAlign: 'center', background: 'blue', color: 'white', fontSize: '24px'}}>
+      <h1>LoginPortalSelector is Loading!</h1>
+      <p>If you see this, React routing is working</p>
+      <button onClick={() => window.location.href = '/login/patient'} style={{padding: '10px', marginTop: '20px'}}>
+        Go to Patient Login
+      </button>
+    </div>
+  );
+  
   const navigate = useNavigate()
 
   const portals = [

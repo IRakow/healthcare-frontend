@@ -7,6 +7,7 @@ import AppRoutes from './components/AppRoutes';
 import { AuthProvider } from './contexts/AuthContext';
 
 export default function App() {
+  console.log('[App] Starting to render');
   return (
     <HelmetProvider>
       <BrowserRouter>
