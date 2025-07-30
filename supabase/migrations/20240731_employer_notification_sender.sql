@@ -1,1 +1,0 @@
-alter table employers add column notification_sender_name text default 'Insperity Health';

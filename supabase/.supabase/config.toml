@@ -1,0 +1,45 @@
+from textwrap import dedent
+
+# Re-create the config.toml file content after reset
+config_toml = dedent("""
+  project_id = "healthcare-frontend"
+
+  [api]
+  port = 54321
+  schema = "public"
+
+  [db]
+  port = 54328
+
+  [studio]
+  port = 54323
+
+  [inbucket]
+  port = 54324
+
+  [auth]
+  port = 9999
+  site_url = "http://localhost:3000"
+  additional_redirect_urls = []
+
+  [storage]
+  port = 5000
+
+  [rest]
+  port = 3000
+
+  [realtime]
+  port = 4000
+
+  [analytics]
+  port = 54327
+
+  [vector]
+  port = 54326
+""")
+
+config_path = "/mnt/data/config.toml"
+with open(config_path, "w") as f:
+    f.write(config_toml)
+
+config_path
