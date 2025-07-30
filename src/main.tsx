@@ -1,8 +1,8 @@
 // File: src/main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// import App from './App';
-import App from './TestApp'; // TEMPORARY TEST
+import App from './App';
+// import App from './TestApp'; // TEMPORARY TEST
 import { BrandingProvider } from '@/contexts/BrandingProvider';
 import '@/styles/globals.css';
 
