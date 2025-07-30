@@ -22,6 +22,7 @@ export default function AppRoutes() {
       <Routes>
         {/* Universal Entry Points */}
         <Route path="/" element={<LoginPortalSelector />} />
+        <Route path="/login" element={<LoginPortalSelector />} />
         <Route path="/login/patient" element={<PatientLogin />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
 

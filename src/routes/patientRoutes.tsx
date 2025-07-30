@@ -3,7 +3,7 @@ import PatientRecords from '@/pages/patient/Records';
 import Meditation from '@/pages/patient/Meditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
 import NutritionDashboard from '@/pages/patient/NutritionDashboard';
-import AppointmentsPage from '@/pages/patient/AppointmentsPage';
+import AppointmentsPage from '@/pages/patient/appointments';
 import Labs from '@/pages/patient/Labs';
 import Wearables from '@/pages/patient/Wearables';
 import PatientSettings from '@/pages/patient/Settings';
