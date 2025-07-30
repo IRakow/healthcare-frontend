@@ -1,7 +1,7 @@
 // File: src/components/AppRoutes.tsx
 
 import * as React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Suspense } from 'react';
 
 // Route Modules
@@ -18,36 +18,34 @@ import UnauthorizedPage from '@/pages/UnauthorizedPage';
 
 export default function AppRoutes() {
   return (
-    <Router>
-      <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
-        <Routes>
-          {/* Universal Entry Points */}
-          <Route path="/" element={<LoginPortalSelector />} />
-          <Route path="/unauthorized" element={<UnauthorizedPage />} />
-          <Route path="*" element={<ErrorPage />} />
+    <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
+      <Routes>
+        {/* Universal Entry Points */}
+        <Route path="/" element={<LoginPortalSelector />} />
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        <Route path="*" element={<ErrorPage />} />
 
-          {/* Role-Based Routing */}
-          {adminRoutes.map(({ path, element }) => (
-            <Route key={path} path={path} element={element} />
-          ))}
+        {/* Role-Based Routing */}
+        {adminRoutes.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
 
-          {providerRoutes.map(({ path, element }) => (
-            <Route key={path} path={path} element={element} />
-          ))}
+        {providerRoutes.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
 
-          {patientRoutes.map(({ path, element }) => (
-            <Route key={path} path={path} element={element} />
-          ))}
+        {patientRoutes.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
 
-          {employerRoutes.map(({ path, element }) => (
-            <Route key={path} path={path} element={element} />
-          ))}
+        {employerRoutes.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
 
-          {ownerRoutes.map(({ path, element }) => (
-            <Route key={path} path={path} element={element} />
-          ))}
-        </Routes>
-      </Suspense>
-    </Router>
+        {ownerRoutes.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
+      </Routes>
+    </Suspense>
   );
 }

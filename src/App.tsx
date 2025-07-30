@@ -1,22 +1,25 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { AppRoutes } from './components/AppRoutes';
+import { BrandingProvider } from '@/contexts/BrandingProvider';
 import TenantRouter from './components/TenantRouter';
+import AppRoutes from './components/AppRoutes';
 import { AuthProvider } from './contexts/AuthContext';
 
 export default function App() {
   return (
     <HelmetProvider>
-      <Router>
+      <BrowserRouter>
         <ErrorBoundary>
           <AuthProvider>
-            <TenantRouter>
-              <AppRoutes />
-            </TenantRouter>
+            <BrandingProvider>
+              <TenantRouter>
+                <AppRoutes />
+              </TenantRouter>
+            </BrandingProvider>
           </AuthProvider>
         </ErrorBoundary>
-      </Router>
+      </BrowserRouter>
     </HelmetProvider>
   );
 }
