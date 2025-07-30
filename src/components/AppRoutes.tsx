@@ -17,6 +17,7 @@ import UnauthorizedPage from '@/pages/UnauthorizedPage';
 import PatientLogin from '@/pages/PatientLogin';
 
 export default function AppRoutes() {
+  console.log('[AppRoutes] Rendering routes');
   return (
     <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
       <Routes>
@@ -35,9 +36,10 @@ export default function AppRoutes() {
           <Route key={path} path={path} element={element} />
         ))}
 
-        {patientRoutes.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
-        ))}
+        {patientRoutes.map(({ path, element }) => {
+          console.log('[AppRoutes] Mapping patient route:', path);
+          return <Route key={path} path={path} element={element} />;
+        })}
 
         {employerRoutes.map(({ path, element }) => (
           <Route key={path} path={path} element={element} />

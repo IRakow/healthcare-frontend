@@ -19,7 +19,8 @@ import { supabase } from '@/lib/supabase';
 import { format } from 'date-fns';
 
 export default function PatientHealthDashboard() {
-  console.log('PatientHealthDashboard rendering');
+  console.log('[PatientHealthDashboard] Component starting to render');
+  
   const navigate = useNavigate();
   const [tab, setTab] = useState('overview');
   const [stats, setStats] = useState({
@@ -33,14 +34,22 @@ export default function PatientHealthDashboard() {
   const [nextAppointment, setNextAppointment] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('[PatientHealthDashboard] Running auth check');
     const checkAuth = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        console.log('[PatientHealthDashboard] Auth check result:', { user: data?.user?.email, error });
+        if (!data.user) {
+          console.log('[PatientHealthDashboard] No user found, redirecting to /login/patient');
+          navigate('/login/patient');
+        }
+      } catch (err) {
+        console.error('[PatientHealthDashboard] Auth check error:', err);
         navigate('/login/patient');
       }
     };
     checkAuth();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     fetchStats();
@@ -110,6 +119,8 @@ export default function PatientHealthDashboard() {
     }
   }
 
+  console.log('[PatientHealthDashboard] About to render JSX');
+  
   return (
     <PatientLayout>
       <div className="space-y-6 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
