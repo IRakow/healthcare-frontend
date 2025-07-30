@@ -1,7 +1,7 @@
 // File: src/routes/adminRoutes.tsx
 
 import AdminLogin from '@/pages/AdminLogin';
-import AdminDashboard from '@/pages/AdminDashboard';
+import AdminDashboardSimple from '@/pages/AdminDashboardSimple';
 import AdminEmployersPage from '@/pages/AdminEmployersPage';
 import AdminSettingsPage from '@/pages/AdminSettingsPage';
 import AdminBillingPage from '@/pages/AdminBillingPage';
@@ -19,7 +19,7 @@ import { ChartDashboardPage } from '@/pages/admin/ChartDashboard';
 
 export const adminRoutes = [
   { path: '/admin/login', element: <AdminLogin /> },
-  { path: '/admin/dashboard', element: <AdminDashboard /> },
+  { path: '/admin/dashboard', element: <AdminDashboardSimple /> },
   { path: '/admin/employers', element: <AdminEmployersPage /> },
   { path: '/admin/settings', element: <AdminSettingsPage /> },
   { path: '/admin/billing', element: <AdminBillingPage /> },

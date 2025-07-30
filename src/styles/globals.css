@@ -5,6 +5,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure proper base styles */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    -webkit-text-size-adjust: 100%;
+    font-feature-settings: normal;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
+
 /* Beautiful custom polish */
 html, body {
   @apply bg-white text-gray-900 antialiased;

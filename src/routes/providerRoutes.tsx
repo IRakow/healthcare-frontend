@@ -1,6 +1,6 @@
 // File: src/routes/providerRoutes.tsx
 
-import ProviderDashboard from '@/pages/provider/index';
+import ProviderDashboardSimple from '@/pages/provider/ProviderDashboardSimple';
 import VisitSchedulePage from '@/pages/provider/visits';
 import PatientDirectoryPage from '@/pages/provider/patients';
 import SOAPNotesPage from '@/pages/provider/soap';
@@ -11,8 +11,8 @@ import VisitReviewQueue from '@/pages/provider/VisitReviewQueue';
 import PatientOverview from '@/pages/provider/PatientOverview';
 
 export const providerRoutes = [
-  { path: '/provider', element: <ProviderDashboard /> },
-  { path: '/provider/dashboard', element: <ProviderDashboard /> },
+  { path: '/provider', element: <ProviderDashboardSimple /> },
+  { path: '/provider/dashboard', element: <ProviderDashboardSimple /> },
   { path: '/provider/visits', element: <VisitSchedulePage /> },
   { path: '/provider/patients', element: <PatientDirectoryPage /> },
   { path: '/provider/soap', element: <SOAPNotesPage /> },
