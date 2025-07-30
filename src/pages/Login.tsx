@@ -1,6 +1,6 @@
 // File: src/pages/Login.tsx
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
@@ -17,15 +17,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleLogin(e: React.FormEvent) {
+  useEffect(() => {
+    document.title = branding?.employer_name ? `Login | ${branding.employer_name}` : 'Login';
+  }, [branding]);
+
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setError(error.message);
@@ -37,16 +38,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-blue-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#E0F7FA] to-[#B2EBF2] flex items-center justify-center px-4">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <Card className="shadow-2xl border border-white/30 backdrop-blur-xl bg-white/80 max-w-md w-full">
+        <Card className="shadow-2xl rounded-2xl border border-white/30 backdrop-blur-xl bg-white/60 max-w-md w-full">
           <CardHeader className="text-center">
             {branding.logo_url ? (
-              <img src={branding.logo_url} alt="Logo" className="mx-auto h-10 mb-2" />
+              <img src={branding.logo_url} alt="Logo" className="mx-auto h-12 mb-3" />
             ) : (
-              <h2 className="text-2xl font-bold text-sky-800">Insperity Health</h2>
+              <h2 className="text-2xl font-bold text-[color:var(--brand-primary)]">Insperity Health</h2>
             )}
-            <CardTitle className="text-lg text-gray-700">Welcome back. Please log in.</CardTitle>
+            <CardTitle className="text-lg text-gray-800">Welcome back. Please log in.</CardTitle>
+            {branding.tagline && (
+              <p className="text-xs text-muted-foreground mt-1">{branding.tagline}</p>
+            )}
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
@@ -56,6 +60,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="focus:ring-2 focus:ring-[color:var(--brand-primary)] focus:border-transparent"
               />
               <Input
                 type="password"
@@ -63,11 +68,12 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="focus:ring-2 focus:ring-[color:var(--brand-primary)] focus:border-transparent"
               />
               {error && <p className="text-sm text-red-600 text-center">{error}</p>}
               <Button
                 type="submit"
-                className="w-full bg-[color:var(--brand-primary)] hover:opacity-90 text-white font-semibold"
+                className="w-full bg-[color:var(--brand-primary)] hover:opacity-90 text-white font-semibold rounded-lg"
                 disabled={loading}
               >
                 {loading ? 'Logging in...' : 'Log In'}
