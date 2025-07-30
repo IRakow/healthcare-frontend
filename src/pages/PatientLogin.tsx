@@ -37,9 +37,9 @@ export default function PatientLogin() {
         setError(error.message);
       } else {
         const role = data?.user?.user_metadata?.role;
-        if (role === 'provider') navigate('/provider');
-        else if (role === 'admin') navigate('/admin');
-        else navigate('/patient');
+        if (role === 'provider') navigate('/provider/dashboard');
+        else if (role === 'admin') navigate('/admin/dashboard');
+        else navigate('/patient/dashboard');
       }
     } catch (err: any) {
       setError('Unexpected error occurred.');
