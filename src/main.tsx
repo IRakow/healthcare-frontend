@@ -1,19 +1,16 @@
 // File: src/main.tsx
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import AppRoutes from '@/components/AppRoutes';
+import App from './App';
+import { BrandingProvider } from '@/contexts/BrandingProvider';
 import '@/styles/globals.css';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <BrandingProvider>
+      <App />
+    </BrandingProvider>
   </React.StrictMode>
 );
