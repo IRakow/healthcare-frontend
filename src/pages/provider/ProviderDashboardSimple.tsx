@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import ProviderLayout from '@/components/layout/ProviderLayout';
+import ProviderLayoutSimple from '@/components/layout/ProviderLayoutSimple';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,7 @@ export default function ProviderDashboardSimple() {
   });
 
   return (
-    <ProviderLayout>
+    <ProviderLayoutSimple>
       <div className="p-6 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -163,6 +163,6 @@ export default function ProviderDashboardSimple() {
           </Card>
         </div>
       </div>
-    </ProviderLayout>
+    </ProviderLayoutSimple>
   );
 }
