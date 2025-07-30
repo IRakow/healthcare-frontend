@@ -5,6 +5,16 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   server: { port: 5173 },
+  base: '/',
+  build: {
+    assetsDir: 'assets',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')

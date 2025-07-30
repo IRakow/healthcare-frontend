@@ -35,22 +35,9 @@ export default function PatientHealthDashboard() {
     const [nextAppointment, setNextAppointment] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('[PatientHealthDashboard] Running auth check');
-    const checkAuth = async () => {
-      try {
-        const { data, error } = await supabase.auth.getUser();
-        console.log('[PatientHealthDashboard] Auth check result:', { user: data?.user?.email, error });
-        if (!data.user) {
-          console.log('[PatientHealthDashboard] No user found, redirecting to /login/patient');
-          navigate('/login/patient');
-        }
-      } catch (err) {
-        console.error('[PatientHealthDashboard] Auth check error:', err);
-        navigate('/login/patient');
-      }
-    };
-    checkAuth();
-  }, [navigate]);
+    console.log('[PatientHealthDashboard] Component mounted');
+    // Auth check removed - no login required
+  }, []);
 
   useEffect(() => {
     fetchStats();

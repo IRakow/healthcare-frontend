@@ -15,7 +15,6 @@ import CalendarView from '@/pages/CalendarView';
 import { ChartLogsPage } from '@/pages/admin/ChartLogs';
 import { ChartExportPage } from '@/pages/admin/ChartExport';
 import { ChartDashboardPage } from '@/pages/admin/ChartDashboard';
-import { adminRoutes } from '@/routes/adminRoutes';
 
 
 export const adminRoutes = [
