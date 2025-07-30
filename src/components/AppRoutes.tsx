@@ -1,6 +1,5 @@
 // File: src/components/AppRoutes.tsx
 
-import * as React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Suspense } from 'react';
 
@@ -15,6 +14,7 @@ import { ownerRoutes } from '@/routes/ownerRoutes';
 import LoginPortalSelector from '@/pages/LoginPortalSelector';
 import ErrorPage from '@/pages/ErrorPage';
 import UnauthorizedPage from '@/pages/UnauthorizedPage';
+import PatientLogin from '@/pages/PatientLogin';
 
 export default function AppRoutes() {
   return (
@@ -22,8 +22,8 @@ export default function AppRoutes() {
       <Routes>
         {/* Universal Entry Points */}
         <Route path="/" element={<LoginPortalSelector />} />
+        <Route path="/login/patient" element={<PatientLogin />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
-        <Route path="*" element={<ErrorPage />} />
 
         {/* Role-Based Routing */}
         {adminRoutes.map(({ path, element }) => (
@@ -45,6 +45,9 @@ export default function AppRoutes() {
         {ownerRoutes.map(({ path, element }) => (
           <Route key={path} path={path} element={element} />
         ))}
+
+        {/* Catch-all route - must be last */}
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Suspense>
   );

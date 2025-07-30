@@ -32,6 +32,16 @@ export default function PatientHealthDashboard() {
   const [nextAppointment, setNextAppointment] = useState<string | null>(null);
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (!data.user) {
+        navigate('/login/patient');
+      }
+    };
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
     fetchStats();
     fetchNextAppointment();
   }, []);
