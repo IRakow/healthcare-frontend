@@ -22,12 +22,16 @@ export default function PatientLogin() {
   }, [branding]);
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    console.log('🧠 Login attempt with:', email);
+
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log('✅ Supabase response:', data);
+      if (data?.user) console.log('🔐 Logged in as:', data.user.email, '| Role:', data.user.user_metadata?.role);
 
       if (error) {
         setError(error.message);
