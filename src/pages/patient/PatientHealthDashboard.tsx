@@ -21,17 +21,18 @@ import { format } from 'date-fns';
 export default function PatientHealthDashboard() {
   console.log('[PatientHealthDashboard] Component starting to render');
   
-  const navigate = useNavigate();
-  const [tab, setTab] = useState('overview');
-  const [stats, setStats] = useState({
-    heartRate: '–',
-    sleep: '–',
-    protein: '–',
-    hydration: '–',
-    steps: '–',
-    aiLogs: '–'
-  });
-  const [nextAppointment, setNextAppointment] = useState<string | null>(null);
+  try {
+    const navigate = useNavigate();
+    const [tab, setTab] = useState('overview');
+    const [stats, setStats] = useState({
+      heartRate: '–',
+      sleep: '–',
+      protein: '–',
+      hydration: '–',
+      steps: '–',
+      aiLogs: '–'
+    });
+    const [nextAppointment, setNextAppointment] = useState<string | null>(null);
 
   useEffect(() => {
     console.log('[PatientHealthDashboard] Running auth check');
@@ -120,6 +121,11 @@ export default function PatientHealthDashboard() {
   }
 
   console.log('[PatientHealthDashboard] About to render JSX');
+  
+  // Test render without PatientLayout first
+  if (!stats) {
+    return <div>Loading stats...</div>;
+  }
   
   return (
     <PatientLayout>
@@ -245,4 +251,21 @@ export default function PatientHealthDashboard() {
       </div>
     </PatientLayout>
   );
+  } catch (error) {
+    console.error('[PatientHealthDashboard] Component render error:', error);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-2">Error Loading Dashboard</h1>
+          <p className="text-gray-600">{error?.message || 'An unexpected error occurred'}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Reload Page
+          </button>
+        </div>
+      </div>
+    );
+  }
 }
