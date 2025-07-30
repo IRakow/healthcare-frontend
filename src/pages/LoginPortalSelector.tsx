@@ -1,88 +1,64 @@
-import * as React from "react"
-import { useNavigate } from "react-router-dom"
-import { Mic, User, ShieldCheck, Stethoscope, Briefcase } from "lucide-react"
+// File: src/pages/LoginPortalSelector.tsx
+
+import { useNavigate } from 'react-router-dom';
+import { useBrandingContext } from '@/contexts/BrandingProvider';
+import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+import { Building2, User, ShieldCheck } from 'lucide-react';
 
 export default function LoginPortalSelector() {
-  console.log('[LoginPortalSelector] Component rendering');
-  
-  // Temporary test - show a simple div first
+  const navigate = useNavigate();
+  const { branding } = useBrandingContext();
+
   return (
-    <div style={{padding: '50px', textAlign: 'center', background: 'blue', color: 'white', fontSize: '24px'}}>
-      <h1>LoginPortalSelector is Loading!</h1>
-      <p>If you see this, React routing is working</p>
-      <button onClick={() => window.location.href = '/login/patient'} style={{padding: '10px', marginTop: '20px'}}>
-        Go to Patient Login
-      </button>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-blue-50 to-cyan-100 p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white/60 backdrop-blur-xl border border-white/30 shadow-2xl rounded-3xl max-w-2xl w-full p-8"
+      >
+        <div className="text-center mb-6">
+          {branding.logo_url ? (
+            <img src={branding.logo_url} alt="Logo" className="h-10 mx-auto mb-2" />
+          ) : (
+            <h1 className="text-2xl font-bold text-[color:var(--brand-primary)]">Insperity Health</h1>
+          )}
+          <p className="text-gray-600 text-sm">
+            Welcome to your AI-powered healthcare platform
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-3 gap-4">
+          <Button
+            onClick={() => navigate('/admin/login')}
+            className="flex flex-col items-center gap-2 bg-sky-600 text-white py-6 rounded-xl shadow hover:bg-sky-700"
+          >
+            <ShieldCheck className="w-6 h-6" />
+            <span className="text-sm font-medium">Admin Portal</span>
+          </Button>
+
+          <Button
+            onClick={() => navigate('/owner/login')}
+            className="flex flex-col items-center gap-2 bg-emerald-600 text-white py-6 rounded-xl shadow hover:bg-emerald-700"
+          >
+            <Building2 className="w-6 h-6" />
+            <span className="text-sm font-medium">Owner Portal</span>
+          </Button>
+
+          <Button
+            onClick={() => navigate('/login/patient')}
+            className="flex flex-col items-center gap-2 bg-indigo-600 text-white py-6 rounded-xl shadow hover:bg-indigo-700"
+          >
+            <User className="w-6 h-6" />
+            <span className="text-sm font-medium">Patient Portal</span>
+          </Button>
+        </div>
+
+        <p className="mt-6 text-center text-xs text-gray-400">
+          Powered by AI • {branding.employer_name || 'Insperity Health'}
+        </p>
+      </motion.div>
     </div>
   );
-  
-  const navigate = useNavigate()
-
-  const portals = [
-    {
-      name: "Patient Portal",
-      description: "Access your health records, appointments, and AI assistant.",
-      icon: <User className="w-6 h-6 mr-2" />,
-      path: "/login/patient"
-    },
-    {
-      name: "Provider Portal",
-      description: "Manage patients, records, and clinical tools.",
-      icon: <Stethoscope className="w-6 h-6 mr-2" />,
-      path: "/login/provider"
-    },
-    {
-      name: "Admin Portal",
-      description: "Control users, logs, and platform operations.",
-      icon: <ShieldCheck className="w-6 h-6 mr-2" />,
-      path: "/login/admin"
-    },
-    {
-      name: "Owner Portal",
-      description: "Access billing, employer config, and invoices.",
-      icon: <Briefcase className="w-6 h-6 mr-2" />,
-      path: "/login/owner"
-    }
-  ]
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 px-6">
-      <div className="max-w-4xl w-full text-white">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2">Welcome to Insperity Health AI</h1>
-          <p className="text-gray-300 text-lg">Please choose your login portal</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {portals.map(({ name, description, icon, path }) => (
-            <button
-              key={name}
-              onClick={() => navigate(path)}
-              className="flex flex-col items-start justify-start p-6 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md shadow-xl text-left transition-all hover:scale-105 hover:bg-white/20 hover:border-white/30"
-            >
-              <div className="flex items-center text-xl font-semibold mb-2">
-                {icon}
-                {name}
-              </div>
-              <p className="text-sm text-gray-300">{description}</p>
-            </button>
-          ))}
-        </div>
-
-        {/* Voice Assistant Button */}
-        <div className="mt-10 flex justify-center">
-          <button
-            onClick={() => {
-              // Trigger Deepgram + ElevenLabs voice input (stub)
-              alert("Voice assistant coming soon!")
-            }}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-teal-600 hover:bg-teal-700 transition text-white shadow-lg"
-          >
-            <Mic className="w-5 h-5" />
-            Ask the AI Assistant
-          </button>
-        </div>
-      </div>
-    </div>
-  )
 }
