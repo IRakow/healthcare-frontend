@@ -20,18 +20,18 @@ export default function StatCard({ label, value, icon, trend, description, class
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className={`rounded-2xl bg-gradient-to-br from-white/80 to-zinc-100/90 dark:from-zinc-900/80 dark:to-zinc-800/90 border border-zinc-200 dark:border-zinc-700 shadow-lg p-5 w-full hover:shadow-xl transition-shadow ${className}`}
+      className={`rounded-2xl bg-gradient-to-br from-white to-gray-50 border border-gray-200 shadow-lg p-5 w-full hover:shadow-xl transition-shadow ${className}`}
     >
       <div className="flex items-start justify-between mb-3">
-        <div className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">{label}</div>
+        <div className="text-gray-600 text-sm font-medium">{label}</div>
         {icon && (
-          <div className="text-emerald-500 dark:text-emerald-400">{icon}</div>
+          <div className="text-emerald-500">{icon}</div>
         )}
       </div>
       
       <div className="space-y-1">
         <div className="flex items-baseline gap-2">
-          <div className="text-2xl font-semibold text-zinc-800 dark:text-white">{value}</div>
+          <div className="text-2xl font-semibold text-gray-800">{value}</div>
           {trend && (
             <span className={`text-xs font-medium ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
               {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
@@ -40,7 +40,7 @@ export default function StatCard({ label, value, icon, trend, description, class
         </div>
         
         {description && (
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
+          <p className="text-xs text-gray-500">{description}</p>
         )}
       </div>
     </motion.div>
