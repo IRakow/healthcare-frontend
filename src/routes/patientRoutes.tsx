@@ -1,4 +1,4 @@
-import PatientDashboardSimple from '@/pages/patient/PatientDashboardSimple';
+import PatientDashboardSimpleHybrid from '@/pages/patient/PatientDashboardSimpleHybrid';
 import PatientRecords from '@/pages/patient/Records';
 import Meditation from '@/pages/patient/Meditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
@@ -36,8 +36,8 @@ import FoodIntel from '@/pages/patient/FoodIntel';
 import ProgressPhotos from '@/pages/patient/ProgressPhotos';
 
 export const patientRoutes = [
-  { path: '/patient', element: <PatientDashboardSimple /> },
-  { path: '/patient/dashboard', element: <PatientDashboardSimple /> },
+  { path: '/patient', element: <PatientDashboardSimpleHybrid /> },
+  { path: '/patient/dashboard', element: <PatientDashboardSimpleHybrid /> },
   { path: '/patient/records', element: <PatientRecords /> },
   { path: '/patient/health-dashboard', element: <HealthDashboard /> },
   { path: '/patient/voice-screen', element: <VoiceScreen /> },
