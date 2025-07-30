@@ -1,3 +1,5 @@
+// File: src/components/TenantRouter.tsx
+
 import { useEffect, useState } from 'react';
 import { useTenantBranding } from '@/hooks/useTenantBranding';
 import { useTenantSubdomain } from '@/hooks/useTenantSubdomain';
@@ -14,12 +16,11 @@ export default function TenantRouter({ children }: TenantRouterProps) {
 
   const host = typeof window !== 'undefined' ? window.location.hostname : '';
   const isLocalOrPreview =
-    host.includes('vercel.app') || host.includes('vercel.sh') || host === 'localhost';
+    host.includes('vercel.app') || host.includes('vercel.sh') || host === 'localhost' || host === '127.0.0.1';
 
   // Inject favicon and brand CSS
   useEffect(() => {
     if (branding) {
-      // ✅ Favicon
       if (branding.favicon_url) {
         const existing = document.querySelector("link[rel='icon']") as HTMLLinkElement;
         if (existing) {
@@ -31,8 +32,6 @@ export default function TenantRouter({ children }: TenantRouterProps) {
           document.head.appendChild(link);
         }
       }
-
-      // ✅ CSS primary color
       if (branding.primary_color) {
         document.documentElement.style.setProperty('--brand-primary', branding.primary_color);
       }
@@ -45,17 +44,14 @@ export default function TenantRouter({ children }: TenantRouterProps) {
       setIsValidTenant(true);
       return;
     }
-
     if (!loading && subdomain && !branding) {
       setIsValidTenant(false);
     }
-
     if (!subdomain || branding) {
       setIsValidTenant(true);
     }
   }, [subdomain, branding, loading]);
 
-  // Show loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
@@ -67,7 +63,6 @@ export default function TenantRouter({ children }: TenantRouterProps) {
     );
   }
 
-  // Main domain redirect
   if (!subdomain && !isLocalOrPreview && typeof window !== 'undefined') {
     if (window.location.pathname === '/') {
       window.location.href = 'https://insperityhealth.com/marketing';
@@ -75,7 +70,6 @@ export default function TenantRouter({ children }: TenantRouterProps) {
     }
   }
 
-  // Unknown org error
   if (!isValidTenant) {
     return (
       <ErrorPage
