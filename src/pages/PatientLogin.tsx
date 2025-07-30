@@ -1,62 +1,94 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
+// File: src/pages/PatientLogin.tsx
+
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
+import { motion } from 'framer-motion';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useBrandingContext } from '@/contexts/BrandingProvider';
 
 export default function PatientLogin() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const navigate = useNavigate()
-  const { signIn } = useAuth()
+  const navigate = useNavigate();
+  const { branding } = useBrandingContext();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async () => {
-    const { error } = await signIn(email, password)
-    if (error) {
-      setError(error.message)
-    } else {
-      navigate('/patient')
+  useEffect(() => {
+    document.title = branding?.employer_name ? `Login | ${branding.employer_name}` : 'Login';
+  }, [branding]);
+
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        setError(error.message);
+      } else {
+        const role = data?.user?.user_metadata?.role;
+        if (role === 'provider') navigate('/provider');
+        else if (role === 'admin') navigate('/admin');
+        else navigate('/patient');
+      }
+    } catch (err: any) {
+      setError('Unexpected error occurred.');
+    } finally {
+      setLoading(false);
     }
   }
 
-  const handleGuestAccess = () => {
-    navigate('/patient')
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-xl font-semibold mb-4 text-center">Patient Login</h1>
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-2 border rounded mb-3"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border rounded mb-4"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <button
-          className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 mb-3"
-          onClick={handleLogin}
-        >
-          Login
-        </button>
-        <div className="text-center">
-          <span className="text-gray-600 text-sm">Don't have an account?</span>
-          <button
-            className="w-full mt-2 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300"
-            onClick={handleGuestAccess}
-          >
-            Continue as Guest
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#E0F7FA] to-[#B2EBF2] flex items-center justify-center px-4">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <Card className="shadow-2xl rounded-2xl border border-white/30 backdrop-blur-xl bg-white/60 max-w-md w-full">
+          <CardHeader className="text-center">
+            {branding.logo_url ? (
+              <img src={branding.logo_url} alt="Logo" className="mx-auto h-12 mb-3" />
+            ) : (
+              <h2 className="text-2xl font-bold text-[color:var(--brand-primary)]">Insperity Health</h2>
+            )}
+            <CardTitle className="text-lg text-gray-800">Welcome back. Please log in.</CardTitle>
+            {branding.tagline && (
+              <p className="text-xs text-muted-foreground mt-1">{branding.tagline}</p>
+            )}
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="focus:ring-2 focus:ring-[color:var(--brand-primary)] focus:border-transparent"
+              />
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="focus:ring-2 focus:ring-[color:var(--brand-primary)] focus:border-transparent"
+              />
+              {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+              <Button
+                type="submit"
+                className="w-full bg-[color:var(--brand-primary)] hover:opacity-90 text-white font-semibold rounded-lg"
+                disabled={loading}
+              >
+                {loading ? 'Logging in...' : 'Log In'}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
-  )
+  );
 }
