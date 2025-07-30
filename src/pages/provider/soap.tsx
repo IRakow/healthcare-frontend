@@ -1,17 +1,17 @@
 // File: src/pages/provider/soap.tsx
 
 import React from 'react';
-import Head from 'next/head';
-import { ProviderLayout } from '@/layouts/ProviderLayout';
+import { Helmet } from 'react-helmet-async';
+import ProviderLayout from '@/components/layout/ProviderLayout';
 import { SOAPSummaryViewer } from '@/components/provider/SOAPSummaryViewer';
 import { motion } from 'framer-motion';
 
 const ProviderSOAPPage: React.FC = () => {
   return (
     <ProviderLayout>
-      <Head>
+      <Helmet>
         <title>SOAP Notes</title>
-      </Head>
+      </Helmet>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

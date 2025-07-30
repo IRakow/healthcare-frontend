@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Volume2, Settings, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Select from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 

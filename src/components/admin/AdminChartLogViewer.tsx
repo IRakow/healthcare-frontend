@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileSearch, Clock, User, FileText, Activity, Loader2, Calendar, ChevronDown, ChevronUp, Stethoscope, Heart, Pill, Flask, CalendarCheck, AlertCircle, Download, Filter, RefreshCw } from 'lucide-react';
+import { FileSearch, Clock, User, FileText, Activity, Loader2, Calendar, ChevronDown, ChevronUp, Stethoscope, Heart, Pill, TestTube, CalendarCheck, AlertCircle, Download, Filter, RefreshCw } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -296,7 +296,7 @@ export const AdminChartLogViewer: React.FC = () => {
       'soap_note': <Stethoscope className="w-4 h-4" />,
       'vitals_recorded': <Heart className="w-4 h-4" />,
       'medication_prescribed': <Pill className="w-4 h-4" />,
-      'lab_ordered': <Flask className="w-4 h-4" />,
+      'lab_ordered': <TestTube className="w-4 h-4" />,
       'appointment_scheduled': <CalendarCheck className="w-4 h-4" />,
       'clinical_note': <FileText className="w-4 h-4" />,
       'telehealth': <Activity className="w-4 h-4" />

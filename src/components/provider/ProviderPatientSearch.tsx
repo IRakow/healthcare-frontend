@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserSearch, Search, Calendar, Pill, AlertCircle, Phone, Mail, ChevronRight, Loader2, Clock, Heart, Activity } from 'lucide-react';
+import { UserCheck, Search, Calendar, Pill, AlertCircle, Phone, Mail, ChevronRight, Loader2, Clock, Heart, Activity } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useUser } from '@/hooks/useUser';
 import { Card } from '@/components/ui/card';
@@ -319,7 +319,7 @@ export const ProviderPatientSearch: React.FC = () => {
     >
       <div className="space-y-4">
         <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-          <UserSearch className="w-5 h-5 text-primary" /> Patient Search
+          <UserCheck className="w-5 h-5 text-primary" /> Patient Search
         </h3>
 
         {/* Search Input */}
@@ -429,7 +429,7 @@ export const ProviderPatientSearch: React.FC = () => {
           {/* No Results */}
           {query && results.length === 0 && !loading && (
             <Card className="p-8 text-center">
-              <UserSearch className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <UserCheck className="w-12 h-12 text-gray-300 mx-auto mb-4" />
               <p className="text-muted-foreground">No patients found matching your search</p>
             </Card>
           )}

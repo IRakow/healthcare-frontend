@@ -1,7 +1,7 @@
 // File: src/pages/patient/AppointmentsPage.tsx
 
 import React from 'react';
-import AppointmentBooking from '@/components/patient/AppointmentBooking';
+import { AppointmentBooking } from '@/components/patient/AppointmentBooking';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export default function AppointmentsPage() {

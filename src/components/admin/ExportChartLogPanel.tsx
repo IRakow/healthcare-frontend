@@ -17,7 +17,7 @@ import {
   Stethoscope,
   Heart,
   Pill,
-  Flask,
+  TestTube,
   Activity
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
@@ -109,7 +109,7 @@ export const ExportChartLogPanel: React.FC = () => {
     { value: 'soap_note', label: 'SOAP Notes', icon: <Stethoscope className="w-4 h-4" /> },
     { value: 'vitals_recorded', label: 'Vitals', icon: <Heart className="w-4 h-4" /> },
     { value: 'medication_prescribed', label: 'Medications', icon: <Pill className="w-4 h-4" /> },
-    { value: 'lab_ordered', label: 'Lab Orders', icon: <Flask className="w-4 h-4" /> },
+    { value: 'lab_ordered', label: 'Lab Orders', icon: <TestTube className="w-4 h-4" /> },
     { value: 'telehealth', label: 'Telehealth', icon: <Activity className="w-4 h-4" /> },
     { value: 'clinical_note', label: 'Clinical Notes', icon: <FileText className="w-4 h-4" /> }
   ];
