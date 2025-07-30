@@ -11,7 +11,7 @@ import { employerRoutes } from '@/routes/employerRoutes';
 import { ownerRoutes } from '@/routes/ownerRoutes';
 
 // Universal Pages
-import SimpleLanding from '@/pages/SimpleLanding';
+import LoginPortalSelector from '@/pages/LoginPortalSelector';
 import ErrorPage from '@/pages/ErrorPage';
 import UnauthorizedPage from '@/pages/UnauthorizedPage';
 
@@ -21,8 +21,8 @@ export default function AppRoutes() {
     <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading...</div>}>
       <Routes>
         {/* Universal Entry Points */}
-        <Route path="/" element={<SimpleLanding />} />
-        <Route path="/login" element={<SimpleLanding />} />
+        <Route path="/" element={<LoginPortalSelector />} />
+        <Route path="/login" element={<LoginPortalSelector />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
         {/* Role-Based Routing */}

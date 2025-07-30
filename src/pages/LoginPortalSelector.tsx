@@ -31,7 +31,7 @@ export default function LoginPortalSelector() {
 
         <div className="grid sm:grid-cols-3 gap-4">
           <Button
-            onClick={() => navigate('/admin/login')}
+            onClick={() => navigate('/admin/dashboard')}
             className="flex flex-col items-center gap-2 bg-sky-600 text-white py-6 rounded-xl shadow hover:bg-sky-700"
           >
             <ShieldCheck className="w-6 h-6" />
@@ -39,15 +39,15 @@ export default function LoginPortalSelector() {
           </Button>
 
           <Button
-            onClick={() => navigate('/owner/login')}
+            onClick={() => navigate('/provider/dashboard')}
             className="flex flex-col items-center gap-2 bg-emerald-600 text-white py-6 rounded-xl shadow hover:bg-emerald-700"
           >
             <Building2 className="w-6 h-6" />
-            <span className="text-sm font-medium">Owner Portal</span>
+            <span className="text-sm font-medium">Provider Portal</span>
           </Button>
 
           <Button
-            onClick={() => navigate('/login/patient')}
+            onClick={() => navigate('/patient/dashboard')}
             className="flex flex-col items-center gap-2 bg-indigo-600 text-white py-6 rounded-xl shadow hover:bg-indigo-700"
           >
             <User className="w-6 h-6" />
