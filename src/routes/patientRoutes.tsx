@@ -1,4 +1,4 @@
-import PatientDashboard from '@/pages/patient/PatientHealthDashboard';
+import PatientHealthDashboard from '@/pages/patient/PatientHealthDashboard';
 import PatientRecords from '@/pages/patient/Records';
 import Meditation from '@/pages/patient/Meditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
@@ -36,8 +36,8 @@ import FoodIntel from '@/pages/patient/FoodIntel';
 import ProgressPhotos from '@/pages/patient/ProgressPhotos';
 
 export const patientRoutes = [
-  { path: '/patient', element: <PatientDashboard /> },
-  { path: '/patient/dashboard', element: <PatientDashboard /> },
+  { path: '/patient', element: <PatientHealthDashboard /> },
+  { path: '/patient/dashboard', element: <PatientHealthDashboard /> },
   { path: '/patient/records', element: <PatientRecords /> },
   { path: '/patient/health-dashboard', element: <HealthDashboard /> },
   { path: '/patient/voice-screen', element: <VoiceScreen /> },
@@ -72,6 +72,5 @@ export const patientRoutes = [
   { path: '/patient/unified-dashboard', element: <UnifiedGlassDashboard /> },
   { path: '/patient/scan', element: <Scan /> },
   { path: '/patient/food-intel', element: <FoodIntel /> },
-  { path: '/patient/progress', element: <ProgressPhotos /> },
-  { path: '/patient/appointments', element: <AppointmentsPage /> },
+  { path: '/patient/progress', element: <ProgressPhotos /> }
 ];
