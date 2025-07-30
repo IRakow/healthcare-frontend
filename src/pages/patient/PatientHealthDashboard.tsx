@@ -19,6 +19,7 @@ import { supabase } from '@/lib/supabase';
 import { format } from 'date-fns';
 
 export default function PatientHealthDashboard() {
+  console.log('PatientHealthDashboard rendering');
   const navigate = useNavigate();
   const [tab, setTab] = useState('overview');
   const [stats, setStats] = useState({
