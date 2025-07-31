@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import PatientLayoutSimple from '@/components/layout/PatientLayoutSimple';
+import PatientLayoutGlass from '@/components/layout/PatientLayoutGlass';
 import { Stethoscope, Calendar, Bot, MessageSquare, Pill, Apple, FileText, Droplets, Footprints, Moon } from 'lucide-react';
 import StatCard from '@/components/ui/StatCard';
 import { publicDataService } from '@/services/publicDataService';
@@ -129,7 +129,7 @@ export default function PatientDashboardSimpleHybrid() {
   }, []);
 
   return (
-    <PatientLayoutSimple>
+    <PatientLayoutGlass>
       <div className="space-y-6 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
@@ -348,6 +348,6 @@ export default function PatientDashboardSimpleHybrid() {
           </TabsContent>
         </Tabs>
       </div>
-    </PatientLayoutSimple>
+    </PatientLayoutGlass>
   );
 }
