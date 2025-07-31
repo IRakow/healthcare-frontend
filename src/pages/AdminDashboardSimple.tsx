@@ -12,7 +12,7 @@ import {
   DollarSign,
   BarChart3
 } from 'lucide-react';
-import AdminSidebar from '@/components/admin/AdminSidebar';
+import AdminLayoutGlass from '@/components/layout/AdminLayoutGlass';
 
 export default function AdminDashboardSimple() {
   const [stats] = useState({
@@ -27,11 +27,8 @@ export default function AdminDashboardSimple() {
   });
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <AdminSidebar />
-      
-      <div className="flex-1 overflow-auto">
-        <div className="p-8">
+    <AdminLayoutGlass>
+      <div className="p-8">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
@@ -163,8 +160,7 @@ export default function AdminDashboardSimple() {
               </CardContent>
             </Card>
           </div>
-        </div>
       </div>
-    </div>
+    </AdminLayoutGlass>
   );
 }
