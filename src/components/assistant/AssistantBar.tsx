@@ -21,7 +21,7 @@ export default function AssistantBar({ role }: AssistantBarProps) {
   const [error, setError] = useState<string | null>(null);
 
   const { recording, transcript, startRecording, stopRecording, resetTranscript } = useVoiceInput();
-  const { output, startStreaming, cancelStreaming } = useAIStreaming({ role });
+  const { response: output, streamAI: startStreaming } = useAIStreaming();
   const { speak } = useVoiceOutput({ voiceId: branding.voice_profile_id });
 
   // Handle streamed output
