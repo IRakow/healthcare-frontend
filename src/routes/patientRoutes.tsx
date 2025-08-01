@@ -34,6 +34,8 @@ import UnifiedGlassDashboard from '@/pages/patient/UnifiedGlassDashboard';
 import Scan from '@/pages/patient/Scan';
 import FoodIntel from '@/pages/patient/FoodIntel';
 import ProgressPhotos from '@/pages/patient/ProgressPhotos';
+import PatientCalendar from '@/pages/patient/PatientCalendar';
+import { AISummaryPanel } from '@/components/patient/AISummaryPanel';
 
 export const patientRoutes = [
   { path: '/patient', element: <PatientDashboardSimpleHybrid /> },
@@ -57,8 +59,9 @@ export const patientRoutes = [
   { path: '/patient/family', element: <Family /> },
   { path: '/patient/timeline', element: <Timeline /> },
   { path: '/patient/documents', element: <Documents /> },
-  { path: '/patient/calendar', element: <CalendarView /> },
+  { path: '/patient/calendar', element: <PatientCalendar /> },
   { path: '/patient/telemed/:appointmentId', element: <TelemedVisit /> },
+  { path: '/patient/visit', element: <TelemedVisit /> },
   { path: '/patient/share-access', element: <ShareAccess /> },
   { path: '/patient/shared/:patientId', element: <SharedPatientView /> },
   { path: '/patient/export-pdf', element: <ExportPDF /> },
@@ -72,5 +75,6 @@ export const patientRoutes = [
   { path: '/patient/unified-dashboard', element: <UnifiedGlassDashboard /> },
   { path: '/patient/scan', element: <Scan /> },
   { path: '/patient/food-intel', element: <FoodIntel /> },
-  { path: '/patient/progress', element: <ProgressPhotos /> }
+  { path: '/patient/progress', element: <ProgressPhotos /> },
+  { path: '/patient/ai-summary', element: <AISummaryPanel /> }
 ];
