@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Mic, Send } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
 
@@ -65,7 +64,8 @@ export function AssistantBar() {
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur border shadow-xl w-[95%] sm:w-[700px] rounded-2xl px-4 py-3 flex items-center gap-3 z-50">
-      <Input
+      <input
+        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/80 backdrop-blur"
         placeholder="Ask anything..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
