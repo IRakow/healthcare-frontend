@@ -8,7 +8,6 @@ import {
   Database,
   Users,
   Radio,
-  LogOut,
   ChevronLeft,
   ChevronRight,
   FileText,
@@ -98,10 +97,6 @@ export default function AdminSidebar() {
     }
   ]
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    navigate('/')
-  }
 
   return (
     <div className={`bg-gray-900 text-white transition-all duration-300 ${
@@ -165,17 +160,6 @@ export default function AdminSidebar() {
           )
         })}
       </nav>
-
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-800">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-600/20 text-red-400 hover:text-red-300 transition-all"
-        >
-          <LogOut className="h-5 w-5" />
-          {!isCollapsed && <span className="font-medium">Logout</span>}
-        </button>
-      </div>
     </div>
   )
 }
