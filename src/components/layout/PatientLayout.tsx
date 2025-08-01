@@ -1,8 +1,8 @@
-// File: src/components/layout/PatientLayout.tsx
+// src/components/layout/PatientLayout.tsx
 
-import React, { ReactNode, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { ReactNode, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { AssistantBar } from '@/components/ai/AssistantBar'
 import {
   CalendarDays,
   FileText,
@@ -19,11 +19,11 @@ import {
   MessageCircle,
   Menu,
   X
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface PatientLayoutProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const links = [
@@ -36,12 +36,12 @@ const links = [
   { href: '/patient/scan', label: 'Camera Tools', icon: Camera },
   { href: '/patient/ai-history', label: 'AI History', icon: Bot },
   { href: '/patient/settings', label: 'Settings', icon: User },
-  { href: '/patient/notifications', label: 'Notifications', icon: Bell },
-];
+  { href: '/patient/notifications', label: 'Notifications', icon: Bell }
+]
 
 export default function PatientLayout({ children }: PatientLayoutProps) {
-  const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-white to-emerald-50 flex">
@@ -64,11 +64,11 @@ export default function PatientLayout({ children }: PatientLayoutProps) {
       `}>
         <div className="mb-6">
           <h2 className="text-xl font-bold text-sky-800 mb-1">Patient Portal</h2>
-          <p className="text-sm text-gray-500">Welcome back</p>
+          <p className="text-sm text-gray-500">Navigation</p>
         </div>
         <nav className="space-y-2">
           {links.map(({ href, label, icon: Icon }) => {
-            const isActive = location.pathname === href || location.pathname.startsWith(href + '/');
+            const isActive = location.pathname === href || location.pathname.startsWith(href + '/')
             return (
               <Link
                 key={href}
@@ -80,7 +80,7 @@ export default function PatientLayout({ children }: PatientLayoutProps) {
                 <Icon className="w-4 h-4" />
                 {label}
               </Link>
-            );
+            )
           })}
         </nav>
       </aside>
@@ -98,7 +98,9 @@ export default function PatientLayout({ children }: PatientLayoutProps) {
         {children}
       </main>
 
-      <AssistantBar role="patient" />
+      <div className="fixed bottom-6 right-6 z-50">
+        <AssistantBar />
+      </div>
     </div>
-  );
+  )
 }

@@ -1,56 +1,34 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle, Circle } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { CheckCircle } from 'lucide-react'
 
-interface Goal {
-  id: number;
-  title: string;
-  completed: boolean;
-}
+const goals = [
+  { label: 'Sleep 7+ hrs', met: true },
+  { label: 'Protein 60g/day', met: true },
+  { label: 'Hydration 80oz/day', met: false },
+  { label: 'Log 3 meals', met: true }
+]
 
-const defaultGoals: Goal[] = [
-  { id: 1, title: 'Drink 2L of water daily', completed: false },
-  { id: 2, title: 'Sleep 7-8 hours each night', completed: false },
-  { id: 3, title: 'Eat 3 servings of vegetables', completed: false },
-  { id: 4, title: 'Walk 30 minutes a day', completed: false },
-  { id: 5, title: 'Log all meals this week', completed: false }
-];
-
-export const WeeklyGoalsTracker: React.FC = () => {
-  const [goals, setGoals] = useState<Goal[]>(defaultGoals);
-
-  const toggleGoal = (id: number) => {
-    setGoals((prev) =>
-      prev.map((goal) =>
-        goal.id === id ? { ...goal, completed: !goal.completed } : goal
-      )
-    );
-  };
-
+export function WeeklyGoalsTracker() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="rounded-2xl border border-gray-200 bg-white/70 backdrop-blur p-6 shadow space-y-4"
-    >
-      <h3 className="text-xl font-semibold text-gray-800">Your Weekly Health Goals</h3>
-      <ul className="space-y-3">
-        {goals.map((goal) => (
-          <li
-            key={goal.id}
-            onClick={() => toggleGoal(goal.id)}
-            className={`cursor-pointer flex items-center gap-3 p-3 rounded-xl border shadow-sm bg-white transition hover:bg-gray-50 ${goal.completed ? 'opacity-60' : ''}`}
+    <Card className="glass-card">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-green-700">
+          <CheckCircle className="w-5 h-5" />
+          Weekly Goals
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {goals.map((g, i) => (
+          <div
+            key={i}
+            className={`rounded-xl px-4 py-3 text-sm font-medium flex items-center justify-between border shadow-sm
+              ${g.met ? 'bg-green-50 text-green-700 border-green-300' : 'bg-white/60 text-gray-600 border-gray-200'}`}
           >
-            {goal.completed ? (
-              <CheckCircle className="text-green-500 w-5 h-5" />
-            ) : (
-              <Circle className="text-gray-400 w-5 h-5" />
-            )}
-            <p className="text-sm text-gray-800">{goal.title}</p>
-          </li>
+            {g.label}
+            {g.met && <span className="text-green-500 text-xs">✓</span>}
+          </div>
         ))}
-      </ul>
-    </motion.div>
-  );
-};
+      </CardContent>
+    </Card>
+  )
+}

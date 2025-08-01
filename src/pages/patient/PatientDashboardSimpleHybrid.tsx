@@ -7,6 +7,9 @@ import PatientLayoutGlass from '@/components/layout/PatientLayoutGlass';
 import { Stethoscope, Calendar, Bot, MessageSquare, Pill, Apple, FileText, Droplets, Footprints, Moon } from 'lucide-react';
 import StatCard from '@/components/ui/StatCard';
 import { publicDataService } from '@/services/publicDataService';
+import { AISummaryPanel } from '@/components/patient/AISummaryPanel';
+import { WeeklyGoalsTracker } from '@/components/patient/WeeklyGoalsTracker';
+import { SmartGroceryList } from '@/components/patient/SmartGroceryList';
 
 export default function PatientDashboardSimpleHybrid() {
   const [tab, setTab] = useState('overview');
@@ -199,58 +202,67 @@ export default function PatientDashboardSimpleHybrid() {
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="w-5 h-5" />
-                  Upcoming Appointments
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {appointments.map((apt) => (
-                    <div key={apt.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                      <div>
-                        <p className="font-medium">{apt.title}</p>
-                        <p className="text-sm text-gray-500">{apt.provider}</p>
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="w-5 h-5" />
+                    Upcoming Appointments
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {appointments.map((apt) => (
+                      <div key={apt.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="font-medium">{apt.title}</p>
+                          <p className="text-sm text-gray-500">{apt.provider}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-medium">{apt.date}</p>
+                          <p className="text-xs text-gray-500">{apt.time}</p>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium">{apt.date}</p>
-                        <p className="text-xs text-gray-500">{apt.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <Button className="w-full mt-4" variant="outline">View All Appointments</Button>
-              </CardContent>
-            </Card>
+                    ))}
+                  </div>
+                  <Button className="w-full mt-4" variant="outline">View All Appointments</Button>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bot className="w-5 h-5" />
-                  AI Health Assistant
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <p className="text-sm text-gray-600">Get instant answers to your health questions</p>
-                  <Button className="w-full">
-                    <MessageSquare className="w-4 h-4 mr-2" />
-                    Start Conversation
-                  </Button>
-                  <div className="pt-2 border-t">
-                    <p className="text-xs text-gray-500 mb-2">Recent topics:</p>
-                    <div className="space-y-1">
-                      <p className="text-xs">• Medication side effects</p>
-                      <p className="text-xs">• Exercise recommendations</p>
-                      <p className="text-xs">• Nutrition planning</p>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Bot className="w-5 h-5" />
+                    AI Health Assistant
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <p className="text-sm text-gray-600">Get instant answers to your health questions</p>
+                    <Button className="w-full">
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      Start Conversation
+                    </Button>
+                    <div className="pt-2 border-t">
+                      <p className="text-xs text-gray-500 mb-2">Recent topics:</p>
+                      <div className="space-y-1">
+                        <p className="text-xs">• Medication side effects</p>
+                        <p className="text-xs">• Exercise recommendations</p>
+                        <p className="text-xs">• Nutrition planning</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* New Components Section */}
+            <div className="grid gap-6 md:grid-cols-3">
+              <AISummaryPanel />
+              <WeeklyGoalsTracker />
+              <SmartGroceryList />
+            </div>
           </TabsContent>
 
           {/* Medications Tab */}
