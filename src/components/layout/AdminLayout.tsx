@@ -11,7 +11,6 @@ import {
   FileClock,
   Menu,
   X,
-  LogOut,
   ShieldCheck,
   Cpu,
   Server,
@@ -22,7 +21,6 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/lib/supabase';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -50,14 +48,8 @@ const advancedLinks = [
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const location = useLocation();
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandAdvanced, setExpandAdvanced] = useState(false);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/admin/login');
-  };
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-white to-gray-50 flex">
@@ -130,17 +122,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </div>
           )}
         </nav>
-
-        <div className="absolute bottom-4 left-4 right-4">
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
-            onClick={handleLogout}
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Log Out
-          </Button>
-        </div>
       </aside>
 
       {/* Mobile Overlay */}

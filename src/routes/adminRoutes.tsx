@@ -1,7 +1,7 @@
 // File: src/routes/adminRoutes.tsx
 
 import AdminLogin from '@/pages/AdminLogin';
-import AdminDashboard from '@/components/AdminDashboard';
+import AdminDashboard from '@/pages/admin/index';
 import AdminDashboardSimple from '@/pages/AdminDashboardSimple';
 import AdminEmployersPage from '@/pages/AdminEmployersPage';
 import AdminSettingsPage from '@/pages/AdminSettingsPage';
