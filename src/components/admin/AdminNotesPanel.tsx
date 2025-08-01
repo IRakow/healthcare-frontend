@@ -1,37 +1,35 @@
 import { useState } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-
-const initialNotes = [
-  { id: 1, text: 'Patient is consistent with hydration this week.' },
-  { id: 2, text: 'Follow up on protein intake trends.' }
-]
+import { StickyNote } from 'lucide-react'
 
 export function AdminNotesPanel() {
-  const [notes, setNotes] = useState(initialNotes)
+  const [notes, setNotes] = useState<string[]>([])
   const [input, setInput] = useState('')
 
   const addNote = () => {
     if (!input.trim()) return
-    setNotes([...notes, { id: Date.now(), text: input }])
+    setNotes([...notes, input.trim()])
     setInput('')
   }
 
   return (
     <Card className="glass-card">
       <CardHeader>
-        <CardTitle className="text-rose-700">🗂 Notes & Tags</CardTitle>
+        <CardTitle className="text-rose-700 flex items-center gap-2">
+          <StickyNote className="w-5 h-5" /> Admin Notes
+        </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         <ul className="space-y-2 text-sm text-gray-700">
-          {notes.map(n => (
-            <li key={n.id} className="border-b pb-1">{n.text}</li>
+          {notes.map((n, i) => (
+            <li key={i} className="border-b pb-1">{n}</li>
           ))}
         </ul>
         <input
           value={input}
           onChange={e => setInput(e.target.value)}
           placeholder="Write a new note..."
-          className="w-full border px-3 py-2 rounded-lg text-sm bg-white/50 backdrop-blur"
+          className="w-full border px-3 py-2 rounded-lg text-sm bg-white/60 backdrop-blur"
         />
         <button
           onClick={addNote}
