@@ -1,5 +1,4 @@
 import AdminLayout from '@/components/layout/AdminLayout'
-import { AssistantBar } from '@/components/ai/AssistantBar'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { AdminAuditLogPanel } from '@/components/admin/AdminAuditLogPanel'
 import { EmployerOnboardingPanel } from '@/components/admin/EmployerOnboardingPanel'
@@ -36,26 +35,17 @@ export default function AdminDashboard() {
             <AdminFeatureUsagePanel />
             <AuditLogSearch />
             <AdminTimeline />
-            <div className="flex justify-end pt-10">
-              <AssistantBar />
-            </div>
           </TabsContent>
 
           <TabsContent value="ai" className="space-y-10">
             <AdminAiActivityFeed />
             <AdminAuditLogPanel />
-            <div className="flex justify-end pt-10">
-              <AssistantBar />
-            </div>
           </TabsContent>
 
           <TabsContent value="employers" className="space-y-10">
             <EmployerOnboardingPanel />
             <MonthlyInvoicePanel />
             <EmployerInvoiceViewer />
-            <div className="flex justify-end pt-10">
-              <AssistantBar />
-            </div>
           </TabsContent>
 
           <TabsContent value="settings" className="space-y-10">
@@ -65,9 +55,6 @@ export default function AdminDashboard() {
             <AdminCustomReportPanel />
             <AdminChartBuilder />
             <AdminNotesPanel />
-            <div className="flex justify-end pt-10">
-              <AssistantBar />
-            </div>
           </TabsContent>
         </Tabs>
       </div>
