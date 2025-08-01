@@ -70,11 +70,13 @@ export default function AdminLayoutGlassy({ children }: AdminLayoutProps) {
         </nav>
 
         <div className="p-4 border-t border-gray-200 mt-auto">
-          <Button variant="ghost" onClick={() => navigate('/')}
-            className="w-full flex gap-2 items-center text-red-500 hover:bg-red-50">
+          <button
+            onClick={() => navigate('/')}
+            className="w-full flex gap-2 items-center px-3 py-2.5 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition-all"
+          >
             <LogOut className="w-4 h-4" />
             {!collapsed && 'Logout'}
-          </Button>
+          </button>
         </div>
       </aside>
 
