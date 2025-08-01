@@ -45,6 +45,10 @@ input, textarea, select {
   @apply backdrop-blur bg-white/70 border border-gray-200 rounded-2xl shadow-md;
 }
 
+.glass-card {
+  @apply rounded-2xl bg-white/30 backdrop-blur-md border border-white/40 shadow-md;
+}
+
 .section-heading {
   @apply text-xl font-semibold mb-2 text-gray-800;
 }
