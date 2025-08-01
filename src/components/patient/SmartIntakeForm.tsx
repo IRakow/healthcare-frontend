@@ -4,6 +4,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { AllergyEditor } from '@/components/patient/Allergies'
 import { supabase } from '@/lib/supabase'
+import { createAIChat } from '@/lib/openaiClient'
 // @ts-ignore - react-speech-recognition doesn't have types
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
@@ -55,6 +56,15 @@ export const SmartIntakeForm = () => {
       console.error('Error saving form:', error)
     } else {
       console.log('Intake saved.')
+      
+      // Generate AI summary
+      try {
+        const aiPrompt = `Summarize the following patient intake data:\n${JSON.stringify(form, null, 2)}`
+        const summary = await createAIChat(aiPrompt)
+        console.log('AI Summary:', summary)
+      } catch (err) {
+        console.error('Error generating AI summary:', err)
+      }
     }
   }
 
