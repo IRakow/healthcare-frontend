@@ -5,6 +5,7 @@ import { ProviderPatientSearch } from '@/components/provider/ProviderPatientSear
 import { SOAPSummaryViewer } from '@/components/provider/SOAPSummaryViewer';
 import { PatientRiskFlags } from '@/components/provider/PatientRiskFlags';
 import { LabReviewPanel } from '@/components/provider/LabReviewPanel';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -351,6 +352,10 @@ export const ProviderDashboard: React.FC = () => {
           </Button>
         </div>
       </Card>
+      
+      <div className="flex justify-end px-6 pt-10">
+        <AssistantBar />
+      </div>
     </motion.div>
   );
 };

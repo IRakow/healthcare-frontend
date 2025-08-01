@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import PatientLayoutSimple from '@/components/layout/PatientLayoutSimple';
 import StatCard from '@/components/ui/StatCard';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import { Stethoscope, Calendar, Bot, Moon, Apple, Droplets, Footprints, Clock, MessageSquare } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -64,8 +64,6 @@ export default function PatientDashboard() {
 
   return (
     <PatientLayoutSimple>
-      <AssistantBar role="patient" />
-
       <motion.div
         className="space-y-8 max-w-7xl mx-auto p-4 sm:p-6 md:p-8"
         initial={{ opacity: 0 }}
@@ -148,6 +146,10 @@ export default function PatientDashboard() {
             <Button variant="outline" className="w-full">Open Full History</Button>
           </CardContent>
         </Card>
+        
+        <div className="flex justify-end px-6 pt-10">
+          <AssistantBar />
+        </div>
       </motion.div>
     </PatientLayoutSimple>
   );

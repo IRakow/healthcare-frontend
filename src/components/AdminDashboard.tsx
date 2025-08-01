@@ -76,6 +76,9 @@ export default function AdminDashboard() {
               <motion.div {...staggered(2)}><AdminFeatureUsagePanel /></motion.div>
               <motion.div {...staggered(3)}><AuditLogSearch /></motion.div>
               <motion.div {...staggered(4)}><AdminTimeline /></motion.div>
+              <div className="flex justify-end pt-10">
+                <AssistantBar />
+              </div>
             </TabsContent>
 
             <TabsContent value="ai" className="space-y-10">
@@ -99,10 +102,6 @@ export default function AdminDashboard() {
             </TabsContent>
           </Tabs>
         </motion.div>
-        
-        <div className="flex justify-end pt-10">
-          <AssistantBar />
-        </div>
       </div>
     </AdminLayout>
   )
