@@ -1,117 +1,133 @@
-// File: src/pages/patient/PatientDashboard.tsx
-
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import PatientLayoutSimple from '@/components/layout/PatientLayoutSimple';
-import StatCard from '@/components/ui/StatCard';
-import AssistantBar from '@/components/assistant/AssistantBar';
-import { Stethoscope, Calendar, Bot, Moon, Apple, Droplets, Footprints, Clock, MessageSquare } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import PatientLayout from '@/components/layout/PatientLayout'
+import { AssistantBar } from '@/components/ai/AssistantBar'
+import StatCard from '@/components/ui/StatCard'
+import {
+  Stethoscope,
+  Calendar,
+  Bot,
+  Moon,
+  Apple,
+  Droplets,
+  Footprints,
+  Clock,
+  MessageSquare
+} from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { getPatientVitals, getUpcomingAppointments } from '@/lib/patientDataService'
 
 export default function PatientDashboard() {
-  const [stats, setStats] = useState({
-    heartRate: '72 bpm',
-    sleep: '7.5 hrs',
-    protein: '65g',
-    hydration: '64 oz',
-    steps: '8,432',
-    aiLogs: '3'
-  });
+  const [vitals, setVitals] = useState({
+    heartRate: '—',
+    sleep: '—',
+    protein: '—',
+    hydration: '—',
+    steps: '—',
+    aiLogs: '—'
+  })
+
+  const [appointments, setAppointments] = useState<any[]>([])
 
   const [timeline, setTimeline] = useState([
     {
       id: '1',
       icon: '💬',
-      title: 'Chat with AI Assistant',
-      timestamp: '10:15 AM',
-      detail: 'Discussed fatigue and protein intake.'
+      title: 'AI Chat – Fatigue & Protein',
+      detail: 'Assistant suggested protein-rich snacks.',
+      timestamp: 'Today, 9:22 AM'
     },
     {
       id: '2',
-      icon: '📄',
+      icon: '📁',
       title: 'Uploaded Lab Results',
-      timestamp: 'Yesterday',
-      detail: 'CBC results from Quest Diagnostics.'
+      detail: 'CBC panel from Quest Diagnostics',
+      timestamp: 'Yesterday'
     },
     {
       id: '3',
       icon: '💊',
-      title: 'Refilled Prescription',
-      timestamp: 'Mon, July 28',
-      detail: 'Refilled Lisinopril 10mg.'
+      title: 'Medication Refill',
+      detail: 'Refilled Lisinopril 10mg via CVS',
+      timestamp: 'Jul 28'
     }
-  ]);
+  ])
 
   const [aiConversations, setAIConversations] = useState([
     {
       id: '1',
-      prompt: 'What are good ways to improve sleep?',
-      response: 'Improving sleep hygiene includes consistent sleep times, no screens before bed, and reducing caffeine.',
-      timestamp: 'Today, 9:00 AM'
+      prompt: 'How do I improve my sleep score?',
+      response: 'Try consistent sleep/wake times, reduce blue light at night.',
+      timestamp: 'Today, 7:50 AM'
     },
     {
       id: '2',
-      prompt: 'Explain my lab results (CBC)',
-      response: 'Your white blood cell count is within normal range. Hemoglobin is slightly low, which could indicate anemia.',
+      prompt: 'Can you interpret my CBC labs?',
+      response: 'Your hemoglobin is slightly low. Consider discussing with your doctor.',
       timestamp: 'Yesterday'
     }
-  ]);
+  ])
 
   useEffect(() => {
-    // Later: fetch patient dashboard data from Supabase
-  }, []);
+    getPatientVitals().then(setVitals)
+    getUpcomingAppointments().then(setAppointments)
+  }, [])
 
   return (
-    <PatientLayoutSimple>
-      <AssistantBar role="patient" />
-
+    <PatientLayout>
       <motion.div
-        className="space-y-8 max-w-7xl mx-auto p-4 sm:p-6 md:p-8"
+        className="space-y-8 max-w-7xl mx-auto p-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4 }}
       >
         <div className="space-y-1">
           <h1 className="text-3xl font-bold text-sky-900">Welcome back</h1>
-          <p className="text-gray-500 text-sm">Your personalized health summary</p>
+          <p className="text-sm text-gray-500">Here's your personalized health snapshot.</p>
         </div>
 
+        {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-          <StatCard label="Heart Rate" value={stats.heartRate} icon={<Stethoscope className="w-4 h-4" />} description="Resting" />
-          <StatCard label="Sleep" value={stats.sleep} icon={<Moon className="w-4 h-4" />} description="Last Night" />
-          <StatCard label="Protein" value={stats.protein} icon={<Apple className="w-4 h-4" />} description="Today" />
-          <StatCard label="Hydration" value={stats.hydration} icon={<Droplets className="w-4 h-4" />} description="Goal: 80oz" />
-          <StatCard label="Steps" value={stats.steps} icon={<Footprints className="w-4 h-4" />} description="So far" />
-          <StatCard label="AI Logs" value={stats.aiLogs} icon={<Bot className="w-4 h-4" />} description="Today" />
+          <StatCard label="Heart Rate" value={vitals.heartRate} icon={<Stethoscope className="w-4 h-4" />} description="Resting" />
+          <StatCard label="Sleep" value={vitals.sleep} icon={<Moon className="w-4 h-4" />} description="Last Night" />
+          <StatCard label="Protein" value={vitals.protein} icon={<Apple className="w-4 h-4" />} description="Today" />
+          <StatCard label="Hydration" value={vitals.hydration} icon={<Droplets className="w-4 h-4" />} description="Goal: 80oz" />
+          <StatCard label="Steps" value={vitals.steps} icon={<Footprints className="w-4 h-4" />} description="So far" />
+          <StatCard label="AI Logs" value={vitals.aiLogs} icon={<Bot className="w-4 h-4" />} description="Today" />
         </div>
 
+        {/* Appointments */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-blue-500" />
+            <CardTitle className="flex items-center gap-2 text-blue-700">
+              <Calendar className="w-5 h-5" />
               Upcoming Appointments
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm text-gray-700">
-              <li>
-                📅 Annual Checkup - Dec 15, 2:00 PM<br />
-                Dr. Smith - Primary Care
-              </li>
-              <li>
-                🧪 Lab Work - Dec 20, 9:00 AM<br />
-                Quest Diagnostics
-              </li>
+              {appointments.length === 0 ? (
+                <li>No upcoming appointments.</li>
+              ) : (
+                appointments.map((appt, i) => (
+                  <li key={i}>
+                    📅 {appt.title} – {appt.date} at {appt.time}
+                    <br />
+                    {appt.provider}
+                  </li>
+                ))
+              )}
             </ul>
           </CardContent>
         </Card>
 
+        {/* Timeline */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-gray-700" />
-              Recent Activity Timeline
+            <CardTitle className="flex items-center gap-2 text-gray-700">
+              <Clock className="w-5 h-5" />
+              Recent Activity
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -130,17 +146,18 @@ export default function PatientDashboard() {
           </CardContent>
         </Card>
 
+        {/* AI Conversations */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-violet-600" />
-              AI Assistant Conversations
+            <CardTitle className="flex items-center gap-2 text-violet-700">
+              <MessageSquare className="w-5 h-5" />
+              AI Conversations
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {aiConversations.map((entry) => (
-              <div key={entry.id} className="border rounded-lg p-4 bg-white/80">
-                <p className="text-sm font-medium text-gray-800">🧠 {entry.prompt}</p>
+              <div key={entry.id} className="border rounded-lg p-4 bg-white/70 backdrop-blur-sm">
+                <p className="text-sm font-semibold text-gray-800">🧠 {entry.prompt}</p>
                 <p className="text-sm text-gray-600 mt-2">💬 {entry.response}</p>
                 <p className="text-xs text-gray-400 mt-1">{entry.timestamp}</p>
               </div>
@@ -148,7 +165,12 @@ export default function PatientDashboard() {
             <Button variant="outline" className="w-full">Open Full History</Button>
           </CardContent>
         </Card>
+
+        {/* AI Assistant */}
+        <div className="flex justify-end pt-10">
+          <AssistantBar />
+        </div>
       </motion.div>
-    </PatientLayoutSimple>
-  );
+    </PatientLayout>
+  )
 }
