@@ -3,7 +3,6 @@
 import React, { ReactNode, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useBrandingContext } from '@/contexts/BrandingProvider';
-import { AssistantBar } from '@/components/ai/AssistantBar';
 import {
   LayoutDashboard,
   Building2,
@@ -101,7 +100,6 @@ export default function AdminLayoutGlass({ children }: AdminLayoutProps) {
         </button>
       </div>
 
-      <AssistantBar />
     </div>
   );
 }
