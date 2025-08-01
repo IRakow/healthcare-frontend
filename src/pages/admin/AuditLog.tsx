@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import AdminSidebar from '@/components/admin/AdminSidebar'
+import AdminLayout from '@/components/layout/AdminLayout'
 import {
   Shield,
   User,
@@ -228,19 +228,17 @@ export default function AuditLog() {
 
   if (loading) {
     return (
-      <div className="flex">
-        <AdminSidebar />
-        <div className="flex-1 flex items-center justify-center h-screen">
+      <AdminLayout>
+        <div className="flex items-center justify-center h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
-      </div>
+      </AdminLayout>
     )
   }
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <div className="flex-1 p-6 bg-gray-50 min-h-screen">
+    <AdminLayout>
+      <div className="p-6 min-h-screen">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="flex justify-between items-center">
@@ -394,6 +392,6 @@ export default function AuditLog() {
           </Card>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   )
 }

@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Alert from '@/components/ui/alert'
-import AdminSidebar from '@/components/admin/AdminSidebar'
+import AdminLayout from '@/components/layout/AdminLayout'
 import VoiceAssistant from '@/components/voice/DeepgramAssistant'
 import {
   Database,
@@ -281,19 +281,17 @@ export default function Backup() {
 
   if (loading) {
     return (
-      <div className="flex">
-        <AdminSidebar />
-        <div className="flex-1 flex items-center justify-center h-screen">
+      <AdminLayout>
+        <div className="flex items-center justify-center h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
-      </div>
+      </AdminLayout>
     )
   }
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <div className="flex-1 p-6 bg-gray-50 min-h-screen">
+    <AdminLayout>
+      <div className="p-6 min-h-screen">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="flex justify-between items-center">
@@ -753,6 +751,6 @@ export default function Backup() {
           </Tabs>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   )
 }
