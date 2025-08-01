@@ -64,12 +64,9 @@ export const AppWrapper: React.FC = () => {
       );
     case 'admin':
       return (
-        <>
-          <CommandBar />
-          <AdminLayout>
-            <Outlet />
-          </AdminLayout>
-        </>
+        <AdminLayout>
+          <Outlet />
+        </AdminLayout>
       );
     case 'owner':
       return (

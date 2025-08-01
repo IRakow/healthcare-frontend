@@ -23,7 +23,7 @@ export default function AdminDashboard() {
     <AdminLayout>
       <div className="px-6 pb-24">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="sticky top-0 z-10 backdrop-blur-md bg-gray-800/80 border border-slate-700 mb-6 p-2 rounded-xl shadow text-white">
+          <TabsList className="sticky top-0 z-10 backdrop-blur-md bg-white/60 border border-slate-200 mb-6 p-2 rounded-xl shadow">
             <TabsTrigger value="overview">📊 Overview</TabsTrigger>
             <TabsTrigger value="ai">🧠 AI Logs</TabsTrigger>
             <TabsTrigger value="employers">🏢 Employers</TabsTrigger>

@@ -25,7 +25,7 @@ export default function AdminSidebar() {
   const navItem = (label: string, path: string, icon: JSX.Element) => (
     <li
       onClick={() => navigate(path)}
-      className="flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition cursor-pointer"
+      className="flex items-center gap-3 px-3 py-2 text-sm rounded-lg text-slate-700 hover:bg-sky-50 transition cursor-pointer font-medium"
     >
       {icon}
       {!collapsed && <span>{label}</span>}
@@ -34,36 +34,37 @@ export default function AdminSidebar() {
 
   return (
     <aside
-      className={`bg-gray-900 text-white min-h-screen flex flex-col transition-all duration-300 ${
+      className={`bg-white/80 backdrop-blur-lg min-h-screen flex flex-col transition-all duration-300 border-r shadow-xl ${
         collapsed ? 'w-16' : 'w-64'
       }`}
     >
-      <div className="flex flex-col items-center px-4 py-4 border-b border-gray-800">
-        <div className="flex justify-center items-center mb-6">
-          {!collapsed ? (
-            <Lottie
-              animationData={pulseLogo}
-              loop
-              autoplay
-              className="w-36 h-36"
-              style={{ marginTop: '-12px' }}
-            />
-          ) : (
-            <div className="w-6 h-6 bg-cyan-400 rounded-full animate-pulse" />
-          )}
-        </div>
-        <div className="flex items-center justify-between w-full">
-          {!collapsed && <span className="text-lg font-semibold">Admin</span>}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="text-gray-400 hover:text-white transition ml-auto"
-          >
-            {collapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
-          </button>
-        </div>
+      {/* Logo block only */}
+      <div className="flex justify-center items-center px-2 py-6 border-b border-gray-200">
+        {!collapsed ? (
+          <Lottie
+            animationData={pulseLogo}
+            loop
+            autoplay
+            className="w-36 h-36"
+            style={{ marginTop: '-12px' }}
+          />
+        ) : (
+          <div className="w-6 h-6 bg-cyan-400 rounded-full animate-pulse" />
+        )}
       </div>
 
-      <nav className="flex-1 px-2 pt-6">
+      {/* Collapse toggle only */}
+      <div className="flex justify-end px-4 py-3">
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="text-gray-400 hover:text-gray-600 transition"
+        >
+          {collapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
+        </button>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-2">
         <ul className="space-y-2">
           {navItem('Dashboard', '/admin', <Home size={18} />)}
           {navItem('Employers', '/admin/employers', <Users size={18} />)}
@@ -72,10 +73,11 @@ export default function AdminSidebar() {
         </ul>
       </nav>
 
-      <div className="mt-auto px-2 pb-6 border-t border-gray-800 pt-4">
+      {/* Logout */}
+      <div className="mt-auto px-2 pb-6 border-t border-gray-200 pt-4">
         <li
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-red-600 hover:text-white text-red-400 cursor-pointer transition"
+          className="flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-red-50 text-red-500 hover:text-red-600 cursor-pointer transition font-medium"
         >
           <LogOut size={18} />
           {!collapsed && <span>Logout</span>}
