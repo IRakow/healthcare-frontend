@@ -2,7 +2,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { useState } from 'react'
 
 const starterNotes = [
-  { id: 1, tag: 'employer', text: 'NovaHealth's payment plan expires next month.' },
+  { id: 1, tag: 'employer', text: "NovaHealth's payment plan expires next month." },
   { id: 2, tag: 'ai', text: 'Gemini responded with 98% accuracy this week.' }
 ]
 
