@@ -20,7 +20,7 @@ import {
   Calendar,
   Shield
 } from 'lucide-react';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/hooks/useUser';
 import { supabase } from '@/lib/supabase';
@@ -165,7 +165,7 @@ export default function OwnerLayout({ children }: OwnerLayoutProps) {
             {children}
           </motion.div>
         </main>
-        <AssistantBar role="owner" />
+        <AssistantBar />
       </div>
     </div>
   );

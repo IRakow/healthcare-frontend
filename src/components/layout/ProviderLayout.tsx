@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import {
   CalendarDays,
   FileText,
@@ -114,7 +114,7 @@ export default function ProviderLayout({ children }: ProviderLayoutProps) {
         {children}
       </main>
 
-      <AssistantBar role="provider" />
+      <AssistantBar />
     </div>
   );
 }

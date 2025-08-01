@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { MealPlannerAI } from '@/components/patient/MealPlannerAI';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import { ArrowLeft, Download, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ export default function MealPlan() {
       className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6"
     >
       {/* Floating Assistant Bar */}
-      <AssistantBar role="patient" />
+      <AssistantBar />
 
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-8">

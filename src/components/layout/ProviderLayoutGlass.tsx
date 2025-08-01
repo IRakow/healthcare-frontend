@@ -3,7 +3,7 @@
 import React, { ReactNode, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useBrandingContext } from '@/contexts/BrandingProvider';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import {
   LayoutDashboard,
   CalendarDays,

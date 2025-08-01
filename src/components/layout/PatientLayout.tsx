@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import {
   CalendarDays,
   FileText,

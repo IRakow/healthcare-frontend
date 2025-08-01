@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import Lottie from 'lottie-react'
-import pulseLogo from '/lottie/HeartCubePulseFinal.json'
 import {
   Home,
   Users,
@@ -15,7 +14,15 @@ import {
 
 export default function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  const [animationData, setAnimationData] = useState<any>(null)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    fetch('/lottie/HeartCubePulseFinal.json')
+      .then(response => response.json())
+      .then(data => setAnimationData(data))
+      .catch(err => console.error('Failed to load animation:', err))
+  }, [])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -41,13 +48,19 @@ export default function AdminSidebar() {
       {/* Logo block only */}
       <div className="flex justify-center items-center px-2 py-6 border-b border-gray-200">
         {!collapsed ? (
-          <Lottie
-            animationData={pulseLogo}
-            loop
-            autoplay
-            className="w-36 h-36"
-            style={{ marginTop: '-12px' }}
-          />
+          animationData ? (
+            <Lottie
+              animationData={animationData}
+              loop
+              autoplay
+              className="w-36 h-36"
+              style={{ marginTop: '-12px' }}
+            />
+          ) : (
+            <div className="w-36 h-36 flex items-center justify-center">
+              <div className="w-8 h-8 bg-cyan-400 rounded-full animate-pulse" />
+            </div>
+          )
         ) : (
           <div className="w-6 h-6 bg-cyan-400 rounded-full animate-pulse" />
         )}

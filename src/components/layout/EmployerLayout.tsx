@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import {
   LayoutDashboard,
   FileText,
@@ -101,7 +101,7 @@ export default function EmployerLayout({ children }: EmployerLayoutProps) {
         {children}
       </main>
 
-      <AssistantBar role="employer" />
+      <AssistantBar />
     </div>
   );
 }

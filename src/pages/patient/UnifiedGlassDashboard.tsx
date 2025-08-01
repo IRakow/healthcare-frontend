@@ -1,5 +1,5 @@
 import React from 'react';
-import AssistantBar from '@/components/assistant/AssistantBar';
+import { AssistantBar } from '@/components/ai/AssistantBar';
 import { TrendChartPanel } from '@/components/patient/TrendChartPanel';
 import { WeeklyGoalsTracker } from '@/components/patient/WeeklyGoalsTracker';
 import { AutoInsightsPanel } from '@/components/patient/AutoInsightsPanel';
