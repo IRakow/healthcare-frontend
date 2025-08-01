@@ -15,5 +15,8 @@
   ],
   "env": {
     "NODE_VERSION": "18"
-  }
+  },
+  "analytics": false,
+  "speedInsights": false,
+  "webVitals": false
 }

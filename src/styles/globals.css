@@ -52,3 +52,20 @@ input, textarea, select {
 .section-heading {
   @apply text-xl font-semibold mb-2 text-gray-800;
 }
+
+/* Force remove all Vercel injected elements */
+[data-vercel-analytics],
+[data-vercel-speed-insights],
+vercel-live-feedback,
+vercel-toolbar,
+#__vercel_speed_insights,
+#vercel-analytics,
+div[class*="vercel"],
+div[id*="vercel"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  z-index: -9999 !important;
+}
