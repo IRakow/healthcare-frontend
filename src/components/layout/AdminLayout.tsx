@@ -2,7 +2,6 @@
 
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import AssistantBar from '@/components/assistant/AssistantBar';
 import {
   LayoutDashboard,
   Settings,
@@ -156,8 +155,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <main className="flex-1 p-4 md:p-8 bg-white/60 backdrop-blur rounded-3xl shadow-inner">
         {children}
       </main>
-
-      <AssistantBar role="admin" />
     </div>
   );
 }
