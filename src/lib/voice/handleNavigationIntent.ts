@@ -27,7 +27,7 @@ export async function handleNavigationIntent(text: string): Promise<boolean> {
       return true
     }
 
-    speak('I didn't catch where you want to go.')
+    speak("I didn't catch where you want to go.")
     return true
   }
 
