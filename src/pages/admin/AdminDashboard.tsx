@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import AdminLayout from '@/layouts/AdminLayout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -53,36 +53,34 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-4xl font-extrabold text-slate-800">Admin Command Hub</h1>
-              <p className="text-sm text-muted-foreground">Live stats, alerts, and insights across your platform.</p>
-            </div>
-            <div className="flex gap-3">
-              <Button variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Refresh</Button>
-              <Button size="sm"><Download className="h-4 w-4 mr-1" /> Export</Button>
-            </div>
-          </div>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl font-extrabold text-slate-800">Admin Command Hub</h1>
+          <p className="text-sm text-muted-foreground">Live stats, alerts, and insights across your platform.</p>
+        </div>
+        <div className="flex gap-3">
+          <Button variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Refresh</Button>
+          <Button size="sm"><Download className="h-4 w-4 mr-1" /> Export</Button>
+        </div>
+      </div>
 
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {metricCard('Total Users', '1,208', <Users className="w-6 h-6 text-blue-600" />, '', () => navigate('/admin/users'))}
-            {metricCard('AI Calls (24h)', '534', <Brain className="w-6 h-6 text-purple-600" />, '', () => navigate('/admin/ai-logs'))}
-            {metricCard('Unpaid Invoices', '7', <FileText className="w-6 h-6 text-orange-600" />, '', () => navigate('/admin/billing'))}
-            {metricCard('Errors Today', '3', <AlertTriangle className="w-6 h-6 text-red-500" />, '', () => navigate('/admin/audit-log'))}
-            {metricCard('System Uptime', '99.97%', <Server className="w-6 h-6 text-green-600" />, '')}
-            {metricCard('Open Broadcasts', '2', <Mail className="w-6 h-6 text-yellow-500" />, '', () => navigate('/admin/broadcast'))}
-          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {metricCard('Total Users', '1,208', <Users className="w-6 h-6 text-blue-600" />, '', () => navigate('/admin/users'))}
+        {metricCard('AI Calls (24h)', '534', <Brain className="w-6 h-6 text-purple-600" />, '', () => navigate('/admin/ai-logs'))}
+        {metricCard('Unpaid Invoices', '7', <FileText className="w-6 h-6 text-orange-600" />, '', () => navigate('/admin/billing'))}
+        {metricCard('Errors Today', '3', <AlertTriangle className="w-6 h-6 text-red-500" />, '', () => navigate('/admin/audit-log'))}
+        {metricCard('System Uptime', '99.97%', <Server className="w-6 h-6 text-green-600" />, '')}
+        {metricCard('Open Broadcasts', '2', <Mail className="w-6 h-6 text-yellow-500" />, '', () => navigate('/admin/broadcast'))}
+      </div>
 
-          {/* AI Activity Chart */}
-          <Card className="p-6 rounded-2xl shadow-lg">
-            <div className="mb-4 text-xl font-semibold text-slate-800 flex items-center gap-2">
-              <Brain className="w-5 h-5 text-indigo-500" /> AI Usage This Week
-            </div>
-            <div style={{ height: '280px' }}>
-              <Line data={aiChartData} options={chartOptions} />
-            </div>
-          </Card>
+      <Card className="p-6 rounded-2xl shadow-lg">
+        <div className="mb-4 text-xl font-semibold text-slate-800 flex items-center gap-2">
+          <Brain className="w-5 h-5 text-indigo-500" /> AI Usage This Week
+        </div>
+        <div style={{ height: '280px' }}>
+          <Line data={aiChartData} options={chartOptions} />
+        </div>
+      </Card>
     </AdminLayout>
   )
 }
