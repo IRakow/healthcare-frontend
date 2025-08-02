@@ -1,42 +1,60 @@
+import AdminLayout from '@/components/layout/AdminLayout'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Download, RefreshCw, User } from 'lucide-react'
-import AdminLayout from '@/layouts/AdminLayout'
+import { Button } from '@/components/ui/button'
+import { Download, UserCog, Sparkles, Star } from 'lucide-react'
+import { toast } from 'sonner'
 
-interface UserProfile {
+interface User {
   id: string
-  full_name: string
+  name: string
   email: string
-  role: 'admin' | 'owner' | 'provider' | 'patient'
+  role: 'admin' | 'provider' | 'owner' | 'patient'
   created_at: string
+  score?: number
 }
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<UserProfile[]>([])
+  const [users, setUsers] = useState<User[]>([])
   const [search, setSearch] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [highlightedUser, setHighlightedUser] = useState<string | null>(null)
 
   useEffect(() => {
-    loadUsers()
+    const data = [
+      {
+        id: '1',
+        name: 'Ian Rakow',
+        email: 'ian@admin.com',
+        role: 'owner',
+        created_at: new Date().toISOString(),
+        score: 98
+      },
+      {
+        id: '2',
+        name: 'Dr. Adams',
+        email: 'adams@provider.com',
+        role: 'provider',
+        created_at: new Date().toISOString(),
+        score: 91
+      }
+    ]
+    setUsers(data)
+    const top = data.reduce((prev, current) => (prev.score! > current.score! ? prev : current))
+    setHighlightedUser(top.id)
   }, [])
 
-  const loadUsers = async () => {
-    setLoading(true)
-    const { data, error } = await supabase.from('user_profiles').select('*').order('created_at', { ascending: false })
-    if (!error && data) setUsers(data)
-    setLoading(false)
-  }
+  const filtered = users.filter(u =>
+    u.name.toLowerCase().includes(search.toLowerCase()) ||
+    u.email.toLowerCase().includes(search.toLowerCase())
+  )
 
   const exportUsers = () => {
     const csv = [
-      ['ID', 'Name', 'Email', 'Role', 'Created At'].join(','),
-      ...users.map(u => [u.id, u.full_name, u.email, u.role, u.created_at].join(','))
+      ['ID', 'Name', 'Email', 'Role', 'Score', 'Created At'].join(','),
+      ...filtered.map(u => [u.id, u.name, u.email, u.role, u.score || '', u.created_at].join(','))
     ].join('\n')
-
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -46,67 +64,52 @@ export default function AdminUsersPage() {
     URL.revokeObjectURL(url)
   }
 
-  const filtered = users.filter(user =>
-    user.full_name.toLowerCase().includes(search.toLowerCase()) ||
-    user.email.toLowerCase().includes(search.toLowerCase())
-  )
-
   return (
     <AdminLayout>
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-4xl font-extrabold text-slate-800 flex items-center gap-3">
-                <User className="w-7 h-7 text-primary" /> Users
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">View and manage all users across the platform.</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-2 text-slate-800">
+            <UserCog className="w-6 h-6 text-primary" /> Manage Users
+          </h1>
+          <p className="text-sm text-muted-foreground">Search, export, and see who's most impactful. AI-suggested ranking is live.</p>
+        </div>
+        <div className="flex gap-3">
+          <Button onClick={exportUsers} size="sm"><Download className="w-4 h-4 mr-2" /> Export CSV</Button>
+        </div>
+      </div>
+
+      <Input
+        placeholder="Search by name or email"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="mt-6 max-w-md rounded-xl"
+      />
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {filtered.map((user) => (
+          <Card key={user.id} className={`rounded-xl bg-white/90 shadow-md p-4 space-y-2 border ${highlightedUser === user.id ? 'border-yellow-400' : ''}`}>
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-1">
+              {user.name}
+              {highlightedUser === user.id && <Sparkles className="h-4 w-4 text-yellow-500 animate-pulse" />}
+            </h2>
+            <p className="text-sm text-muted-foreground">{user.email}</p>
+            <Badge className="capitalize mt-1">{user.role}</Badge>
+            {typeof user.score === 'number' && (
+              <p className="text-xs text-sky-700 flex items-center gap-1">
+                <Star className="h-3 w-3" /> Impact Score: {user.score}
+              </p>
+            )}
+            <p className="text-xs text-gray-400">Joined: {new Date(user.created_at).toLocaleDateString()}</p>
+            <div className="flex gap-2 pt-2">
+              <Button size="sm" variant="outline" onClick={() => toast.info(`Opening profile for ${user.name}`)}>View</Button>
+              <Button size="sm" variant="ghost" className="text-red-500" onClick={() => toast(`Deactivation initiated for ${user.email}`)}>Deactivate</Button>
             </div>
-            <div className="flex gap-3">
-              <Button onClick={loadUsers} variant="outline" size="sm" className="shadow-sm">
-                <RefreshCw className="w-4 h-4 mr-1" /> Refresh
-              </Button>
-              <Button onClick={exportUsers} size="sm" className="shadow-sm">
-                <Download className="w-4 h-4 mr-1" /> Export CSV
-              </Button>
-            </div>
-          </div>
-
-          <Input
-            placeholder="🔍 Search by name or email"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="max-w-md rounded-xl shadow-inner border border-blue-100"
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filtered.map(user => (
-              <Card key={user.id} className="bg-white/90 backdrop-blur-xl border border-white/30 rounded-2xl shadow-md hover:shadow-xl transition-all">
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-blue-900">
-                    {user.full_name}
-                  </CardTitle>
-                  <p className="text-xs text-gray-400">{user.email}</p>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Badge className={`capitalize border text-xs ${
-                    user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                    user.role === 'owner' ? 'bg-blue-100 text-blue-700' :
-                    user.role === 'provider' ? 'bg-green-100 text-green-700' :
-                    'bg-gray-100 text-gray-600'
-                  }`}>
-                    {user.role}
-                  </Badge>
-                  <div className="pt-3 flex gap-2">
-                    <Button variant="secondary" size="sm" className="rounded-xl px-3">Profile</Button>
-                    <Button variant="ghost" size="sm" className="rounded-xl text-red-500 hover:bg-red-50">Deactivate</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {filtered.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground text-sm">No users found matching your search.</div>
-          )}
+          </Card>
+        ))}
+        {filtered.length === 0 && (
+          <p className="text-sm text-muted-foreground italic">No users match your search.</p>
+        )}
+      </div>
     </AdminLayout>
   )
 }

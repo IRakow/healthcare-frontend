@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import AdminLayout from '@/components/layout/AdminLayout';
 
 export default function AdminBillingPage() {
   const [invoices, setInvoices] = useState([]);
@@ -13,10 +14,11 @@ export default function AdminBillingPage() {
   }, []);
 
   return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-3xl font-bold">💳 Admin Billing Center</h1>
-      <p className="text-gray-600">Monitor all billing activity across tenants. Generate monthly statements, track overdue payments, and push adjustments.</p>
-      <div className="bg-white p-4 shadow rounded">
+    <AdminLayout>
+      <div className="space-y-4">
+        <h1 className="text-3xl font-bold">💳 Admin Billing Center</h1>
+        <p className="text-gray-600">Monitor all billing activity across tenants. Generate monthly statements, track overdue payments, and push adjustments.</p>
+        <div className="bg-white p-4 shadow rounded">
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left border-b">
@@ -39,5 +41,6 @@ export default function AdminBillingPage() {
         </table>
       </div>
     </div>
+    </AdminLayout>
   );
 }

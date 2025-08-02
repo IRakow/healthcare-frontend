@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Download, RefreshCw, BarChart3, Brain, Users, Activity } from 'lucide-react'
 import { format } from 'date-fns'
-import AdminLayout from '@/layouts/AdminLayout'
+import AdminLayout from '@/components/layout/AdminLayout'
 
 interface Metric {
   label: string
