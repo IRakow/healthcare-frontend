@@ -1,6 +1,5 @@
 import { ReactNode, useEffect } from 'react'
 import AdminSidebar from '@/components/admin/AdminSidebar'
-import { AssistantBar } from '@/components/ai/AssistantBar'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
 import VoiceHUDOverlay from '@/components/voice/VoiceHUDOverlaySimple'
 
@@ -27,10 +26,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </main>
 
-      {/* Floating AI Assistant */}
-      <div className="fixed bottom-4 right-4 z-50">
+      {/* Floating AI Assistant - Commented out to remove legacy AI bar */}
+      {/* <div className="fixed bottom-4 right-4 z-50">
         <AssistantBar />
-      </div>
+      </div> */}
       
       {/* Rachel Voice HUD */}
       <VoiceHUDOverlay interim={interimText} />
