@@ -21,6 +21,9 @@ import AdminBroadcastPage from '@/pages/admin/AdminBroadcastPage';
 import AdminBackupPage from '@/pages/admin/AdminBackupPage';
 import AdminAuditLogPage from '@/pages/admin/AdminAuditLogPage';
 import AdminAiCommandCenter from '@/pages/admin/AdminAiCommandCenter';
+import AdminInvoicesPage from '@/pages/admin/AdminInvoicesPage';
+import AdminSecurityPanel from '@/pages/admin/AdminSecurityPanel';
+import AdminCompliancePanel from '@/pages/admin/AdminCompliancePanel';
 
 
 export const adminRoutes = [
@@ -33,11 +36,14 @@ export const adminRoutes = [
   { path: '/admin/analytics', element: <AdminAnalyticsPage /> },
   { path: '/admin/settings', element: <AdminSettingsPage /> },
   { path: '/admin/billing', element: <AdminBillingPage /> },
+  { path: '/admin/invoices', element: <AdminInvoicesPage /> },
   { path: '/admin/audit', element: <AdminAuditLogPage /> },
   { path: '/admin/audit-log', element: <AdminAuditLogPage /> },
   { path: '/admin/backup', element: <AdminBackupPage /> },
   { path: '/admin/backups', element: <AdminBackupPage /> },
   { path: '/admin/broadcast', element: <AdminBroadcastPage /> },
+  { path: '/admin/security', element: <AdminSecurityPanel /> },
+  { path: '/admin/compliance-panel', element: <AdminCompliancePanel /> },
   { path: '/admin/superpanel', element: <SuperPanel /> },
   { path: '/admin/ai-logs', element: <AILogsPage /> },
   { path: '/admin/audit-dashboard', element: <AuditDashboard /> },
