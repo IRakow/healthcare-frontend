@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import { AssistantBar } from '@/components/ai/AssistantBar'
+import { VoiceHUDOverlay } from '@/components/voice/VoiceHUDOverlay'
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -23,6 +24,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <div className="fixed bottom-4 right-4 z-50">
         <AssistantBar />
       </div>
+      
+      {/* Voice HUD Overlay */}
+      <VoiceHUDOverlay />
     </div>
   )
 }
