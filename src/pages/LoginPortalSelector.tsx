@@ -5,6 +5,7 @@ import { useBrandingContext } from '@/contexts/BrandingProvider';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Building2, User, ShieldCheck } from 'lucide-react';
+import AnimatedLogoWithSound from '@/components/branding/AnimatedLogoWithSound';
 
 export default function LoginPortalSelector() {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ export default function LoginPortalSelector() {
         className="bg-white/60 backdrop-blur-xl border border-white/30 shadow-2xl rounded-3xl max-w-2xl w-full p-8"
       >
         <div className="text-center mb-6">
+          <div className="flex justify-center mb-4">
+            <AnimatedLogoWithSound />
+          </div>
           {branding.logo_url ? (
             <img src={branding.logo_url} alt="Logo" className="h-10 mx-auto mb-2" />
           ) : (
