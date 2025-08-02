@@ -1,5 +1,6 @@
 import { Player } from '@lottiefiles/react-lottie-player'
 import animationData from '@/assets/HeartCubePulseFinal.json'
+import heartbeatAudio from '@/assets/audio/realistic_heartbeat_sequence.mp3'
 import { useEffect, useRef } from 'react'
 
 export default function AnimatedLogoWithSound() {
@@ -24,8 +25,7 @@ export default function AnimatedLogoWithSound() {
         src={animationData}
         style={{ height: '5rem', width: '5rem' }}
       />
-      {/* Audio temporarily commented out until mp3 file is added */}
-      {/* <audio ref={audioRef} src={heartbeatAudio} preload="auto" /> */}
+      <audio ref={audioRef} src={heartbeatAudio} preload="auto" />
     </div>
   )
 }
