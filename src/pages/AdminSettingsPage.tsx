@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Sparkles, Palette, Languages, ShieldAlert, Save } from 'lucide-react'
 import { toast } from 'sonner'
+import AdminAssistantBar from '@/components/AdminAssistantBar'
+import { RachelTTS } from '@/lib/voice/RachelTTS'
 
 export default function AdminSettingsPage() {
   const [aiEnabled, setAiEnabled] = useState(true)
@@ -16,6 +18,23 @@ export default function AdminSettingsPage() {
 
   const save = () => {
     toast.success('Settings saved. All changes take effect immediately.')
+  }
+
+  const handleVoiceQuery = async (text: string) => {
+    if (text.includes('ai') || text.includes('assistant')) {
+      await RachelTTS.say(`AI Assistant is currently ${aiEnabled ? 'enabled' : 'disabled'}. ${aiEnabled ? 'Rachel will respond to all voice commands.' : 'Voice responses are turned off.'}`)
+    } else if (text.includes('theme') || text.includes('color')) {
+      await RachelTTS.say(`The current theme color is set to ${themeColor}. You can change it using the color picker.`)
+    } else if (text.includes('language')) {
+      await RachelTTS.say(`The system language is set to ${language === 'en' ? 'English' : language === 'es' ? 'Spanish' : language === 'fr' ? 'French' : 'German'}.`)
+    } else if (text.includes('guest') || text.includes('access')) {
+      await RachelTTS.say(`Guest access is currently ${guestAccess ? 'enabled' : 'disabled'}. ${guestAccess ? 'Unverified users can interact with AI features.' : 'Only verified users have access.'}`)
+    } else if (text.includes('save')) {
+      save()
+      await RachelTTS.say('Settings have been saved successfully.')
+    } else {
+      await RachelTTS.say('You can ask about AI settings, theme color, language preferences, or guest access.')
+    }
   }
 
   return (
@@ -76,6 +95,7 @@ export default function AdminSettingsPage() {
           </Button>
         </div>
       </div>
+      <AdminAssistantBar onAsk={handleVoiceQuery} />
     </AdminLayout>
   )
 }

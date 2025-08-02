@@ -24,6 +24,8 @@ import {
   Zap
 } from 'lucide-react'
 import { EmployerInvoiceSummary } from '@/components/owner/EmployerInvoiceSummary'
+import AdminAssistantBar from '@/components/AdminAssistantBar'
+import { RachelTTS } from '@/lib/voice/RachelTTS'
 
 interface SystemStats {
   totalEmployers: number
@@ -221,6 +223,31 @@ export default function AdminDashboard() {
       case 'success': return 'text-green-600'
       case 'warning': return 'text-yellow-600'
       case 'error': return 'text-red-600'
+    }
+  }
+
+  const handleVoiceQuery = async (text: string) => {
+    if (text.includes('revenue') || text.includes('money')) {
+      await RachelTTS.say(`Total revenue is ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats.totalRevenue)}. Growth rate is ${stats.growthRate}% this month.`)
+    } else if (text.includes('users') || text.includes('active')) {
+      await RachelTTS.say(`There are ${stats.monthlyActiveUsers} monthly active users. We have ${stats.totalEmployers} employers, ${stats.totalProviders} providers, and ${stats.totalPatients} patients.`)
+    } else if (text.includes('health') || text.includes('system')) {
+      await RachelTTS.say(`System health is at ${stats.systemHealth}%. Last backup was ${formatTimeAgo(new Date(stats.lastBackup))}.`)
+    } else if (text.includes('invoice') || text.includes('pending')) {
+      await RachelTTS.say(`There are ${stats.pendingInvoices} pending invoices to process.`)
+    } else if (text.includes('activity') || text.includes('recent')) {
+      const latest = recentActivity[0]
+      if (latest) {
+        await RachelTTS.say(`Most recent activity: ${latest.description} ${formatTimeAgo(new Date(latest.timestamp))}.`)
+      }
+    } else if (text.includes('settings')) {
+      navigate('/admin/settings')
+      await RachelTTS.say('Taking you to settings.')
+    } else if (text.includes('backup')) {
+      navigate('/admin/backup')
+      await RachelTTS.say('Opening backup management.')
+    } else {
+      await RachelTTS.say('You can ask about revenue, active users, system health, pending invoices, or recent activity.')
     }
   }
 
@@ -499,6 +526,8 @@ export default function AdminDashboard() {
         <h2 className="text-lg font-semibold mb-4">Employer Invoices</h2>
         <EmployerInvoiceSummary />
       </div>
+
+      <AdminAssistantBar onAsk={handleVoiceQuery} />
     </div>
   )
 }
