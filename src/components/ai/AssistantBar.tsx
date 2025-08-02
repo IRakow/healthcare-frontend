@@ -1,82 +1,63 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Mic, Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { supabase } from '@/lib/supabase';
+import { speakWithElevenLabs, startListening } from '@/lib/voiceUtils';
+import { sendToGemini } from '@/lib/ai/geminiClient';
 
-export function AssistantBar() {
-  const [query, setQuery] = useState('');
+export default function AssistantBar() {
+  const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [listening, setListening] = useState(false);
 
-  async function handleSubmit() {
-    if (!query.trim()) return;
+  const handleSubmit = async () => {
+    if (!input.trim()) return;
     setLoading(true);
-
-    // Get Supabase URL from the client
-    const supabaseUrl = (supabase as any).supabaseUrl || import.meta.env.VITE_SUPABASE_URL;
-    
-    const res = await fetch(`${supabaseUrl}/functions/v1/ai-voice`, {
-      method: 'POST',
-      body: JSON.stringify({ query }),
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${(supabase as any).supabaseKey || import.meta.env.VITE_SUPABASE_ANON_KEY}`
-      },
-    });
-
-    const reader = res.body?.getReader();
-    const decoder = new TextDecoder();
-    const audioChunks: Uint8Array[] = [];
-    let finalText = '';
-
-    while (reader) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const chunk = decoder.decode(value, { stream: true });
-      finalText += chunk;
-
-      // Send the chunk to ElevenLabs TTS via Supabase Function
-      const audioRes = await fetch(`${supabaseUrl}/functions/v1/eleven-speak`, {
-        method: 'POST',
-        body: JSON.stringify({ text: chunk }),
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(supabase as any).supabaseKey || import.meta.env.VITE_SUPABASE_ANON_KEY}`
-        },
-      });
-
-      const audioBuffer = await audioRes.arrayBuffer();
-      audioChunks.push(new Uint8Array(audioBuffer));
-      playAudio(audioBuffer); // play each chunk
+    try {
+      const response = await sendToGemini(input);
+      speakWithElevenLabs(response);
+      console.log('Rachel:', response);
+    } catch (err) {
+      console.error('Assistant error:', err);
     }
-
+    setInput('');
     setLoading(false);
-  }
+  };
 
-  function playAudio(buffer: ArrayBuffer) {
-    const ctx = new AudioContext();
-    ctx.decodeAudioData(buffer.slice(0), (decoded) => {
-      const source = ctx.createBufferSource();
-      source.buffer = decoded;
-      source.connect(ctx.destination);
-      source.start(0);
+  const handleVoice = () => {
+    setListening(true);
+    startListening((transcript: string) => {
+      setInput(transcript);
+      setListening(false);
     });
-  }
+  };
+
+  useEffect(() => {
+    // optional: auto-listen on load
+    // handleVoice();
+  }, []);
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur border shadow-xl w-[95%] sm:w-[700px] rounded-2xl px-4 py-3 flex items-center gap-3 z-50">
+    <div className="w-full rounded-xl shadow-lg bg-white border border-gray-200 p-4 flex items-center gap-2">
       <input
-        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/80 backdrop-blur"
-        placeholder="Ask anything..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        className="flex-grow outline-none text-sm text-gray-800 placeholder:text-gray-400"
+        placeholder="Ask Rachel anything..."
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+        disabled={loading}
       />
-      <Button onClick={handleSubmit} disabled={loading}>
-        <Send className="w-4 h-4" />
-      </Button>
-      <Button variant="secondary" onClick={() => alert('Voice input coming soon')}>
-        <Mic className="w-4 h-4" />
-      </Button>
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        className="text-blue-600 hover:text-blue-800"
+      >
+        <Send size={20} />
+      </button>
+      <button
+        onClick={handleVoice}
+        className={`text-blue-500 hover:text-blue-700 ${listening ? 'animate-pulse' : ''}`}
+      >
+        <Mic size={20} />
+      </button>
     </div>
   );
 }
