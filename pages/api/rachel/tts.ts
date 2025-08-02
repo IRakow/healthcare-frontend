@@ -28,8 +28,8 @@ export default async function handler(
     }
 
     // Call ElevenLabs API
-    // Use Rachel voice ID or default to a standard voice
-    const voiceId = process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM' // Rachel or default voice
+    // Use Rachel voice ID - recommended: 21m00Tcm4TlvDq8ikWAM
+    const voiceId = process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM' // Rachel voice
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
       {
