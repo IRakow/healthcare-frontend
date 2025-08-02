@@ -4,6 +4,8 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { AlertCircle, ShieldCheck, Clock } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import AdminAssistantBar from '@/components/AdminAssistantBar'
+import { RachelTTS } from '@/lib/voice/RachelTTS'
 
 interface Log {
   id: string
@@ -42,6 +44,30 @@ export default function AdminAuditLogPage() {
     setLogs(entries)
   }, [])
 
+  const handleVoiceQuery = async (text: string) => {
+    if (text.includes('security') || text.includes('breach') || text.includes('threat')) {
+      const threats = logs.filter(l => l.status === 'error')
+      if (threats.length > 0) {
+        await RachelTTS.say(`Found ${threats.length} security incident${threats.length > 1 ? 's' : ''}. Most recent: ${threats[0].action} by ${threats[0].user}`)
+      } else {
+        await RachelTTS.say('No security threats or breaches found in recent logs.')
+      }
+    } else if (text.includes('failed') || text.includes('error')) {
+      const errors = logs.filter(l => l.status === 'error')
+      await RachelTTS.say(`There ${errors.length === 1 ? 'is' : 'are'} ${errors.length} failed attempt${errors.length !== 1 ? 's' : ''} in the logs.`)
+    } else if (text.includes('recent') || text.includes('latest')) {
+      const latest = logs[0]
+      if (latest) {
+        await RachelTTS.say(`Most recent activity: ${latest.action} by ${latest.user} ${formatDistanceToNow(new Date(latest.time), { addSuffix: true })}`)
+      }
+    } else if (text.includes('auth') || text.includes('login')) {
+      const authLogs = logs.filter(l => l.category === 'auth')
+      await RachelTTS.say(`Found ${authLogs.length} authentication event${authLogs.length !== 1 ? 's' : ''} in the logs.`)
+    } else {
+      await RachelTTS.say('You can ask about security threats, failed attempts, recent activity, or authentication events.')
+    }
+  }
+
   return (
     <AdminLayout>
       <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
@@ -73,6 +99,7 @@ export default function AdminAuditLogPage() {
           </p>
         )}
       </div>
+      <AdminAssistantBar onAsk={handleVoiceQuery} />
     </AdminLayout>
   )
 }

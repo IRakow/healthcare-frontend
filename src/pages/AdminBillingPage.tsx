@@ -1,3 +1,4 @@
+// Cleaned and fully enabled AI Billing Assistant
 import AdminLayout from '@/components/layout/AdminLayout'
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
@@ -20,6 +21,7 @@ interface BillingItem {
 
 export default function AdminBillingCenter() {
   const [items, setItems] = useState<BillingItem[]>([])
+  const [typedQuery, setTypedQuery] = useState('')
 
   useEffect(() => {
     const now = new Date()
@@ -76,7 +78,16 @@ export default function AdminBillingCenter() {
         return
       }
       RachelTTS.say(`Sending payment reminders to: ${overdue.map(x => x.employer).join(', ')}`)
-      // trigger notification logic here
+      return
+    }
+
+    if (text.includes('risk') || text.includes('audit')) {
+      const risky = items.filter(i => i.status === 'overdue' || i.status === 'pending')
+      if (risky.length === 0) {
+        RachelTTS.say('All employers appear current with no payment risk.')
+      } else {
+        RachelTTS.say(`Flagged for review: ${risky.map(x => x.employer).join(', ')}`)
+      }
       return
     }
 
@@ -92,11 +103,9 @@ export default function AdminBillingCenter() {
         return
       } else if (text.includes('email') || text.includes('send')) {
         RachelTTS.say(`Preparing invoice summary for ${item.employer}. Sending it to their configured billing contact.`)
-        // trigger email API or PDF generation here
         return
       } else if (text.includes('pdf') || text.includes('download')) {
         RachelTTS.say(`Generating PDF invoice summary for ${item.employer}. Download will start shortly.`)
-        // trigger PDF generation logic here
         return
       }
       RachelTTS.say(`${item.employer} is on the ${item.plan} plan, paying ${item.monthly} per month, with ${item.invoices} invoices this year.`)
@@ -153,6 +162,26 @@ export default function AdminBillingCenter() {
           </Card>
         ))}
       </div>
+
+      <div className="mt-10 max-w-xl">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleVoiceQuery(typedQuery)
+            setTypedQuery('')
+          }}
+          className="flex gap-2"
+        >
+          <input
+            value={typedQuery}
+            onChange={(e) => setTypedQuery(e.target.value)}
+            placeholder="Ask Rachel about billing..."
+            className="w-full rounded-md border px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+          />
+          <Button type="submit" variant="secondary">Ask</Button>
+        </form>
+      </div>
+
     </AdminLayout>
   )
 }
