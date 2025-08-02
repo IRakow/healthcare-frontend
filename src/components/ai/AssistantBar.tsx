@@ -14,7 +14,7 @@ export function AssistantBar() {
     setLoading(true);
     try {
       // TODO: Implement AI response
-      const response = "I'm Rachel, your AI assistant. This feature is being implemented.";
+      const response = "I'm Rachel, your AI assistant. Voice features are now active!";
       speak(response);
       console.log('Rachel:', response);
     } catch (err) {
