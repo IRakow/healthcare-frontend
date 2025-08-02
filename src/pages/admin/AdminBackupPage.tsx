@@ -1,117 +1,87 @@
-import { useEffect, useState } from 'react'
-import AdminLayout from '@/layouts/AdminLayout'
+import AdminLayout from '@/components/layout/AdminLayout'
+import { useState } from 'react'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { RefreshCw, Download, ShieldCheck, HardDrive, FileText, AlertCircle } from 'lucide-react'
-import { format } from 'date-fns'
+import { RefreshCw, Download, HardDrive, AlertCircle, Timer } from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+import { toast } from 'sonner'
 
 interface BackupEntry {
   id: string
-  created_at: string
+  timestamp: string
   size: string
-  status: 'completed' | 'in_progress' | 'failed'
-  triggered_by: string
+  status: 'complete' | 'in_progress' | 'failed'
+  initiated_by: string
+  expires_in?: string
 }
 
 export default function AdminBackupPage() {
-  const [backups, setBackups] = useState<BackupEntry[]>([])
-  const [loading, setLoading] = useState(true)
-  const [triggering, setTriggering] = useState(false)
+  const [backups, setBackups] = useState<BackupEntry[]>([
+    {
+      id: 'backup_001',
+      timestamp: new Date().toISOString(),
+      size: '1.9 GB',
+      status: 'complete',
+      initiated_by: 'System',
+      expires_in: '7 days'
+    }
+  ])
 
-  useEffect(() => {
-    fetchBackups()
-  }, [])
-
-  const fetchBackups = async () => {
-    setLoading(true)
-    const mock: BackupEntry[] = [
-      {
-        id: 'bkp1',
-        created_at: new Date().toISOString(),
-        size: '2.3 GB',
-        status: 'completed',
-        triggered_by: 'System Auto'
-      },
-      {
-        id: 'bkp2',
-        created_at: new Date(Date.now() - 86400000).toISOString(),
-        size: '2.1 GB',
-        status: 'completed',
-        triggered_by: 'Admin Manual'
-      }
-    ]
-    setTimeout(() => {
-      setBackups(mock)
-      setLoading(false)
-    }, 600)
-  }
-
-  const triggerBackup = async () => {
-    setTriggering(true)
-    setTimeout(() => {
-      const newBackup: BackupEntry = {
-        id: `bkp-${Date.now()}`,
-        created_at: new Date().toISOString(),
-        size: 'Pending',
-        status: 'in_progress',
-        triggered_by: 'You'
-      }
-      setBackups(prev => [newBackup, ...prev])
-      setTriggering(false)
-    }, 1000)
+  const triggerBackup = () => {
+    const newBkp: BackupEntry = {
+      id: `backup_${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      size: 'pending',
+      status: 'in_progress',
+      initiated_by: 'Admin',
+      expires_in: '7 days'
+    }
+    setBackups([newBkp, ...backups])
+    toast.success('Backup process started and will complete in a few minutes.')
   }
 
   return (
     <AdminLayout>
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-4xl font-extrabold text-slate-800 flex items-center gap-3">
-                <HardDrive className="w-7 h-7 text-primary" /> Backups
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">Review system backups and manually trigger exports.</p>
-            </div>
-            <div className="flex gap-3">
-              <Button onClick={fetchBackups} variant="outline" size="sm">
-                <RefreshCw className="w-4 h-4 mr-1" /> Refresh
-              </Button>
-              <Button onClick={triggerBackup} size="sm" disabled={triggering}>
-                <ShieldCheck className="w-4 h-4 mr-1" /> {triggering ? 'Processing...' : 'Trigger Backup'}
-              </Button>
-            </div>
-          </div>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-2 text-slate-800">
+            <HardDrive className="w-6 h-6 text-primary" /> System Backups
+          </h1>
+          <p className="text-sm text-muted-foreground">Trigger smart backups, track expiry, and get notified when backups are stale.</p>
+        </div>
+        <Button onClick={triggerBackup}><RefreshCw className="w-4 h-4 mr-1" /> Trigger Backup</Button>
+      </div>
 
-          <div className="space-y-4">
-            {backups.map((bkp) => (
-              <div
-                key={bkp.id}
-                className="bg-white border border-gray-200 rounded-xl px-5 py-4 shadow-sm flex items-start justify-between"
-              >
-                <div>
-                  <div className="text-sm font-medium text-gray-800 mb-1">
-                    Backup ID: <span className="font-mono text-blue-700">{bkp.id}</span>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    Created: {format(new Date(bkp.created_at), 'PPpp')} • Triggered by: {bkp.triggered_by}
-                  </div>
-                </div>
-                <div className="text-right space-y-1">
-                  <div className="text-xs">
-                    <span className="font-semibold">Status:</span> <span className={
-                      bkp.status === 'completed' ? 'text-green-600' : bkp.status === 'in_progress' ? 'text-yellow-600' : 'text-red-600'
-                    }>{bkp.status}</span>
-                  </div>
-                  <div className="text-xs text-gray-500">Size: {bkp.size}</div>
-                  <Button variant="secondary" size="sm" className="mt-2">
-                    <Download className="w-3 h-3 mr-1" /> Download
-                  </Button>
-                </div>
+      <div className="mt-6 space-y-4">
+        {backups.map(bkp => (
+          <Card key={bkp.id} className="p-4 border bg-white/90 rounded-xl">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-sm font-semibold text-slate-800">{bkp.id}</p>
+                <p className="text-xs text-muted-foreground">
+                  {formatDistanceToNow(new Date(bkp.timestamp), { addSuffix: true })} • Initiated by {bkp.initiated_by}
+                </p>
+                <p className="text-xs text-gray-400 flex items-center gap-1">
+                  <Timer className="w-3 h-3" /> Expires in {bkp.expires_in}
+                </p>
               </div>
-            ))}
-            {backups.length === 0 && (
-              <div className="text-sm text-muted-foreground italic flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-gray-500" /> No backups available yet.
+              <div className="text-right">
+                <p className="text-xs font-medium text-gray-600">
+                  Status: <span className={`capitalize ${
+                    bkp.status === 'complete' ? 'text-green-500' : bkp.status === 'in_progress' ? 'text-yellow-500' : 'text-red-500'}`}>{bkp.status}</span>
+                </p>
+                <p className="text-xs text-gray-400">Size: {bkp.size}</p>
+                <Button variant="secondary" size="sm" className="mt-1"><Download className="w-3 h-3 mr-1" /> Download</Button>
               </div>
-            )}
-          </div>
+            </div>
+          </Card>
+        ))}
+        {backups.length === 0 && (
+          <p className="text-sm text-muted-foreground italic flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-gray-400" /> No backups available yet.
+          </p>
+        )}
+      </div>
     </AdminLayout>
   )
 }

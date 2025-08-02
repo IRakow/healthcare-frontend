@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import AdminLayout from '@/layouts/AdminLayout'
+import AdminLayout from '@/components/layout/AdminLayout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Users, Brain, FileText, Server, AlertTriangle, Download, RefreshCw, Mail } from 'lucide-react'

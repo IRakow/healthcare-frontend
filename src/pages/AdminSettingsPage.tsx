@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import AdminLayout from '@/components/layout/AdminLayout';
 
 export default function AdminSettingsPage() {
   const [form, setForm] = useState({
@@ -68,8 +69,9 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold">🎨 Admin Settings</h1>
+    <AdminLayout>
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold">🎨 Admin Settings</h1>
       
       <div className="grid md:grid-cols-2 gap-6">
         <Card title="Platform Branding">
@@ -147,5 +149,6 @@ export default function AdminSettingsPage() {
         </Button>
       </div>
     </div>
+    </AdminLayout>
   );
 }
