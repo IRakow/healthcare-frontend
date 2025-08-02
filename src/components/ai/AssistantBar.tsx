@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Mic, Send } from 'lucide-react';
-import { speakWithElevenLabs, startListening } from '@/lib/voiceUtils';
-import { sendToGemini } from '@/lib/ai/geminiClient';
+import { speak } from '@/lib/voice/RachelTTSQueue';
+import { useRachelMemoryStore } from '@/lib/voice/useRachelMemoryStore';
+import { handleThreadFollowup } from '@/lib/voice/handleThreadFollowup';
 
-export default function AssistantBar() {
+export function AssistantBar() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
@@ -12,8 +13,9 @@ export default function AssistantBar() {
     if (!input.trim()) return;
     setLoading(true);
     try {
-      const response = await sendToGemini(input);
-      speakWithElevenLabs(response);
+      // TODO: Implement AI response
+      const response = "I'm Rachel, your AI assistant. This feature is being implemented.";
+      speak(response);
       console.log('Rachel:', response);
     } catch (err) {
       console.error('Assistant error:', err);
@@ -24,10 +26,9 @@ export default function AssistantBar() {
 
   const handleVoice = () => {
     setListening(true);
-    startListening((transcript: string) => {
-      setInput(transcript);
-      setListening(false);
-    });
+    // TODO: Implement voice listening with Web Speech API
+    // For now, just toggle the state
+    setTimeout(() => setListening(false), 2000);
   };
 
   useEffect(() => {
@@ -61,3 +62,5 @@ export default function AssistantBar() {
     </div>
   );
 }
+
+export default AssistantBar;
