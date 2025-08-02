@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Download, RefreshCw, UserRound } from 'lucide-react'
+import { Download, RefreshCw, User } from 'lucide-react'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 
 interface UserProfile {
@@ -59,7 +59,7 @@ export default function AdminUsersPage() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-extrabold text-slate-800 flex items-center gap-3">
-                <UserRound className="w-7 h-7 text-primary" /> Users
+                <User className="w-7 h-7 text-primary" /> Users
               </h1>
               <p className="text-sm text-muted-foreground mt-1">View and manage all users across the platform.</p>
             </div>
