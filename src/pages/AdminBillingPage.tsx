@@ -68,6 +68,18 @@ export default function AdminBillingCenter() {
   const handleVoiceQuery = (text: string) => {
     const keyword = items.find(i => text.toLowerCase().includes(i.employer.toLowerCase()))?.employer
     const item = items.find(i => i.employer === keyword)
+
+    if (text.includes('remind') || text.includes('notify') || text.includes('overdue')) {
+      const overdue = items.filter(i => i.status === 'overdue')
+      if (overdue.length === 0) {
+        RachelTTS.say('There are no overdue employers to notify.')
+        return
+      }
+      RachelTTS.say(`Sending payment reminders to: ${overdue.map(x => x.employer).join(', ')}`)
+      // trigger notification logic here
+      return
+    }
+
     if (item) {
       if (text.includes('compare')) {
         const compareTo = items.find(i => i.employer !== item.employer && text.toLowerCase().includes(i.employer.toLowerCase()))
