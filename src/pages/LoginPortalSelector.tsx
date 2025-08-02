@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Building2, User, ShieldCheck } from 'lucide-react';
 import AnimatedLogoWithSound from '@/components/branding/AnimatedLogoWithSound';
+import AnimatedLogoDebug from '@/components/branding/AnimatedLogoDebug';
 
 export default function LoginPortalSelector() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function LoginPortalSelector() {
           <div className="flex justify-center mb-4">
             <AnimatedLogoWithSound />
           </div>
+          <AnimatedLogoDebug />
           {branding.logo_url ? (
             <img src={branding.logo_url} alt="Logo" className="h-10 mx-auto mb-2" />
           ) : (
