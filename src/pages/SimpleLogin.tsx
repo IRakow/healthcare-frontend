@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { User, Stethoscope, Building2, UserCog } from 'lucide-react'
+import AnimatedLogoWithSound from '@/components/branding/AnimatedLogoWithSound'
 
 export default function SimpleLogin() {
   const navigate = useNavigate()
@@ -42,6 +43,9 @@ export default function SimpleLogin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="max-w-6xl w-full px-4">
+        <div className="flex justify-center my-4">
+          <AnimatedLogoWithSound />
+        </div>
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-white mb-4">Insperity Health AI</h1>
           <p className="text-xl text-gray-300">Select your portal to continue</p>
