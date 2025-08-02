@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import AdminSidebar from '@/components/admin/AdminSidebar'
+import AdminLayout from '@/layouts/AdminLayout'
 import { Button } from '@/components/ui/button'
 import { RefreshCw, Download, ShieldCheck, HardDrive, FileText, AlertCircle } from 'lucide-react'
 import { format } from 'date-fns'
@@ -61,10 +61,7 @@ export default function AdminBackupPage() {
   }
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <div className="flex-1 bg-gradient-to-br from-white via-slate-50 to-gray-100 min-h-screen">
-        <div className="max-w-5xl mx-auto px-6 py-12 space-y-10">
+    <AdminLayout>
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-extrabold text-slate-800 flex items-center gap-3">
@@ -115,8 +112,6 @@ export default function AdminBackupPage() {
               </div>
             )}
           </div>
-        </div>
-      </div>
-    </div>
+    </AdminLayout>
   )
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import AdminSidebar from '@/components/admin/AdminSidebar'
+import AdminLayout from '@/layouts/AdminLayout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -48,10 +48,7 @@ export default function AdminBroadcastPage() {
   }
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <div className="flex-1 bg-gradient-to-br from-white via-amber-50 to-yellow-100 min-h-screen">
-        <div className="max-w-5xl mx-auto px-6 py-12 space-y-10">
+    <AdminLayout>
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-extrabold text-yellow-800 flex items-center gap-3">
@@ -114,8 +111,6 @@ export default function AdminBroadcastPage() {
               )}
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+    </AdminLayout>
   )
 }

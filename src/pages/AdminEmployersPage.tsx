@@ -6,8 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Download, RefreshCw, Users } from 'lucide-react'
 import { format } from 'date-fns'
-import AdminSidebar from '@/components/admin/AdminSidebar'
-// import AssistantBar from '@/components/ai/AssistantBar' // Uncomment when AssistantBar is available
+import AdminLayout from '@/layouts/AdminLayout'
 
 interface Employer {
   id: string
@@ -67,12 +66,7 @@ export default function AdminEmployersPage() {
   )
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <div className="flex-1 bg-gradient-to-br from-white via-blue-50 to-sky-100 min-h-screen relative overflow-x-hidden">
-        {/* <AssistantBar /> */}
-
-        <div className="max-w-7xl mx-auto px-6 py-12 space-y-8">
+    <AdminLayout>
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-extrabold text-slate-800 flex items-center gap-3">
@@ -128,8 +122,6 @@ export default function AdminEmployersPage() {
           {filtered.length === 0 && (
             <div className="text-center py-12 text-muted-foreground text-sm">No employers match your search criteria.</div>
           )}
-        </div>
-      </div>
-    </div>
+    </AdminLayout>
   )
 }
