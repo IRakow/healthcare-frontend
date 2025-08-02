@@ -20,16 +20,50 @@ export default async function handler(
     
     if (!apiKey) {
       console.warn('ELEVENLABS_API_KEY is missing in this environment')
+      // Return error response if no API key
+      return res.status(500).json({ 
+        error: 'ElevenLabs API key not configured',
+        hasApiKey: false 
+      })
     }
 
-    // TODO: Integrate with ElevenLabs API
-    // For now, return a success response
-    res.status(200).json({ 
-      success: true, 
-      message: 'TTS request received',
-      text: text,
-      hasApiKey: !!apiKey
-    })
+    // Call ElevenLabs API
+    // Use Rachel voice ID or default to a standard voice
+    const voiceId = process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM' // Rachel or default voice
+    const response = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': apiKey
+        },
+        body: JSON.stringify({
+          text: text,
+          model_id: 'eleven_monolingual_v1',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75
+          }
+        })
+      }
+    )
+
+    if (!response.ok) {
+      console.error('ElevenLabs API error:', response.status, await response.text())
+      return res.status(500).json({ error: 'TTS generation failed' })
+    }
+
+    // Get the audio data
+    const audioBuffer = await response.arrayBuffer()
+    
+    // Set proper headers for audio response
+    res.setHeader('Content-Type', 'audio/mpeg')
+    res.setHeader('Content-Length', audioBuffer.byteLength.toString())
+    
+    // Send the audio data
+    res.send(Buffer.from(audioBuffer))
 
   } catch (error) {
     console.error('TTS error:', error)

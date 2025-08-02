@@ -3,11 +3,20 @@ let currentAudio: HTMLAudioElement | null = null
 export const RachelTTS = {
   async say(text: string) {
     try {
-      const res = await fetch('/api/tts/rachel', {
+      console.log('[RachelTTS] Speaking:', text)
+      const res = await fetch('/api/rachel/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
       })
+      
+      if (!res.ok) {
+        console.error('[RachelTTS] Response not OK:', res.status)
+        const error = await res.text()
+        console.error('[RachelTTS] Error:', error)
+        return
+      }
+      
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
 
