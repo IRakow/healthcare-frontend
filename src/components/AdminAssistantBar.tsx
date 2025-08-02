@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
-export default function AdminAssistantBar({ onAsk }: { onAsk: (query: string) => void }) {
+export default function AdminAssistantBar({ onAsk, context }: { onAsk: (query: string, context?: string) => void, context?: string }) {
   const [query, setQuery] = useState('')
 
   return (
@@ -9,7 +9,7 @@ export default function AdminAssistantBar({ onAsk }: { onAsk: (query: string) =>
       onSubmit={(e) => {
         e.preventDefault()
         if (query.trim()) {
-          onAsk(query)
+          onAsk(query, context)
           setQuery('')
         }
       }}

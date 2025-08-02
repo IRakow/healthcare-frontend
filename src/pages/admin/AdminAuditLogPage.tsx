@@ -99,7 +99,7 @@ export default function AdminAuditLogPage() {
           </p>
         )}
       </div>
-      <AdminAssistantBar onAsk={handleVoiceQuery} />
+      <AdminAssistantBar onAsk={handleVoiceQuery} context="audit" />
     </AdminLayout>
   )
 }

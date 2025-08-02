@@ -143,7 +143,7 @@ export default function AdminUsersPage() {
           <p className="text-sm text-muted-foreground italic">No users match your search.</p>
         )}
       </div>
-      <AdminAssistantBar onAsk={handleVoiceQuery} />
+      <AdminAssistantBar onAsk={handleVoiceQuery} context="users" />
     </AdminLayout>
   )
 }
