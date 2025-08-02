@@ -21,7 +21,7 @@ export async function handleThreadFollowup(text: string): Promise<boolean> {
       clearThread()
       return true
     }
-    speak('I didn't catch that. Would you like PDF or CSV?')
+    speak("I didn't catch that. Would you like PDF or CSV?")
     return true
   }
 
