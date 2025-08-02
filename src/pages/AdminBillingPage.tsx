@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Banknote, Clock, AlertTriangle, Download } from 'lucide-react'
 import { formatDistanceToNow, format } from 'date-fns'
-import { RachelTTS } from '@/lib/voice/RachelTTS'
+import { speak } from '@/lib/voice/RachelTTSQueue'
 import { useVoiceCapture } from '@/lib/voice/useVoiceCapture'
 import { classifyIntent } from '@/lib/ai/classifyIntent'
 
@@ -59,12 +59,12 @@ export default function AdminBillingCenter() {
 
     const overdue = sample.filter(x => x.status === 'overdue')
     if (overdue.length > 0) {
-      RachelTTS.say(`${overdue.length} employer${overdue.length > 1 ? 's are' : ' is'} overdue: ${overdue.map(x => x.employer).join(', ')}`)
+      speak(`${overdue.length} employer${overdue.length > 1 ? 's are' : ' is'} overdue: ${overdue.map(x => x.employer).join(', ')}`)
     }
   }, [])
 
   const exportReport = () => {
-    RachelTTS.say('Exporting billing report to CSV.')
+    speak('Exporting billing report to CSV.')
     // add real CSV export logic here
   }
 
@@ -77,19 +77,19 @@ export default function AdminBillingCenter() {
     if (text.includes('remind') || text.includes('notify') || text.includes('overdue')) {
       const overdue = items.filter(i => i.status === 'overdue')
       if (overdue.length === 0) {
-        RachelTTS.say('There are no overdue employers to notify.')
+        speak('There are no overdue employers to notify.')
         return
       }
-      RachelTTS.say(`Sending payment reminders to: ${overdue.map(x => x.employer).join(', ')}`)
+      speak(`Sending payment reminders to: ${overdue.map(x => x.employer).join(', ')}`)
       return
     }
 
     if (text.includes('risk') || text.includes('audit')) {
       const risky = items.filter(i => i.status === 'overdue' || i.status === 'pending')
       if (risky.length === 0) {
-        RachelTTS.say('All employers appear current with no payment risk.')
+        speak('All employers appear current with no payment risk.')
       } else {
-        RachelTTS.say(`Flagged for review: ${risky.map(x => x.employer).join(', ')}`)
+        speak(`Flagged for review: ${risky.map(x => x.employer).join(', ')}`)
       }
       return
     }
@@ -98,22 +98,22 @@ export default function AdminBillingCenter() {
       if (text.includes('compare')) {
         const compareTo = items.find(i => i.employer !== item.employer && text.toLowerCase().includes(i.employer.toLowerCase()))
         if (compareTo) {
-          RachelTTS.say(`${item.employer} pays ${item.monthly} monthly and has ${item.invoices} invoices. ${compareTo.employer} pays ${compareTo.monthly} and has ${compareTo.invoices}.`)
+          speak(`${item.employer} pays ${item.monthly} monthly and has ${item.invoices} invoices. ${compareTo.employer} pays ${compareTo.monthly} and has ${compareTo.invoices}.`)
           return
         }
       } else if (text.includes('trend') || text.includes('summary')) {
-        RachelTTS.say(`${item.employer} has a ${item.status} status, has paid ${item.monthly * item.invoices} this year, and their next payment is due on ${format(new Date(item.nextDue), 'PPP')}.`)
+        speak(`${item.employer} has a ${item.status} status, has paid ${item.monthly * item.invoices} this year, and their next payment is due on ${format(new Date(item.nextDue), 'PPP')}.`)
         return
       } else if (text.includes('email') || text.includes('send')) {
-        RachelTTS.say(`Preparing invoice summary for ${item.employer}. Sending it to their configured billing contact.`)
+        speak(`Preparing invoice summary for ${item.employer}. Sending it to their configured billing contact.`)
         return
       } else if (text.includes('pdf') || text.includes('download')) {
-        RachelTTS.say(`Generating PDF invoice summary for ${item.employer}. Download will start shortly.`)
+        speak(`Generating PDF invoice summary for ${item.employer}. Download will start shortly.`)
         return
       }
-      RachelTTS.say(`${item.employer} is on the ${item.plan} plan, paying ${item.monthly} per month, with ${item.invoices} invoices this year.`)
+      speak(`${item.employer} is on the ${item.plan} plan, paying ${item.monthly} per month, with ${item.invoices} invoices this year.`)
     } else {
-      RachelTTS.say(`I couldn't find any billing data for that query.`)
+      speak(`I couldn't find any billing data for that query.`)
     }
   }
 

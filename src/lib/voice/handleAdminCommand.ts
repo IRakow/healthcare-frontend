@@ -1,8 +1,15 @@
 import { RachelTTS } from './RachelTTS'
 import { handleAuditCommand } from './handleAuditCommand'
 import { classifyIntent } from '@/lib/ai/classifyIntent'
+import { handleThreadFollowup } from './handleThreadFollowup'
+import { handleNavigationIntent } from './handleNavigationIntent'
+import { handleRepeatCommand } from './handleRepeatCommand'
 
 export async function handleAdminCommand(text: string, context?: string) {
+  if (await handleThreadFollowup(text)) return
+  if (await handleNavigationIntent(text)) return
+  if (handleRepeatCommand(text)) return
+
   const intent = classifyIntent(text, context)
   console.log('Intent:', intent, 'Context:', context)
   const t = text.toLowerCase()

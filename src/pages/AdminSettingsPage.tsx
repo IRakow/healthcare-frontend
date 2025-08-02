@@ -7,7 +7,7 @@ import { Switch } from '@/components/ui/switch'
 import { Sparkles, Palette, Languages, ShieldAlert, Save } from 'lucide-react'
 import { toast } from 'sonner'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
-import { RachelTTS } from '@/lib/voice/RachelTTS'
+import { speak } from '@/lib/voice/RachelTTSQueue'
 
 export default function AdminSettingsPage() {
   const [aiEnabled, setAiEnabled] = useState(true)
@@ -22,18 +22,18 @@ export default function AdminSettingsPage() {
 
   const handleVoiceQuery = async (text: string) => {
     if (text.includes('ai') || text.includes('assistant')) {
-      await RachelTTS.say(`AI Assistant is currently ${aiEnabled ? 'enabled' : 'disabled'}. ${aiEnabled ? 'Rachel will respond to all voice commands.' : 'Voice responses are turned off.'}`)
+      speak(`AI Assistant is currently ${aiEnabled ? 'enabled' : 'disabled'}. ${aiEnabled ? 'Rachel will respond to all voice commands.' : 'Voice responses are turned off.'}`)
     } else if (text.includes('theme') || text.includes('color')) {
-      await RachelTTS.say(`The current theme color is set to ${themeColor}. You can change it using the color picker.`)
+      speak(`The current theme color is set to ${themeColor}. You can change it using the color picker.`)
     } else if (text.includes('language')) {
-      await RachelTTS.say(`The system language is set to ${language === 'en' ? 'English' : language === 'es' ? 'Spanish' : language === 'fr' ? 'French' : 'German'}.`)
+      speak(`The system language is set to ${language === 'en' ? 'English' : language === 'es' ? 'Spanish' : language === 'fr' ? 'French' : 'German'}.`)
     } else if (text.includes('guest') || text.includes('access')) {
-      await RachelTTS.say(`Guest access is currently ${guestAccess ? 'enabled' : 'disabled'}. ${guestAccess ? 'Unverified users can interact with AI features.' : 'Only verified users have access.'}`)
+      speak(`Guest access is currently ${guestAccess ? 'enabled' : 'disabled'}. ${guestAccess ? 'Unverified users can interact with AI features.' : 'Only verified users have access.'}`)
     } else if (text.includes('save')) {
       save()
-      await RachelTTS.say('Settings have been saved successfully.')
+      speak('Settings have been saved successfully.')
     } else {
-      await RachelTTS.say('You can ask about AI settings, theme color, language preferences, or guest access.')
+      speak('You can ask about AI settings, theme color, language preferences, or guest access.')
     }
   }
 

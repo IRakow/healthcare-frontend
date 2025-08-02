@@ -25,7 +25,7 @@ import {
 } from 'lucide-react'
 import { EmployerInvoiceSummary } from '@/components/owner/EmployerInvoiceSummary'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
-import { RachelTTS } from '@/lib/voice/RachelTTS'
+import { speak } from '@/lib/voice/RachelTTSQueue'
 
 interface SystemStats {
   totalEmployers: number
@@ -228,26 +228,26 @@ export default function AdminDashboard() {
 
   const handleVoiceQuery = async (text: string) => {
     if (text.includes('revenue') || text.includes('money')) {
-      await RachelTTS.say(`Total revenue is ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats.totalRevenue)}. Growth rate is ${stats.growthRate}% this month.`)
+      speak(`Total revenue is ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats.totalRevenue)}. Growth rate is ${stats.growthRate}% this month.`)
     } else if (text.includes('users') || text.includes('active')) {
-      await RachelTTS.say(`There are ${stats.monthlyActiveUsers} monthly active users. We have ${stats.totalEmployers} employers, ${stats.totalProviders} providers, and ${stats.totalPatients} patients.`)
+      speak(`There are ${stats.monthlyActiveUsers} monthly active users. We have ${stats.totalEmployers} employers, ${stats.totalProviders} providers, and ${stats.totalPatients} patients.`)
     } else if (text.includes('health') || text.includes('system')) {
-      await RachelTTS.say(`System health is at ${stats.systemHealth}%. Last backup was ${formatTimeAgo(new Date(stats.lastBackup))}.`)
+      speak(`System health is at ${stats.systemHealth}%. Last backup was ${formatTimeAgo(new Date(stats.lastBackup))}.`)
     } else if (text.includes('invoice') || text.includes('pending')) {
-      await RachelTTS.say(`There are ${stats.pendingInvoices} pending invoices to process.`)
+      speak(`There are ${stats.pendingInvoices} pending invoices to process.`)
     } else if (text.includes('activity') || text.includes('recent')) {
       const latest = recentActivity[0]
       if (latest) {
-        await RachelTTS.say(`Most recent activity: ${latest.description} ${formatTimeAgo(new Date(latest.timestamp))}.`)
+        speak(`Most recent activity: ${latest.description} ${formatTimeAgo(new Date(latest.timestamp))}.`)
       }
     } else if (text.includes('settings')) {
       navigate('/admin/settings')
-      await RachelTTS.say('Taking you to settings.')
+      speak('Taking you to settings.')
     } else if (text.includes('backup')) {
       navigate('/admin/backup')
-      await RachelTTS.say('Opening backup management.')
+      speak('Opening backup management.')
     } else {
-      await RachelTTS.say('You can ask about revenue, active users, system health, pending invoices, or recent activity.')
+      speak('You can ask about revenue, active users, system health, pending invoices, or recent activity.')
     }
   }
 

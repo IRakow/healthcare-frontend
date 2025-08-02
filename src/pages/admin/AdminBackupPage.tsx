@@ -6,7 +6,7 @@ import { RefreshCw, Download, HardDrive, AlertCircle, Timer } from 'lucide-react
 import { formatDistanceToNow } from 'date-fns'
 import { toast } from 'sonner'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
-import { RachelTTS } from '@/lib/voice/RachelTTS'
+import { speak } from '@/lib/voice/RachelTTSQueue'
 
 interface BackupEntry {
   id: string
@@ -45,32 +45,32 @@ export default function AdminBackupPage() {
   const handleVoiceQuery = async (text: string) => {
     if (text.includes('trigger') || text.includes('create') || text.includes('new backup')) {
       triggerBackup()
-      await RachelTTS.say('Starting new backup process. It will complete in a few minutes.')
+      speak('Starting new backup process. It will complete in a few minutes.')
     } else if (text.includes('recent') || text.includes('latest')) {
       const latest = backups[0]
       if (latest) {
-        await RachelTTS.say(`Most recent backup was ${formatDistanceToNow(new Date(latest.timestamp), { addSuffix: true })}. Size: ${latest.size}. Status: ${latest.status}.`)
+        speak(`Most recent backup was ${formatDistanceToNow(new Date(latest.timestamp), { addSuffix: true })}. Size: ${latest.size}. Status: ${latest.status}.`)
       } else {
-        await RachelTTS.say('No backups available yet.')
+        speak('No backups available yet.')
       }
     } else if (text.includes('failed') || text.includes('error')) {
       const failed = backups.filter(b => b.status === 'failed')
       if (failed.length > 0) {
-        await RachelTTS.say(`There ${failed.length === 1 ? 'is' : 'are'} ${failed.length} failed backup${failed.length !== 1 ? 's' : ''}.`)
+        speak(`There ${failed.length === 1 ? 'is' : 'are'} ${failed.length} failed backup${failed.length !== 1 ? 's' : ''}.`)
       } else {
-        await RachelTTS.say('All backups completed successfully.')
+        speak('All backups completed successfully.')
       }
     } else if (text.includes('expir')) {
       const expiringSoon = backups.filter(b => b.expires_in && b.expires_in.includes('1 day') || b.expires_in?.includes('0 day'))
       if (expiringSoon.length > 0) {
-        await RachelTTS.say(`Warning: ${expiringSoon.length} backup${expiringSoon.length > 1 ? 's are' : ' is'} expiring soon.`)
+        speak(`Warning: ${expiringSoon.length} backup${expiringSoon.length > 1 ? 's are' : ' is'} expiring soon.`)
       } else {
-        await RachelTTS.say('No backups are expiring soon.')
+        speak('No backups are expiring soon.')
       }
     } else if (text.includes('download')) {
-      await RachelTTS.say('To download a backup, click the download button next to the backup you want.')
+      speak('To download a backup, click the download button next to the backup you want.')
     } else {
-      await RachelTTS.say('You can trigger a new backup, check recent backups, view failed backups, or check expiration status.')
+      speak('You can trigger a new backup, check recent backups, view failed backups, or check expiration status.')
     }
   }
 
