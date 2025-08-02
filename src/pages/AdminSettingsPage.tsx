@@ -95,7 +95,7 @@ export default function AdminSettingsPage() {
           </Button>
         </div>
       </div>
-      <AdminAssistantBar onAsk={handleVoiceQuery} />
+      <AdminAssistantBar onAsk={handleVoiceQuery} context="settings" />
     </AdminLayout>
   )
 }

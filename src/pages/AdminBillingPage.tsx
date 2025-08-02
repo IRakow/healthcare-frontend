@@ -8,6 +8,7 @@ import { Banknote, Clock, AlertTriangle, Download } from 'lucide-react'
 import { formatDistanceToNow, format } from 'date-fns'
 import { RachelTTS } from '@/lib/voice/RachelTTS'
 import { useVoiceCapture } from '@/lib/voice/useVoiceCapture'
+import { classifyIntent } from '@/lib/ai/classifyIntent'
 
 interface BillingItem {
   employer: string
@@ -68,6 +69,8 @@ export default function AdminBillingCenter() {
   }
 
   const handleVoiceQuery = (text: string) => {
+    const intent = classifyIntent(text, 'billing')
+    console.log('Intent classified:', intent)
     const keyword = items.find(i => text.toLowerCase().includes(i.employer.toLowerCase()))?.employer
     const item = items.find(i => i.employer === keyword)
 

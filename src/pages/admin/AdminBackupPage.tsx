@@ -116,7 +116,7 @@ export default function AdminBackupPage() {
           </p>
         )}
       </div>
-      <AdminAssistantBar onAsk={handleVoiceQuery} />
+      <AdminAssistantBar onAsk={handleVoiceQuery} context="backup" />
     </AdminLayout>
   )
 }

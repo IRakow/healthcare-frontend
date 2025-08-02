@@ -1,13 +1,20 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import { AssistantBar } from '@/components/ai/AssistantBar'
-import { VoiceHUDOverlay } from '@/components/voice/VoiceHUDOverlay'
+import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
+import VoiceHUDOverlay from '@/components/voice/VoiceHUDOverlaySimple'
 
 interface AdminLayoutProps {
   children: ReactNode
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  const { startListening, interimText } = useAdminVoiceCapture()
+
+  useEffect(() => {
+    startListening()
+  }, [])
+
   return (
     <div className="relative min-h-screen flex bg-gradient-to-br from-white via-sky-50 to-emerald-50">
       {/* Sidebar */}
@@ -25,8 +32,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <AssistantBar />
       </div>
       
-      {/* Voice HUD Overlay */}
-      <VoiceHUDOverlay />
+      {/* Rachel Voice HUD */}
+      <VoiceHUDOverlay interim={interimText} />
     </div>
   )
 }
