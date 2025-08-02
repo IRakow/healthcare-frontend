@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Download, RefreshCw, User } from 'lucide-react'
-import AdminSidebar from '@/components/admin/AdminSidebar'
+import AdminLayout from '@/layouts/AdminLayout'
 
 interface UserProfile {
   id: string
@@ -52,10 +52,7 @@ export default function AdminUsersPage() {
   )
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <div className="flex-1 bg-gradient-to-br from-white via-slate-50 to-blue-100 min-h-screen relative">
-        <div className="max-w-7xl mx-auto px-6 py-12 space-y-8">
+    <AdminLayout>
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-extrabold text-slate-800 flex items-center gap-3">
@@ -110,8 +107,6 @@ export default function AdminUsersPage() {
           {filtered.length === 0 && (
             <div className="text-center py-12 text-muted-foreground text-sm">No users found matching your search.</div>
           )}
-        </div>
-      </div>
-    </div>
+    </AdminLayout>
   )
 }

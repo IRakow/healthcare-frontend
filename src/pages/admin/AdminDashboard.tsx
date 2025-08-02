@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import AdminSidebar from '@/components/admin/AdminSidebar'
+import AdminLayout from '@/layouts/AdminLayout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Users, Brain, FileText, Server, AlertTriangle, Download, RefreshCw, Mail } from 'lucide-react'
@@ -52,10 +52,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <div className="flex-1 bg-gradient-to-br from-white via-blue-50 to-slate-100 min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-12 space-y-10">
+    <AdminLayout>
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-extrabold text-slate-800">Admin Command Hub</h1>
@@ -86,8 +83,6 @@ export default function AdminDashboard() {
               <Line data={aiChartData} options={chartOptions} />
             </div>
           </Card>
-        </div>
-      </div>
-    </div>
+    </AdminLayout>
   )
 }
