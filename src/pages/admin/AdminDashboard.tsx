@@ -15,14 +15,14 @@ export default function AdminDashboard() {
 
   const metricCard = (title: string, value: string, icon: JSX.Element, color: string, onClick?: () => void) => (
     <Card
-      className={`rounded-2xl p-5 shadow-xl backdrop-blur-xl bg-white/80 border border-white/30 cursor-pointer hover:scale-[1.02] transition-all ${color}`}
+      className={`rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur-xl bg-white/80 border border-white/30 cursor-pointer hover:scale-[1.02] transition-all ${color}`}
       onClick={onClick}
     >
-      <div className="flex items-center gap-4">
-        <div>{icon}</div>
-        <div>
-          <p className="text-sm font-medium text-gray-700">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex-shrink-0">{icon}</div>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs sm:text-sm font-medium text-gray-700 truncate">{title}</p>
+          <p className="text-xl sm:text-2xl font-bold text-gray-900">{value}</p>
         </div>
       </div>
     </Card>
@@ -54,18 +54,24 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-4xl font-extrabold text-slate-800">Admin Command Hub</h1>
-          <p className="text-sm text-muted-foreground">Live stats, alerts, and insights across your platform.</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-800">Admin Command Hub</h1>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">Live stats, alerts, and insights across your platform.</p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Refresh</Button>
-          <Button size="sm"><Download className="h-4 w-4 mr-1" /> Export</Button>
+        <div className="flex gap-2 sm:gap-3">
+          <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+            <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> 
+            <span className="hidden sm:inline">Refresh</span>
+          </Button>
+          <Button size="sm" className="text-xs sm:text-sm">
+            <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> 
+            <span className="hidden sm:inline">Export</span>
+          </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mt-6 sm:mt-8">
         {metricCard('Total Users', '1,208', <Users className="w-6 h-6 text-blue-600" />, '', () => navigate('/admin/users'))}
         {metricCard('AI Calls (24h)', '534', <Brain className="w-6 h-6 text-purple-600" />, '', () => navigate('/admin/ai'))}
         {metricCard('Unpaid Invoices', '7', <FileText className="w-6 h-6 text-orange-600" />, '', () => navigate('/admin/invoices'))}
@@ -74,9 +80,9 @@ export default function AdminDashboard() {
         {metricCard('Open Broadcasts', '2', <Mail className="w-6 h-6 text-yellow-500" />, '', () => navigate('/admin/broadcast'))}
       </div>
 
-      <Card className="mt-10 p-6 rounded-2xl shadow-lg h-[320px]">
-        <p className="text-lg font-semibold text-slate-800 mb-4">7-Day AI Call Trend</p>
-        <div className="relative w-full h-full">
+      <Card className="mt-6 sm:mt-8 lg:mt-10 p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg">
+        <p className="text-sm sm:text-base lg:text-lg font-semibold text-slate-800 mb-3 sm:mb-4">7-Day AI Call Trend</p>
+        <div className="relative w-full h-[200px] sm:h-[250px] lg:h-[300px]">
           <Line data={aiChartData} options={chartOptions} />
         </div>
       </Card>

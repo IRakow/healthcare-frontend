@@ -113,7 +113,7 @@ export default function AdminSidebar() {
           </div>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1.5 hover:bg-gray-800 rounded-md transition-colors"
+            className="hidden lg:block p-1.5 hover:bg-gray-800 rounded-md transition-colors"
           >
             {isCollapsed ? (
               <ChevronRight className="h-4 w-4" />
