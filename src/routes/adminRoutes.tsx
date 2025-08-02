@@ -20,12 +20,14 @@ import AdminAnalyticsPage from '@/pages/admin/AdminAnalyticsPage';
 import AdminBroadcastPage from '@/pages/admin/AdminBroadcastPage';
 import AdminBackupPage from '@/pages/admin/AdminBackupPage';
 import AdminAuditLogPage from '@/pages/admin/AdminAuditLogPage';
+import AdminAiCommandCenter from '@/pages/admin/AdminAiCommandCenter';
 
 
 export const adminRoutes = [
   { path: '/admin', element: <AdminDashboard /> },
   { path: '/admin/login', element: <AdminLogin /> },
   { path: '/admin/dashboard', element: <AdminDashboard /> },
+  { path: '/admin/ai', element: <AdminAiCommandCenter /> },
   { path: '/admin/employers', element: <AdminEmployersPage /> },
   { path: '/admin/users', element: <AdminUsersPage /> },
   { path: '/admin/analytics', element: <AdminAnalyticsPage /> },
