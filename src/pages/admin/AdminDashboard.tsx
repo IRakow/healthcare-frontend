@@ -1,96 +1,93 @@
-// File: src/pages/admin/AdminDashboard.tsx
+import { useEffect, useState } from 'react'
+import AdminSidebar from '@/components/admin/AdminSidebar'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Users, Brain, FileText, Server, AlertTriangle, Download, RefreshCw, Mail } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Line } from 'react-chartjs-2'
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import AdminLayoutGlassy from '@/components/layout/AdminLayoutGlassy';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import StatCard from '@/components/ui/StatCard';
-import { Building2, CreditCard, Users, Shield, Radio, Database } from 'lucide-react';
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({
-    employers: 12,
-    invoices: 43,
-    users: 249,
-    audits: 12,
-    broadcasts: 7,
-    backups: 3
-  });
+  const [aiData, setAiData] = useState<number[]>([10, 22, 18, 32, 45, 51, 60])
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    // Could fetch real data here
-  }, []);
+  const metricCard = (title: string, value: string, icon: JSX.Element, color: string, onClick?: () => void) => (
+    <Card
+      className={`rounded-2xl p-5 shadow-xl backdrop-blur-xl bg-white/80 border border-white/30 cursor-pointer hover:scale-[1.02] transition-all ${color}`}
+      onClick={onClick}
+    >
+      <div className="flex items-center gap-4">
+        <div>{icon}</div>
+        <div>
+          <p className="text-sm font-medium text-gray-700">{title}</p>
+          <p className="text-2xl font-bold text-gray-900">{value}</p>
+        </div>
+      </div>
+    </Card>
+  )
+
+  const aiChartData = {
+    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    datasets: [
+      {
+        label: 'AI Activity',
+        data: aiData,
+        borderColor: '#4f46e5',
+        backgroundColor: 'rgba(79,70,229,0.1)',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  }
+
+  const chartOptions: any = {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { mode: 'index', intersect: false }
+    },
+    scales: { y: { beginAtZero: true } }
+  }
 
   return (
-    <AdminLayoutGlassy>
-      <motion.div
-        className="space-y-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* Header */}
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold text-sky-900">Platform Overview</h1>
-          <p className="text-gray-500 text-sm">Live summary of system metrics and activity</p>
-        </div>
+    <div className="flex">
+      <AdminSidebar />
+      <div className="flex-1 bg-gradient-to-br from-white via-blue-50 to-slate-100 min-h-screen">
+        <div className="max-w-7xl mx-auto px-6 py-12 space-y-10">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-4xl font-extrabold text-slate-800">Admin Command Hub</h1>
+              <p className="text-sm text-muted-foreground">Live stats, alerts, and insights across your platform.</p>
+            </div>
+            <div className="flex gap-3">
+              <Button variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Refresh</Button>
+              <Button size="sm"><Download className="h-4 w-4 mr-1" /> Export</Button>
+            </div>
+          </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          <StatCard
-            label="Employers"
-            value={stats.employers.toString()}
-            icon={<Building2 className="w-4 h-4" />}
-            description="Active orgs"
-          />
-          <StatCard
-            label="Invoices"
-            value={stats.invoices.toString()}
-            icon={<CreditCard className="w-4 h-4" />}
-            description="Pending"
-          />
-          <StatCard
-            label="Users"
-            value={stats.users.toString()}
-            icon={<Users className="w-4 h-4" />}
-            description="All roles"
-          />
-          <StatCard
-            label="Audits"
-            value={stats.audits.toString()}
-            icon={<Shield className="w-4 h-4" />}
-            description="Security"
-          />
-          <StatCard
-            label="Broadcasts"
-            value={stats.broadcasts.toString()}
-            icon={<Radio className="w-4 h-4" />}
-            description="Sent"
-          />
-          <StatCard
-            label="Backups"
-            value={stats.backups.toString()}
-            icon={<Database className="w-4 h-4" />}
-            description="Available"
-          />
-        </div>
+          {/* Metrics Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {metricCard('Total Users', '1,208', <Users className="w-6 h-6 text-blue-600" />, '', () => navigate('/admin/users'))}
+            {metricCard('AI Calls (24h)', '534', <Brain className="w-6 h-6 text-purple-600" />, '', () => navigate('/admin/ai-logs'))}
+            {metricCard('Unpaid Invoices', '7', <FileText className="w-6 h-6 text-orange-600" />, '', () => navigate('/admin/billing'))}
+            {metricCard('Errors Today', '3', <AlertTriangle className="w-6 h-6 text-red-500" />, '', () => navigate('/admin/audit-log'))}
+            {metricCard('System Uptime', '99.97%', <Server className="w-6 h-6 text-green-600" />, '')}
+            {metricCard('Open Broadcasts', '2', <Mail className="w-6 h-6 text-yellow-500" />, '', () => navigate('/admin/broadcast'))}
+          </div>
 
-        {/* Recent Activity */}
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="text-sm space-y-3 text-gray-700">
-              <li>✅ Employer "SkyHealth" added 12 new users</li>
-              <li>📦 Backup completed for July 30th at 4:00 AM</li>
-              <li>🔒 Admin logged in from new location</li>
-              <li>📣 Broadcast sent to 186 patients</li>
-              <li>🧾 Invoice #4829 generated for BrightCare</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </AdminLayoutGlassy>
-  );
+          {/* AI Activity Chart */}
+          <Card className="p-6 rounded-2xl shadow-lg">
+            <div className="mb-4 text-xl font-semibold text-slate-800 flex items-center gap-2">
+              <Brain className="w-5 h-5 text-indigo-500" /> AI Usage This Week
+            </div>
+            <div style={{ height: '280px' }}>
+              <Line data={aiChartData} options={chartOptions} />
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  )
 }
