@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import AdminLayout from '@/components/layout/AdminLayout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -6,11 +5,12 @@ import { Users, Brain, FileText, Server, AlertTriangle, Download, RefreshCw, Mai
 import { useNavigate } from 'react-router-dom'
 import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
+import { useState } from 'react'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 export default function AdminDashboard() {
-  const [aiData, setAiData] = useState<number[]>([10, 22, 18, 32, 45, 51, 60])
+  const [aiData] = useState<number[]>([10, 22, 18, 32, 45, 51, 60])
   const navigate = useNavigate()
 
   const metricCard = (title: string, value: string, icon: JSX.Element, color: string, onClick?: () => void) => (
@@ -42,8 +42,9 @@ export default function AdminDashboard() {
     ]
   }
 
-  const chartOptions: any = {
+  const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
       tooltip: { mode: 'index', intersect: false }
@@ -64,20 +65,18 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         {metricCard('Total Users', '1,208', <Users className="w-6 h-6 text-blue-600" />, '', () => navigate('/admin/users'))}
-        {metricCard('AI Calls (24h)', '534', <Brain className="w-6 h-6 text-purple-600" />, '', () => navigate('/admin/ai-logs'))}
-        {metricCard('Unpaid Invoices', '7', <FileText className="w-6 h-6 text-orange-600" />, '', () => navigate('/admin/billing'))}
+        {metricCard('AI Calls (24h)', '534', <Brain className="w-6 h-6 text-purple-600" />, '', () => navigate('/admin/ai'))}
+        {metricCard('Unpaid Invoices', '7', <FileText className="w-6 h-6 text-orange-600" />, '', () => navigate('/admin/invoices'))}
         {metricCard('Errors Today', '3', <AlertTriangle className="w-6 h-6 text-red-500" />, '', () => navigate('/admin/audit-log'))}
         {metricCard('System Uptime', '99.97%', <Server className="w-6 h-6 text-green-600" />, '')}
         {metricCard('Open Broadcasts', '2', <Mail className="w-6 h-6 text-yellow-500" />, '', () => navigate('/admin/broadcast'))}
       </div>
 
-      <Card className="p-6 rounded-2xl shadow-lg">
-        <div className="mb-4 text-xl font-semibold text-slate-800 flex items-center gap-2">
-          <Brain className="w-5 h-5 text-indigo-500" /> AI Usage This Week
-        </div>
-        <div style={{ height: '280px' }}>
+      <Card className="mt-10 p-6 rounded-2xl shadow-lg h-[320px]">
+        <p className="text-lg font-semibold text-slate-800 mb-4">7-Day AI Call Trend</p>
+        <div className="relative w-full h-full">
           <Line data={aiChartData} options={chartOptions} />
         </div>
       </Card>

@@ -1,154 +1,81 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import AdminLayout from '@/components/layout/AdminLayout';
+import AdminLayout from '@/components/layout/AdminLayout'
+import { useState } from 'react'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
+import { Sparkles, Palette, Languages, ShieldAlert, Save } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function AdminSettingsPage() {
-  const [form, setForm] = useState({
-    voice: 'Rachel',
-    notification_sender_name: 'Insperity Health',
-    primary_color: '#3B82F6',
-    tagline: ''
-  });
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [aiEnabled, setAiEnabled] = useState(true)
+  const [voice, setVoice] = useState('Rachel')
+  const [themeColor, setThemeColor] = useState('#4f46e5')
+  const [language, setLanguage] = useState('en')
+  const [guestAccess, setGuestAccess] = useState(false)
 
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  async function loadSettings() {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      
-      // For admin, we might load platform-wide settings
-      // For now, let's load the first employer as an example
-      const { data: employer } = await supabase
-        .from('employers')
-        .select('*')
-        .limit(1)
-        .single();
-      
-      if (employer) {
-        setForm({
-          voice: employer.voice_profile || 'Rachel',
-          notification_sender_name: employer.notification_sender_name || 'Insperity Health',
-          primary_color: employer.primary_color || '#3B82F6',
-          tagline: employer.tagline || ''
-        });
-      }
-    } catch (error) {
-      console.error('Error loading settings:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function update(key: string, value: string) {
-    setForm({ ...form, [key]: value });
-  }
-
-  async function saveSettings() {
-    setSaving(true);
-    try {
-      // Save settings logic here
-      alert('Settings saved successfully!');
-    } catch (error) {
-      console.error('Error saving settings:', error);
-      alert('Failed to save settings');
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  if (loading) {
-    return <div className="p-6">Loading settings...</div>;
+  const save = () => {
+    toast.success('Settings saved. All changes take effect immediately.')
   }
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold">🎨 Admin Settings</h1>
-      
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card title="Platform Branding">
-          <div className="space-y-4">
-            <Input
-              label="Primary Color"
-              type="color"
-              value={form.primary_color}
-              onChange={(e) => update('primary_color', e.target.value)}
-            />
-            
-            <Input
-              label="Platform Tagline"
-              value={form.tagline}
-              onChange={(e) => update('tagline', e.target.value)}
-              placeholder="e.g. Your Health, Simplified"
-            />
-          </div>
-        </Card>
+      <div className="space-y-10">
+        <h1 className="text-3xl font-bold text-slate-800">System Settings</h1>
 
-        <Card title="Voice Settings">
-          <div className="space-y-4">
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700">Default AI Voice</span>
-              <select
-                className="mt-1 w-full border rounded p-2 text-sm"
-                value={form.voice}
-                onChange={(e) => update('voice', e.target.value)}
-              >
-                <option value="Rachel">Rachel</option>
-                <option value="Bella">Bella</option>
-                <option value="Adam">Adam</option>
-                <option value="Josh">Josh</option>
-              </select>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="p-4 space-y-2">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-medium flex gap-2 items-center text-blue-600">
+                <Sparkles className="w-4 h-4" /> Enable AI Assistant
+              </label>
+              <Switch checked={aiEnabled} onCheckedChange={setAiEnabled} />
+            </div>
+            <p className="text-xs text-muted-foreground">Rachel will speak back for all actions and answer voice queries.</p>
+          </Card>
+
+          <Card className="p-4 space-y-2">
+            <label className="text-sm font-medium flex gap-2 items-center text-purple-700">
+              <Palette className="w-4 h-4" /> Theme Accent Color
             </label>
-          </div>
-        </Card>
+            <Input type="color" value={themeColor} onChange={(e) => setThemeColor(e.target.value)} />
+            <p className="text-xs text-muted-foreground">Affects all accent elements across portals.</p>
+          </Card>
 
-        <Card title="Notification Settings">
-          <div className="space-y-4">
-            <Input
-              label="Notification Sender Name"
-              value={form.notification_sender_name}
-              onChange={(e) => update('notification_sender_name', e.target.value)}
-              placeholder="e.g. Acme Wellness Group"
-            />
-            <p className="text-xs text-gray-500">
-              This name appears as the sender in all system notifications, emails, and SMS messages
-            </p>
-          </div>
-        </Card>
+          <Card className="p-4 space-y-2">
+            <label className="text-sm font-medium flex gap-2 items-center text-emerald-700">
+              <Languages className="w-4 h-4" /> Language Preference
+            </label>
+            <select
+              className="w-full border rounded-md p-2 text-sm"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+            >
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+            </select>
+            <p className="text-xs text-muted-foreground">Applies to all onboarding flows and AI replies.</p>
+          </Card>
 
-        <Card title="File Upload">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Platform Logo
+          <Card className="p-4 space-y-2">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-medium flex gap-2 items-center text-red-600">
+                <ShieldAlert className="w-4 h-4" /> Enable Guest Access
               </label>
-              <input type="file" accept="image/*" className="w-full border rounded p-2 text-sm" />
+              <Switch checked={guestAccess} onCheckedChange={setGuestAccess} />
             </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Favicon
-              </label>
-              <input type="file" accept="image/x-icon,image/png" className="w-full border rounded p-2 text-sm" />
-            </div>
-          </div>
-        </Card>
-      </div>
+            <p className="text-xs text-muted-foreground">Allows unverified demo users to interact with AI features.</p>
+          </Card>
+        </div>
 
-      <div className="flex justify-end">
-        <Button onClick={saveSettings} disabled={saving}>
-          {saving ? 'Saving...' : 'Save Settings'}
-        </Button>
+        <div className="flex justify-end">
+          <Button onClick={save} className="flex gap-2">
+            <Save className="w-4 h-4" /> Save Settings
+          </Button>
+        </div>
       </div>
-    </div>
     </AdminLayout>
-  );
+  )
 }

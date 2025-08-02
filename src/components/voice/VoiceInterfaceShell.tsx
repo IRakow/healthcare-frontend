@@ -5,6 +5,7 @@ import { RachelTTS } from '@/lib/voice/RachelTTS'
 import { IntentParser } from '@/lib/ai/IntentParser'
 import { useVoiceCapture } from '@/lib/voice/useVoiceCapture'
 import { RachelAfterAction } from '@/lib/ai/RachelAfterAction'
+import { AssistantShortcutHandler } from '@/lib/ai/AssistantShortcutHandler'
 
 export default function VoiceInterfaceShell() {
   const [transcript, setTranscript] = useState('')
@@ -27,12 +28,20 @@ export default function VoiceInterfaceShell() {
   useEffect(() => {
     if (debouncedTranscript && debouncedTranscript.length > 3) {
       RachelAfterAction.cancel() // Cancel any pending suggestions
-      IntentParser.handle(transcript).then(async (intent) => {
-        setResponse(intent.feedback)
-        await RachelTTS.say(intent.feedback)
-        intent?.action?.()
+      
+      const processTranscript = async () => {
+        const shortcutHandled = await AssistantShortcutHandler.handle(transcript)
+        if (!shortcutHandled) {
+          // fallback to IntentParser
+          const intent = await IntentParser.handle(transcript)
+          setResponse(intent.feedback)
+          await RachelTTS.say(intent.feedback)
+          intent?.action?.()
+        }
         RachelAfterAction.init() // Schedule follow-up suggestion
-      })
+      }
+      
+      processTranscript()
     }
   }, [debouncedTranscript])
 
@@ -40,12 +49,16 @@ export default function VoiceInterfaceShell() {
     e.preventDefault()
     if (!transcript) return
     RachelAfterAction.cancel() // Cancel any pending suggestions
-    IntentParser.handle(transcript).then(async (intent) => {
+    
+    const shortcutHandled = await AssistantShortcutHandler.handle(transcript)
+    if (!shortcutHandled) {
+      // fallback to IntentParser
+      const intent = await IntentParser.handle(transcript)
       setResponse(intent.feedback)
       await RachelTTS.say(intent.feedback)
       intent?.action?.()
-      RachelAfterAction.init() // Schedule follow-up suggestion
-    })
+    }
+    RachelAfterAction.init() // Schedule follow-up suggestion
   }
 
   return (
