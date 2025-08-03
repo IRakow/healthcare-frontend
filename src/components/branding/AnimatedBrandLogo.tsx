@@ -4,25 +4,25 @@ export default function AnimatedBrandLogo() {
       <svg width="450" height="450" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
         <style>
           {`
+            .spin3d {
+              transform-origin: 50% 50%;
+              animation: spin3d 5s ease-in-out 1 forwards;
+            }
+
+            @keyframes spin3d {
+              0%   { transform: rotateY(0deg); }
+              100% { transform: rotateY(720deg); }
+            }
+
             .heartbeat {
               transform-origin: center;
               animation: beat 1.5s ease-in-out infinite;
-            }
-
-            .spin {
-              transform-origin: center;
-              animation: spin 5s linear 1 forwards;
             }
 
             @keyframes beat {
               0%   { transform: scale(1); }
               25%  { transform: scale(1.05); }
               50%  { transform: scale(1); }
-            }
-
-            @keyframes spin {
-              0%   { transform: rotate(0deg); }
-              100% { transform: rotate(720deg); }
             }
           `}
         </style>
@@ -34,10 +34,12 @@ export default function AnimatedBrandLogo() {
           fill="#3B82F6" 
         />
 
-        {/* AI Cube */}
-        <g className="spin">
-          <rect x="206" y="190" width="100" height="100" rx="12" fill="#1D4ED8" />
-          <text x="256" y="250" textAnchor="middle" fontSize="32" fill="white" fontFamily="Arial, sans-serif">AI</text>
+        {/* AI Cube with 3D illusion */}
+        <g className="spin3d">
+          <polygon points="206,190 306,190 286,210 186,210" fill="#1E40AF" />
+          <polygon points="306,190 306,290 286,310 286,210" fill="#2563EB" />
+          <polygon points="206,190 206,290 186,310 186,210" fill="#3B82F6" />
+          <text x="246" y="250" textAnchor="middle" fontSize="28" fill="white" fontFamily="Arial, sans-serif">AI</text>
         </g>
       </svg>
       <h1 className="text-xl font-bold text-primary mt-2">Insperity Health AI</h1>
