@@ -6,7 +6,7 @@ import { handleAdminCommand } from '@/lib/voice/handleAdminCommand';
 import { supabase } from '@/lib/supabase';
 import { useUser } from '@/hooks/useUser';
 
-export default function AssistantBar() {
+export function AssistantBar() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const { userId } = useUser();
@@ -80,3 +80,5 @@ export default function AssistantBar() {
     </div>
   );
 }
+
+export default AssistantBar;
