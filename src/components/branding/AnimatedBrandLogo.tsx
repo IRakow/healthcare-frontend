@@ -5,10 +5,9 @@ export default function AnimatedBrandLogo() {
     <div className="flex flex-col items-center">
       <img 
         src={insperityLogo} 
-        alt="Insperity Health AI - Blue gradient heart with 3D AI cube" 
+        alt="Insperity Health AI" 
         width={600} 
         height={600}
-        className="animate-pulse"
       />
     </div>
   )
