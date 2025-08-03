@@ -5,6 +5,7 @@ import { handleThreadFollowup } from './handleThreadFollowup';
 import { callOpenAI, callGemini } from '@/lib/ai/aiRouter';
 import { useRachelMemoryStore } from './useRachelMemoryStore';
 import { store } from '@/lib/voice/voiceMemoryStore';
+import { handleMutationCommand } from './handleMutationCommand';
 
 export async function handleAdminCommand(text: string) {
   const cleaned = text.trim().toLowerCase();
@@ -13,6 +14,9 @@ export async function handleAdminCommand(text: string) {
   if (cleaned.includes('go to') || cleaned.includes('open')) {
     return handleNavigationIntent(cleaned);
   }
+
+  // Check for mutation commands
+  if (await handleMutationCommand(cleaned)) return;
 
   if (cleaned.includes('repeat that')) {
     const last = store.getState().lastSpoken;
