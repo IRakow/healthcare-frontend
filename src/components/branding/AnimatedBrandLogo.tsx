@@ -1,7 +1,7 @@
 export default function AnimatedBrandLogo() {
   return (
     <div className="flex flex-col items-center gap-2">
-      <svg width="45" height="45" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <svg width="450" height="450" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
         <style>
           {`
             .heartbeat {
