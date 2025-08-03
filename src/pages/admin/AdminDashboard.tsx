@@ -59,16 +59,6 @@ export default function AdminDashboard() {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-800">Admin Command Hub</h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">Live stats, alerts, and insights across your platform.</p>
         </div>
-        <div className="flex gap-2 sm:gap-3">
-          <Button variant="outline" size="sm" className="text-xs sm:text-sm">
-            <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> 
-            <span className="hidden sm:inline">Refresh</span>
-          </Button>
-          <Button size="sm" className="text-xs sm:text-sm">
-            <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> 
-            <span className="hidden sm:inline">Export</span>
-          </Button>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mt-6 sm:mt-8">
