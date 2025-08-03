@@ -1,4 +1,5 @@
 import { useRachelMemoryStore } from './useRachelMemoryStore'
+import { store } from './voiceMemoryStore'
 
 let queue: string[] = []
 let isSpeaking = false
@@ -10,6 +11,10 @@ export async function speak(text: string) {
   interrupt()       // 🛑 Cancel anything in progress
   queue.push(text)
   setLast(text)     // 🧠 Store in memory
+  
+  // Also store in voice memory store
+  store.getState().setLastSpoken(text)
+  
   processQueue()
 }
 
@@ -27,7 +32,7 @@ async function processQueue() {
     voice.pitch = 1.1
     voice.voice = speechSynthesis
       .getVoices()
-      .find(v => v.name.toLowerCase().includes('rachel')) || undefined
+      .find(v => v.name.toLowerCase().includes('rachel')) || null
 
     await new Promise<void>((resolve) => {
       voice.onend = () => resolve()
