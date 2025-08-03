@@ -1,50 +1,66 @@
-import { RachelTTS } from './RachelTTS'
-import { handleAuditCommand } from './handleAuditCommand'
-import { classifyIntent } from '@/lib/ai/classifyIntent'
-import { handleThreadFollowup } from './handleThreadFollowup'
-import { handleNavigationIntent } from './handleNavigationIntent'
-import { handleRepeatCommand } from './handleRepeatCommand'
+import { supabase } from '@/lib/supabase';
+import { speak } from './RachelTTSQueue';
+import { handleNavigationIntent } from './handleNavigationIntent';
+import { handleThreadFollowup } from './handleThreadFollowup';
+import { callOpenAI, callGemini } from '@/lib/ai/aiRouter';
+import { useRachelMemoryStore } from './useRachelMemoryStore';
+import { store } from '@/lib/voice/voiceMemoryStore';
 
-export async function handleAdminCommand(text: string, context?: string) {
-  if (await handleThreadFollowup(text)) return
-  if (await handleNavigationIntent(text)) return
-  if (handleRepeatCommand(text)) return
+export async function handleAdminCommand(text: string) {
+  const cleaned = text.trim().toLowerCase();
 
-  const intent = classifyIntent(text, context)
-  console.log('Intent:', intent, 'Context:', context)
-  const t = text.toLowerCase()
-
-  // Route to specific command handlers
-  if (t.includes('audit') || t.includes('log') || t.includes('compliance')) {
-    return handleAuditCommand(text)
+  // 💡 Route to specific handlers first
+  if (cleaned.includes('go to') || cleaned.includes('open')) {
+    return handleNavigationIntent(cleaned);
   }
 
-  if (t.includes('users') || t.includes('admin')) {
-    if (t.includes('count') || t.includes('how many')) {
-      return RachelTTS.say('There are 12 total admins with varying permission levels.')
-    }
-    if (t.includes('active')) {
-      return RachelTTS.say('8 admins have been active in the last 24 hours.')
-    }
+  if (cleaned.includes('repeat that')) {
+    const last = store.getState().lastSpoken;
+    return last ? speak(last) : speak("I don't have anything to repeat.");
   }
 
-  if (t.includes('settings')) {
-    if (t.includes('voice') || t.includes('rachel')) {
-      return RachelTTS.say('Voice assistant Rachel is currently active and responding to commands.')
-    }
-    if (t.includes('environment')) {
-      return RachelTTS.say('System is running in production environment with all security features enabled.')
-    }
+  if (cleaned.includes('export audit')) {
+    const { data, error } = await supabase.from('audit_logs').select('*').limit(500);
+    if (error || !data) return speak("There was an error exporting the audit logs.");
+    const summary = `Exported ${data.length} audit entries. Ready for review.`;
+    // TODO: Hook up PDF export or CSV if needed
+    return speak(summary);
   }
 
-  if (t.includes('broadcast') || t.includes('message')) {
-    if (t.includes('last') || t.includes('recent')) {
-      return RachelTTS.say('Last broadcast was sent on August 1st: Platform update notice.')
-    }
-    if (t.includes('send') || t.includes('new')) {
-      return RachelTTS.say('To send a new broadcast, use the form below or say the message content.')
-    }
+  if (cleaned.includes('how many admins')) {
+    const { count, error } = await supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+      .eq('role', 'admin');
+    if (error) return speak("Couldn't fetch admin count.");
+    return speak(`There are currently ${count} admins in the system.`);
   }
 
-  return RachelTTS.say('You can ask about users, settings, audit logs, or broadcasts.')
+  if (cleaned.includes('recent invoices')) {
+    const { data, error } = await supabase.from('invoices').select('id, total_amount, created_at').order('created_at', { ascending: false }).limit(5);
+    if (error) return speak("Failed to fetch invoice data.");
+    const formatted = data.map(i => `Invoice ${i.id} for ${i.total_amount}`).join(', ');
+    return speak(`Here are the latest invoices: ${formatted}`);
+  }
+
+  if (cleaned.includes('settings')) {
+    return speak(`You're in ${import.meta.env.MODE} environment. Rachel voice is active.`);
+  }
+
+  // 🌐 AI ROUTING FOR COMPLEX QUERIES
+  const aiResponse = await callOpenAIOrGemini(cleaned);
+  return aiResponse;
+}
+
+async function callOpenAIOrGemini(prompt: string) {
+  const medicalKeywords = ['HIPAA', 'compliance', 'audit', 'protected data'];
+  const useGemini = medicalKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
+
+  const result = useGemini ? await callGemini(prompt) : await callOpenAI(prompt);
+  if (result?.text) {
+    speak(result.text);
+    store.getState().setLastSpoken(result.text);
+    return;
+  }
+  return speak("I'm having trouble processing that. Please try again.");
 }
