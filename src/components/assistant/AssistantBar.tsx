@@ -27,6 +27,7 @@ const globalCommandMap: Record<string, (payload?: any) => void> = {
 export default function AssistantBar() {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
+  const [messages, setMessages] = useState<{ role: 'user' | 'rachel'; text: string }[]>([])
   const [silentMode, setSilentMode] = useState(false);
   const [recording, setRecording] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,18 +35,32 @@ export default function AssistantBar() {
 
   useEffect(() => {
     const stored = localStorage.getItem('silent_mode');
+    const last = localStorage.getItem('rachel_last_command');
+    if (last) setInput(last);
     setSilentMode(stored === 'true');
   }, []);
 
+  useEffect(() => {
+    const idleTimer = setTimeout(() => {
+      if (!input && !recording && !response) {
+        setInput("Hi, how can I help you today?");
+      }
+    }, 12000);
+    return () => clearTimeout(idleTimer);
+  }, [input, recording, response]);
+
   async function handleSubmit() {
     if (!input) return;
+    setMessages(prev => [...prev, { role: 'user', text: input }]);
     const res = await fetch('/api/ai/rachel', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input })
     });
     const data = await res.json();
+    setMessages(prev => [...prev, { role: 'rachel', text: data?.text }]);
     setResponse(data?.text);
+    localStorage.setItem('rachel_last_command', input);
     if (!silentMode) speak(data?.text || '');
     if (data?.action === 'navigate' && data.route?.startsWith('/patient')) {
       router.push(data.route);
@@ -122,9 +137,13 @@ export default function AssistantBar() {
           <MicIcon className="w-4 h-4" />
         </button>
       </div>
-      {response && (
-        <div className="text-center text-xs text-gray-600 pb-2 animate-fade-in">
-          {response}
+      {messages.length > 0 && (
+        <div className="bg-white/90 border-t border-gray-200 px-4 py-2 text-xs max-h-40 overflow-y-auto">
+          {messages.map((m, i) => (
+            <div key={i} className={`mb-1 ${m.role === 'user' ? 'text-gray-900 font-medium' : 'text-blue-700 italic'}`}>
+              {m.role === 'user' ? '🧍 ' : '🧠 '} {m.text}
+            </div>
+          ))}
         </div>
       )}
     </div>
