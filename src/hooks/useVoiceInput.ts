@@ -3,7 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@deepgram/sdk';
 
-const deepgram = createClient(import.meta.env.VITE_DEEPGRAM_API_KEY || '');
+const DEEPGRAM_API_KEY = import.meta.env.VITE_DEEPGRAM_API_KEY;
+const deepgram = DEEPGRAM_API_KEY ? createClient(DEEPGRAM_API_KEY) : null;
 
 export function useVoiceInput() {
   const [recording, setRecording] = useState(false);
@@ -17,6 +18,11 @@ export function useVoiceInput() {
   }, []);
 
   async function startRecording() {
+    if (!deepgram) {
+      console.warn('Deepgram API key not configured');
+      return;
+    }
+    
     setTranscript('');
     setRecording(true);
 

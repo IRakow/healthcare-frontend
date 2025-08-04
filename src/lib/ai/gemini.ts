@@ -1,14 +1,10 @@
 // src/lib/ai/gemini.ts
 
-import { createClient } from 'groq-sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 
-if (!GEMINI_API_KEY) throw new Error('Missing Gemini API Key');
-
-const gemini = createClient({
-  apiKey: GEMINI_API_KEY,
-});
+const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 
 interface GeminiRequest {
   prompt: string;
@@ -16,20 +12,22 @@ interface GeminiRequest {
 }
 
 export async function fetchFromGemini({ prompt, context }: GeminiRequest) {
-  const messages = [
-    { role: 'system', content: context || 'You are a helpful medical assistant.' },
-    { role: 'user', content: prompt },
-  ];
-
+  if (!genAI) {
+    console.warn('Gemini API key not configured');
+    return { text: 'Gemini is not configured. Please add the API key.' };
+  }
+  
   try {
-    const result = await gemini.chat.completions.create({
-      model: 'gemini-1.5-flash-latest',
-      messages,
-      max_tokens: 1200,
-      temperature: 0.4,
-    });
-
-    const text = result?.choices?.[0]?.message?.content;
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    
+    const fullPrompt = context 
+      ? `${context}\n\nUser: ${prompt}`
+      : prompt;
+    
+    const result = await model.generateContent(fullPrompt);
+    const response = await result.response;
+    const text = response.text();
+    
     return { text };
   } catch (error) {
     console.error('Gemini Error:', error);

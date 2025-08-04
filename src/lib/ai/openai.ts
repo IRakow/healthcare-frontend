@@ -4,12 +4,10 @@ import OpenAI from 'openai';
 
 const OPENAI_API_KEY = import.meta.env.VITE_PURITY_HEALTH_OPENAI || process.env.PURITY_HEALTH_OPENAI;
 
-if (!OPENAI_API_KEY) throw new Error('Missing OpenAI API Key');
-
-const openai = new OpenAI({
+const openai = OPENAI_API_KEY ? new OpenAI({
   apiKey: OPENAI_API_KEY,
   dangerouslyAllowBrowser: true, // Only if you're using in browser directly
-});
+}) : null;
 
 interface OpenAIRequest {
   prompt: string;
@@ -17,6 +15,11 @@ interface OpenAIRequest {
 }
 
 export async function fetchFromOpenAI({ prompt, system }: OpenAIRequest) {
+  if (!openai) {
+    console.warn('OpenAI API key not configured');
+    return { text: 'OpenAI is not configured. Please add the API key.' };
+  }
+  
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
