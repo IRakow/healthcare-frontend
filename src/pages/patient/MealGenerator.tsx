@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useUser } from '@/hooks/useUser';
+import { DownloadIcon } from 'lucide-react';
 
 export default function MealGenerator() {
   const { user } = useUser();
@@ -22,6 +23,14 @@ export default function MealGenerator() {
     const result = await res.json();
     setMeal(result?.meal || 'Rachel could not generate a meal plan.');
     setLoading(false);
+  }
+
+  function exportPDF() {
+    const blob = new Blob([meal], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'rachel-meal-plan.pdf';
+    link.click();
   }
 
   return (
@@ -70,19 +79,50 @@ export default function MealGenerator() {
           className="mt-10 max-w-3xl mx-auto"
         >
           <Card className="bg-white/90 border border-yellow-200 shadow-xl">
-            <CardContent className="p-6 text-gray-800 whitespace-pre-line leading-relaxed space-y-2">
-              <h2 className="text-lg font-semibold text-yellow-700 mb-4">🌿 Your Personalized Plan</h2>
-              {meal.split('\n').map((line, index) => (
-                <motion.p
-                  key={index}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.08 }}
-                  className="text-sm"
-                >
-                  {line}
-                </motion.p>
-              ))}
+            <CardContent className="p-6 text-gray-800 leading-relaxed space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                <h2 className="text-lg font-semibold text-yellow-700">🌿 Your Personalized Plan</h2>
+                <Button onClick={exportPDF} className="flex items-center gap-2 text-xs text-yellow-800 bg-white border border-yellow-300 px-3 py-1 rounded hover:bg-yellow-100">
+                  <DownloadIcon className="w-4 h-4" /> Export PDF
+                </Button>
+              </div>
+
+              <div className="bg-yellow-100 text-yellow-900 p-4 rounded-lg text-sm shadow-inner">
+                💬 <em>"Your sleep was outstanding! Keep up the restful routine."</em>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
+                  <h3 className="font-semibold text-yellow-700 text-sm mb-1">Hydration</h3>
+                  <p className="text-sm">7.5 cups/day average — looking hydrated!</p>
+                </div>
+                <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
+                  <h3 className="font-semibold text-yellow-700 text-sm mb-1">Protein</h3>
+                  <p className="text-sm">105g/day — great job hitting the muscle goals.</p>
+                </div>
+                <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
+                  <h3 className="font-semibold text-yellow-700 text-sm mb-1">Sleep</h3>
+                  <p className="text-sm">Avg 7.9 hrs/night — consistency paying off.</p>
+                </div>
+                <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
+                  <h3 className="font-semibold text-yellow-700 text-sm mb-1">Movement</h3>
+                  <p className="text-sm">6,200 steps/day — want to push closer to 8k?</p>
+                </div>
+              </div>
+
+              <div className="bg-white mt-6 p-4 rounded-xl shadow-inner border border-yellow-100">
+                {meal.split('\n').map((line, index) => (
+                  <motion.p
+                    key={index}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.06 }}
+                    className="text-sm"
+                  >
+                    {line}
+                  </motion.p>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </motion.div>
