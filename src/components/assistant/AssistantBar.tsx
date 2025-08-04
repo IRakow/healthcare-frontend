@@ -1,4 +1,4 @@
-// src/components/assistant/AssistantBar.tsx
+// CLEANED + STABILIZED: AssistantBar.tsx
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -6,10 +6,7 @@ import { MicIcon, SendIcon } from 'lucide-react';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 
 const globalCommandMap: Record<string, (payload?: any) => void> = {
-  scrollToVitals: () => {
-    const el = document.querySelector('#vitals-panel');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  },
+  scrollToVitals: () => document.querySelector('#vitals-panel')?.scrollIntoView({ behavior: 'smooth' }),
   highlightVitals: () => {
     const el = document.querySelector('#vitals-panel');
     if (el) {
@@ -17,10 +14,7 @@ const globalCommandMap: Record<string, (payload?: any) => void> = {
       setTimeout(() => el.classList.remove('ring-4', 'ring-sky-300'), 2000);
     }
   },
-  scrollToUploads: () => {
-    const el = document.querySelector('#upload-panel');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  },
+  scrollToUploads: () => document.querySelector('#upload-panel')?.scrollIntoView({ behavior: 'smooth' }),
   highlightUploads: () => {
     const el = document.querySelector('#upload-panel');
     if (el) {
@@ -28,10 +22,7 @@ const globalCommandMap: Record<string, (payload?: any) => void> = {
       setTimeout(() => el.classList.remove('ring-4', 'ring-rose-300'), 2000);
     }
   },
-  scrollToGoals: () => {
-    const el = document.querySelector('#goals-panel');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  },
+  scrollToGoals: () => document.querySelector('#goals-panel')?.scrollIntoView({ behavior: 'smooth' }),
   highlightGoals: () => {
     const el = document.querySelector('#goals-panel');
     if (el) {
@@ -39,28 +30,20 @@ const globalCommandMap: Record<string, (payload?: any) => void> = {
       setTimeout(() => el.classList.remove('ring-4', 'ring-yellow-300'), 2000);
     }
   },
-  addHydrationGoal: (payload) => {
-    console.log('Hydration goal set to:', payload?.target);
-    // e.g. update goal state or Supabase mutation
-  },
+  addHydrationGoal: (payload) => console.log('Hydration goal set to:', payload?.target),
   toggleSilentMode: () => {
     const next = !(localStorage.getItem('silent_mode') === 'true');
     localStorage.setItem('silent_mode', JSON.stringify(next));
     window.location.reload();
   },
-  openUploadModal: () => {
-    const e = new CustomEvent('open-upload-modal');
-    window.dispatchEvent(e);
-  },
-  showVitals: () => {
-    window.location.href = '/patient/vitals';
-  }
+  openUploadModal: () => window.dispatchEvent(new CustomEvent('open-upload-modal')),
+  showVitals: () => (window.location.href = '/patient/vitals')
 };
 
 export default function AssistantBar() {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
-  const [messages, setMessages] = useState<{ role: 'user' | 'rachel'; text: string }[]>([])
+  const [messages, setMessages] = useState<{ role: 'user' | 'rachel'; text: string }[]>([]);
   const [silentMode, setSilentMode] = useState(false);
   const [recording, setRecording] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -70,16 +53,13 @@ export default function AssistantBar() {
     const stored = localStorage.getItem('silent_mode');
     const last = localStorage.getItem('rachel_last_command');
     const micReady = localStorage.getItem('microphone_ready') === 'true';
+    if (stored) setSilentMode(stored === 'true');
     if (last) setInput(last);
     if (micReady) setTimeout(() => handleVoice(), 3000);
-    const page = window.location.pathname;
-    if (page === '/patient/timeline') setTimeout(() => handleVoice(), 8000);
-    setSilentMode(stored === 'true');
+    if (window.location.pathname === '/patient/timeline') setTimeout(() => handleVoice(), 8000);
 
     const idleInterval = setInterval(() => {
-      if (!input && !recording && !response && micReady) {
-        handleVoice();
-      }
+      if (!input && !recording && !response && micReady) handleVoice();
     }, 30000);
     return () => clearInterval(idleInterval);
   }, []);
@@ -87,24 +67,14 @@ export default function AssistantBar() {
   useEffect(() => {
     const button = document.createElement('button');
     button.innerText = '🚑 I need help';
-    button.classList.add('animate-pulse');
-    button.className = 'fixed bottom-24 right-4 z-50 px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-full shadow-md';
+    button.className = 'fixed bottom-24 right-4 z-50 px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-full shadow-md animate-pulse';
     button.onclick = () => {
-      setInput('I'm not feeling well');
+      setInput("I'm not feeling well");
       setTimeout(() => handleSubmit(), 1000);
     };
     document.body.appendChild(button);
     return () => document.body.removeChild(button);
   }, []);
-
-  useEffect(() => {
-    const idleTimer = setTimeout(() => {
-      if (!input && !recording && !response) {
-        setInput("Hi, how can I help you today?");
-      }
-    }, 12000);
-    return () => clearTimeout(idleTimer);
-  }, [input, recording, response]);
 
   async function handleSubmit() {
     if (!input) return;
@@ -119,38 +89,37 @@ export default function AssistantBar() {
     setMessages(prev => [...prev, { role: 'rachel', text: data?.text }]);
     setResponse(data?.text);
     setInput('');
-    if (data?.autoConfirm && data.function) {
-      globalCommandMap[data.function]?.(data.payload);
-    }
     localStorage.setItem('rachel_last_command', input);
     if (!silentMode) speak(data?.text || '');
+
+    if (data?.autoConfirm && data.function) globalCommandMap[data.function]?.(data.payload);
+
     if (data?.action === 'navigate' && data.route?.startsWith('/patient')) {
       router.push(data.route);
     } else if (data?.action === 'runFunction' && data.function) {
       globalCommandMap[data.function]?.(data.payload);
-      if (data.function.includes('Vitals')) {
-        setTimeout(() => {
+
+      const followup = () => {
+        if (data.function.includes('Vitals')) {
           globalCommandMap.scrollToVitals?.();
           globalCommandMap.highlightVitals?.();
           setTimeout(() => setInput('Would you like to set a hydration goal too?'), 3000);
-        }, 1200);
-      } else if (data.function.includes('sleep')) {
-        setTimeout(() => setInput('Would you like me to summarize your sleep trends this week?'), 2000);
-      }
-      if (data.function.includes('Uploads')) {
-        setTimeout(() => {
+        }
+        if (data.function.includes('Uploads')) {
           globalCommandMap.scrollToUploads?.();
           globalCommandMap.highlightUploads?.();
           setTimeout(() => setInput('Want to upload another document now?'), 3000);
-        }, 1200);
-      }
-      if (data.function.includes('Goals')) {
-        setTimeout(() => {
+        }
+        if (data.function.includes('Goals')) {
           globalCommandMap.scrollToGoals?.();
           globalCommandMap.highlightGoals?.();
           setTimeout(() => setInput('Shall I log this goal for you?'), 3000);
-        }, 1200);
-      }
+        }
+        if (data.function.includes('sleep')) {
+          setTimeout(() => setInput('Would you like me to summarize your sleep trends this week?'), 2000);
+        }
+      };
+      setTimeout(followup, 1200);
     }
   }
 
@@ -166,12 +135,9 @@ export default function AssistantBar() {
         const formData = new FormData();
         formData.append('audio', audioBlob);
 
-        const res = await fetch('/api/voice/deepgram-to-rachel', {
-          method: 'POST',
-          body: formData
-        });
-
+        const res = await fetch('/api/voice/deepgram-to-rachel', { method: 'POST', body: formData });
         const result = await res.json();
+
         if (result?.text) {
           setInput(result.text);
           setTimeout(() => handleSubmit(), 1000);
