@@ -17,6 +17,28 @@ const globalCommandMap: Record<string, (payload?: any) => void> = {
       setTimeout(() => el.classList.remove('ring-4', 'ring-sky-300'), 2000);
     }
   },
+  scrollToUploads: () => {
+    const el = document.querySelector('#upload-panel');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  },
+  highlightUploads: () => {
+    const el = document.querySelector('#upload-panel');
+    if (el) {
+      el.classList.add('ring-4', 'ring-rose-300');
+      setTimeout(() => el.classList.remove('ring-4', 'ring-rose-300'), 2000);
+    }
+  },
+  scrollToGoals: () => {
+    const el = document.querySelector('#goals-panel');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  },
+  highlightGoals: () => {
+    const el = document.querySelector('#goals-panel');
+    if (el) {
+      el.classList.add('ring-4', 'ring-yellow-300');
+      setTimeout(() => el.classList.remove('ring-4', 'ring-yellow-300'), 2000);
+    }
+  },
   addHydrationGoal: (payload) => {
     console.log('Hydration goal set to:', payload?.target);
     // e.g. update goal state or Supabase mutation
@@ -63,6 +85,19 @@ export default function AssistantBar() {
   }, []);
 
   useEffect(() => {
+    const button = document.createElement('button');
+    button.innerText = '🚑 I need help';
+    button.classList.add('animate-pulse');
+    button.className = 'fixed bottom-24 right-4 z-50 px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-full shadow-md';
+    button.onclick = () => {
+      setInput('I'm not feeling well');
+      setTimeout(() => handleSubmit(), 1000);
+    };
+    document.body.appendChild(button);
+    return () => document.body.removeChild(button);
+  }, []);
+
+  useEffect(() => {
     const idleTimer = setTimeout(() => {
       if (!input && !recording && !response) {
         setInput("Hi, how can I help you today?");
@@ -93,6 +128,29 @@ export default function AssistantBar() {
       router.push(data.route);
     } else if (data?.action === 'runFunction' && data.function) {
       globalCommandMap[data.function]?.(data.payload);
+      if (data.function.includes('Vitals')) {
+        setTimeout(() => {
+          globalCommandMap.scrollToVitals?.();
+          globalCommandMap.highlightVitals?.();
+          setTimeout(() => setInput('Would you like to set a hydration goal too?'), 3000);
+        }, 1200);
+      } else if (data.function.includes('sleep')) {
+        setTimeout(() => setInput('Would you like me to summarize your sleep trends this week?'), 2000);
+      }
+      if (data.function.includes('Uploads')) {
+        setTimeout(() => {
+          globalCommandMap.scrollToUploads?.();
+          globalCommandMap.highlightUploads?.();
+          setTimeout(() => setInput('Want to upload another document now?'), 3000);
+        }, 1200);
+      }
+      if (data.function.includes('Goals')) {
+        setTimeout(() => {
+          globalCommandMap.scrollToGoals?.();
+          globalCommandMap.highlightGoals?.();
+          setTimeout(() => setInput('Shall I log this goal for you?'), 3000);
+        }, 1200);
+      }
     }
   }
 
@@ -178,10 +236,3 @@ export default function AssistantBar() {
     </div>
   );
 }
-
-/*
- Use these in your AI payload:{
-  "action": "runFunction",
-  "function": "highlightVitals"
-}
-*/
