@@ -2,11 +2,11 @@
 
 import { ReactNode } from 'react';
 import AssistantBar from '@/components/assistant/AssistantBar';
-import { usePathname } from 'next/navigation';
+import { useLocation } from 'react-router-dom';
 
 export default function PatientLayout({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const isPatientRoute = pathname?.startsWith('/patient');
+  const location = useLocation();
+  const isPatientRoute = location.pathname?.startsWith('/patient');
 
   return (
     <div className="min-h-screen bg-slate-50">
