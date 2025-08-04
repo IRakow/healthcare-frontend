@@ -4,7 +4,7 @@ import PatientLayout from '@/components/layout/PatientLayout';
 import PatientHealthDashboard from '@/components/patient/PatientHealthDashboard';
 import { Link } from 'react-router-dom';
 
-import AssistantBarOverlay from '@/components/assistant/AssistantBarOverlay';
+import AssistantBar from '@/components/assistant/AssistantBar';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 import { useEffect } from 'react';
 import { useRachelMemory } from '@/lib/voice/useRachelMemoryStore';
@@ -117,7 +117,7 @@ export default function PatientDashboardIndex() {
   </div>
 </div>
       </section>
-      <div className='fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto'><AssistantBarOverlay /></div>
+      <div className='fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto'><AssistantBar /></div>
     </PatientLayout>
   );
 }
