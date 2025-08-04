@@ -1,5 +1,5 @@
 import PatientDashboardSimpleHybrid from '@/pages/patient/PatientDashboardSimpleHybrid';
-import PatientDashboardIndex from '@/pages/patient/index';
+import PatientDashboardIndex from '@/pages/patient/PatientIndex';
 import PatientRecords from '@/pages/patient/Records';
 import Meditation from '@/pages/patient/Meditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
