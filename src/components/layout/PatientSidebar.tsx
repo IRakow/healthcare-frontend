@@ -35,6 +35,9 @@ export default function PatientSidebar() {
       <NavLink to="/patient/messages" className="block font-semibold">
         💬 Messages
       </NavLink>
+      <NavLink to="/patient/meditation" className="block font-semibold">
+        🧘 Meditation
+      </NavLink>
       <NavLink to="/patient/settings" className="block font-semibold">
         ⚙️ Settings
       </NavLink>
