@@ -88,6 +88,14 @@ export default function AssistantBar() {
     const data = await res.json();
     setMessages(prev => [...prev, { role: 'rachel', text: data?.text }]);
     setResponse(data?.text);
+    if (data?.text?.includes('see a doctor') || data?.text?.includes('schedule')) {
+      setTimeout(() => {
+        setInput('Would you like to schedule an appointment now? We have openings in 20 minutes or less.');
+        setTimeout(() => {
+          router.push({ pathname: '/patient/appointments', query: { reason: 'urgent', source: 'rachel' } });
+        }, 2000);
+      }, 3000);
+    }
     setInput('');
     localStorage.setItem('rachel_last_command', input);
     if (!silentMode) speak(data?.text || '');
