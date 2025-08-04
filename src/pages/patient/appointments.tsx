@@ -16,16 +16,70 @@ export default function AppointmentForm() {
   }, [reason]);
 
   async function handleConfirm() {
+    const phone = localStorage.getItem('user_phone');
+    const appointmentTime = new Date();
+    const event = {
+      type: 'appointment',
+      title: 'AI Scheduled Appointment',
+      details: `Booked via Rachel: ${appointmentReason}`,
+      timestamp: appointmentTime.toISOString()
+    };
+
     await fetch('/api/timeline/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'appointment',
-        title: 'AI Scheduled Appointment',
-        details: `Booked via Rachel: ${appointmentReason}`,
-        timestamp: new Date().toISOString()
-      })
+      body: JSON.stringify(event)
     });
+
+    // optional: open calendar event link
+    const calendarURL = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Doctor+Appointment+-+${encodeURIComponent(appointmentReason)}&dates=${appointmentTime.toISOString().replace(/[-:]/g, '').slice(0, 15)}/${appointmentTime.toISOString().replace(/[-:]/g, '').slice(0, 15)}&details=Scheduled+via+Rachel&location=Virtual&sf=true&output=xml`;
+    window.open(calendarURL, '_blank');
+
+    if (phone) {
+      await fetch('/api/notifications/sms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: phone,
+          message: `Your appointment with a provider from Insperity Health has been booked. You'll get a reminder 30 minutes before.`
+        })
+      });
+
+      // Schedule reminder 30 minutes before
+      const reminderTime = new Date(appointmentTime.getTime() - 30 * 60 * 1000);
+      await fetch('/api/notifications/schedule-reminder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: phone,
+          message: `⏰ Reminder: You have an appointment with Insperity Health in 30 minutes.`,
+          sendAt: reminderTime.toISOString()
+        })
+      });
+    } else {
+      const addNumber = confirm('Appointment booked, but no phone number found. Would you like to add your number now to receive SMS reminders?');
+      if (addNumber) {
+        const newPhone = prompt('Enter your mobile number:');
+        if (newPhone) {
+          await fetch('/api/health/profile/update-phone', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: newPhone })
+          });
+          localStorage.setItem('user_phone', newPhone);
+          await fetch('/api/notifications/sms', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: newPhone,
+              message: `Your appointment with a provider from Insperity Health has been booked. Check your calendar.`
+            })
+          });
+          alert('Phone saved. You'll now receive SMS reminders.');
+        }
+      }
+    }
+
     alert(`Appointment booked: ${appointmentReason}`);
     router.push('/patient/confirmation');
   }
