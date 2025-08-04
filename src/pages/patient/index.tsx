@@ -5,8 +5,21 @@ import PatientHealthDashboard from '@/components/patient/PatientHealthDashboard'
 import Link from 'next/link';
 
 import AssistantBarOverlay from '@/components/assistant/AssistantBarOverlay';
+import { speak } from '@/lib/voice/RachelTTSQueue';
+import { useEffect } from 'react';
+import { useRachelMemory } from '@/lib/voice/useRachelMemoryStore';
+import { handleThreadFollowup } from '@/lib/voice/handleThreadFollowup';
 
 export default function PatientDashboardIndex() {
+  const { rachelMemory, setRachelMemory } = useRachelMemory();
+
+  useEffect(() => {
+    if (!rachelMemory.sessionStarted) {
+      setRachelMemory({ ...rachelMemory, sessionStarted: true });
+      speak("Welcome back. I'm here if you need anything — just speak your request.");
+      handleThreadFollowup('patient-dashboard-landing', { context: 'patient-dashboard' });
+    }
+  }, []);
   return (
     <PatientLayout>
       <PatientHealthDashboard />
