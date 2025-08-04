@@ -1,6 +1,6 @@
 // src/pages/patient/appointments.tsx
 
-import { useRouter } from 'next/router';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/input';
@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 
 export default function AppointmentForm() {
-  const router = useRouter();
-  const { reason, source } = router.query;
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const reason = searchParams.get('reason');
+  const source = searchParams.get('source');
   const [appointmentReason, setAppointmentReason] = useState('');
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export default function AppointmentForm() {
   async function handleConfirm() {
     const phone = localStorage.getItem('user_phone');
     const appointmentTime = new Date();
-    const event = {
+    const _event = {
       type: 'appointment',
       title: 'AI Scheduled Appointment',
       details: `Booked via Rachel: ${appointmentReason}`,
@@ -80,14 +82,14 @@ export default function AppointmentForm() {
               message: `Your appointment with a provider from Insperity Health has been booked. Check your calendar.`
             })
           });
-          alert('Phone saved. You'll now receive SMS reminders.');
+          alert("Phone saved. You'll now receive SMS reminders.");
         }
       }
     }
     
     alert(`Appointment booked: ${appointmentReason}`);
     speak(`Your appointment has been confirmed. We'll notify you 30 minutes before it begins.`);
-    router.push('/patient/confirmation');
+    navigate('/patient/confirmation');
   }
 
   return (
