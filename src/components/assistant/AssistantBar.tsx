@@ -36,7 +36,9 @@ export default function AssistantBar() {
   useEffect(() => {
     const stored = localStorage.getItem('silent_mode');
     const last = localStorage.getItem('rachel_last_command');
+    const micReady = localStorage.getItem('microphone_ready') === 'true';
     if (last) setInput(last);
+    if (micReady) setTimeout(() => handleVoice(), 3000);
     setSilentMode(stored === 'true');
   }, []);
 
@@ -52,10 +54,11 @@ export default function AssistantBar() {
   async function handleSubmit() {
     if (!input) return;
     setMessages(prev => [...prev, { role: 'user', text: input }]);
+    const contextPrompt = `User is on ${window.location.pathname}. Last command: ${input}. Silent mode: ${silentMode}.`;
     const res = await fetch('/api/ai/rachel', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ input })
+      body: JSON.stringify({ input, context: contextPrompt })
     });
     const data = await res.json();
     setMessages(prev => [...prev, { role: 'rachel', text: data?.text }]);
@@ -105,6 +108,7 @@ export default function AssistantBar() {
         recorder.stop();
         stream.getTracks().forEach((t) => t.stop());
         setRecording(false);
+        localStorage.setItem('microphone_ready', 'true');
       }, 5000);
     } catch (err) {
       console.error('Voice error', err);
