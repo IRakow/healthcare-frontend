@@ -51,6 +51,7 @@ export default function PatientDashboardIndex() {
         <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-900 tracking-tight animate-fade-in">
           🧠 AI Power Tools & Smart Health Features
         </h2>
+        {/* Deployment timestamp: ${new Date().toISOString()} */}
         <div className="space-y-12">
   <div>
     <h3 className="text-xl font-semibold text-blue-700 mb-4">🧘 Wellness</h3>
