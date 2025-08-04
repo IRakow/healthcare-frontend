@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { speak } from '@/lib/voice/RachelTTSQueue';
 
 export default function AppointmentForm() {
   const router = useRouter();
@@ -25,12 +26,7 @@ export default function AppointmentForm() {
       timestamp: appointmentTime.toISOString()
     };
 
-    await fetch('/api/timeline/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(event)
-    });
-
+    
     // optional: open calendar event link
     const calendarURL = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Doctor+Appointment+-+${encodeURIComponent(appointmentReason)}&dates=${appointmentTime.toISOString().replace(/[-:]/g, '').slice(0, 15)}/${appointmentTime.toISOString().replace(/[-:]/g, '').slice(0, 15)}&details=Scheduled+via+Rachel&location=Virtual&sf=true&output=xml`;
     window.open(calendarURL, '_blank');
@@ -88,14 +84,9 @@ export default function AppointmentForm() {
         }
       }
     }
-    },
-        body: JSON.stringify({
-          to: phone,
-          message: `Your appointment for '${appointmentReason}' has been booked. Check your calendar.`
-        })
-      });
-    }
+    
     alert(`Appointment booked: ${appointmentReason}`);
+    speak(`Your appointment has been confirmed. We'll notify you 30 minutes before it begins.`);
     router.push('/patient/confirmation');
   }
 
