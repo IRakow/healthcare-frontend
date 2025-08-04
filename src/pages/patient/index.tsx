@@ -17,7 +17,29 @@ export default function PatientDashboardIndex() {
     if (!rachelMemory.sessionStarted) {
       setRachelMemory({ ...rachelMemory, sessionStarted: true });
       speak("Welcome back. I'm here if you need anything — just speak your request.");
-      handleThreadFollowup('patient-dashboard-landing', { context: 'patient-dashboard' });
+
+      handleThreadFollowup('patient-dashboard-landing', {
+        context: 'patient-dashboard',
+        source: 'supabase',
+        model: 'gemini-patient',
+        memory: {
+          userId: rachelMemory.userId,
+          preferences: rachelMemory.preferences,
+          goals: rachelMemory.goals || [],
+          alerts: rachelMemory.alerts || [],
+        },
+        routes: [
+          '/patient/appointments',
+          '/patient/medications',
+          '/patient/TimelineViewer',
+          '/patient/LabViewer',
+          '/patient/MealGenerator',
+          '/patient/MeditationImmersive',
+        ],
+        allowDomMutation: true,
+        allowPageNavigation: true,
+        allowSupabaseWrites: true
+      });
     }
   }, []);
   return (
@@ -37,7 +59,6 @@ export default function PatientDashboardIndex() {
       <Link href="/patient/MeditationStart" className="glass-tile">Start Meditation</Link>
       <Link href="/patient/MeditationHistory" className="glass-tile">Meditation History</Link>
       <Link href="/patient/MeditationSessionLog" className="glass-tile">Session Log</Link>
-      <Link href="/patient/WeeklyGoals" className="glass-tile">Weekly Goals Tracker</Link>
     </div>
   </div>
 
