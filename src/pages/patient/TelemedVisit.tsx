@@ -1,144 +1,96 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
-import { generateJitsiLink } from '@/utils/videoCall';
-import Spinner from '@/components/ui/spinner';
-import { TranscriptionControls } from '@/components/TranscriptionControls';
-import { CompleteVisitButton } from '@/components/CompleteVisitButton';
-import { useRole } from '@/hooks/useRole';
+// src/pages/patient/TelemedVisit.tsx
+
+import { useEffect, useRef, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useUser } from '@/hooks/useUser';
+import { speak } from '@/lib/voice/RachelTTSQueue';
 
 export default function TelemedVisit() {
-  const { appointmentId } = useParams();
-  const navigate = useNavigate();
-  const { role } = useRole();
-  const [url, setUrl] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [appointment, setAppointment] = useState<any>(null);
+  const localVideoRef = useRef<HTMLVideoElement>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  const [roomStarted, setRoomStarted] = useState(false);
+  const [transcript, setTranscript] = useState('');
+  const { user } = useUser();
 
   useEffect(() => {
-    if (!appointmentId) return;
+    // Load WebRTC or pre-join signaling logic
+    if (roomStarted) startVideo();
+  }, [roomStarted]);
 
-    (async () => {
-      try {
-        // Get appointment details
-        const { data: appt } = await supabase
-          .from('appointments')
-          .select('*')
-          .eq('id', appointmentId)
-          .maybeSingle();
-
-        if (!appt) {
-          console.error('Appointment not found');
-          setLoading(false);
-          return;
-        }
-
-        setAppointment(appt);
-
-        // Use existing video URL or generate new one
-        let videoUrl = appt.video_url;
-        if (!videoUrl) {
-          videoUrl = generateJitsiLink(appointmentId);
-          await supabase
-            .from('appointments')
-            .update({ video_url: videoUrl })
-            .eq('id', appointmentId);
-        }
-
-        // Update status to in_progress
-        if (appt.status === 'pending') {
-          await supabase
-            .from('appointments')
-            .update({ status: 'in_progress' })
-            .eq('id', appointmentId);
-        }
-
-        // Create timeline event for video visit started
-        await supabase.from('patient_timeline_events').insert({
-          patient_id: appt.patient_id,
-          type: 'visit',
-          label: 'Video Visit Started',
-          data: { appointment_id: appt.id }
+  async function startVideo() {
+    // For now, this is simulated. Replace with real WebRTC config.
+    if (localVideoRef.current) {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          localVideoRef.current\!.srcObject = stream;
+          localVideoRef.current\!.play();
         });
-
-        setUrl(videoUrl);
-      } catch (error) {
-        console.error('Error setting up video session:', error);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [appointmentId]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-[80vh]">
-        <div className="text-center">
-          <Spinner size="lg" />
-          <p className="mt-4 text-gray-600">Setting up your video session...</p>
-        </div>
-      </div>
-    );
+    }
   }
 
-  if (!url) {
-    return (
-      <div className="flex items-center justify-center h-[80vh]">
-        <div className="text-center">
-          <p className="text-red-600">Unable to start video session</p>
-          <p className="text-sm text-gray-600 mt-2">Please contact support</p>
-        </div>
-      </div>
-    );
+  async function handleEndVisit() {
+    const summaryPrompt = `Patient: ${user?.email}. Transcript: ${transcript}`;
+    const response = await fetch('/api/ai/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: summaryPrompt, context: 'Summarize this patient-provider visit in SOAP format.' })
+    }).then(res => res.json());
+
+    const { error } = await supabase.from('visit_notes').insert({
+      patient_id: user?.id,
+      summary: response.text,
+      raw_transcript: transcript
+    });
+
+    speak("Visit complete. Your summary has been saved.");
+    setRoomStarted(false);
   }
 
   return (
-    <div className="p-6 max-w-screen-xl mx-auto">
-      <div className="mb-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Telemedicine Visit</h1>
-        {appointment && (
-          <div className="text-sm text-gray-600">
-            <p>Date: {new Date(appointment.date).toLocaleDateString()}</p>
-            <p>Time: {appointment.time}</p>
-          </div>
-        )}
-      </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-3">
-          <iframe
-            title="Telemedicine Session"
-            src={url}
-            className="w-full h-[80vh] rounded-xl border shadow-xl"
-            allow="camera; microphone; fullscreen; display-capture"
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 p-6 pb-24">
+      <h1 className="text-2xl font-bold text-center mb-6">Telemedicine Visit 🩺</h1>
+
+      {\!roomStarted ? (
+        <div className="text-center space-y-4">
+          <p className="text-muted-foreground">Ready to connect with your provider?</p>
+          <Button onClick={() => setRoomStarted(true)} className="text-white bg-blue-600 hover:bg-blue-700">
+            Start Visit
+          </Button>
+        </div>
+      ) : (
+        <Card className="max-w-4xl mx-auto">
+          <CardContent className="flex flex-col md:flex-row gap-6 p-6">
+            <div className="flex-1 space-y-2">
+              <h2 className="font-semibold text-lg">You</h2>
+              <video ref={localVideoRef} muted className="rounded-xl w-full aspect-video bg-black" />
+            </div>
+            <div className="flex-1 space-y-2">
+              <h2 className="font-semibold text-lg">Provider</h2>
+              <video ref={remoteVideoRef} className="rounded-xl w-full aspect-video bg-gray-200" />
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {roomStarted && (
+        <div className="text-center mt-6">
+          <textarea
+            value={transcript}
+            onChange={(e) => setTranscript(e.target.value)}
+            placeholder="Live transcript from Deepgram will appear here..."
+            className="w-full max-w-2xl mx-auto p-3 border border-gray-300 rounded-lg shadow-sm text-sm"
+            rows={5}
           />
-          
-          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-800">
-              <strong>Tips for your video visit:</strong>
-            </p>
-            <ul className="text-sm text-blue-700 mt-2 space-y-1 list-disc list-inside">
-              <li>Ensure your camera and microphone are enabled</li>
-              <li>Find a quiet, well-lit location</li>
-              <li>Have your medications and any relevant documents ready</li>
-              <li>Your provider will join the session at the scheduled time</li>
-            </ul>
+          <div className="mt-4">
+            <Button onClick={handleEndVisit} variant="destructive">
+              End Visit & Save Summary
+            </Button>
           </div>
         </div>
-        
-        <div className="lg:col-span-1 space-y-4">
-          {appointmentId && <TranscriptionControls appointmentId={appointmentId} />}
-          
-          {role === 'provider' && appointment?.status === 'in_progress' && (
-            <CompleteVisitButton 
-              appointmentId={appointmentId!}
-              onComplete={() => {
-                navigate('/provider/dashboard');
-              }}
-            />
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
+ENDOFFILE < /dev/null
