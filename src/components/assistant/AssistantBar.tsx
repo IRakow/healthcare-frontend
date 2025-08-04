@@ -1,7 +1,7 @@
 // CLEANED + STABILIZED: AssistantBar.tsx
 
 import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';
 import { MicIcon, SendIcon } from 'lucide-react';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 
@@ -47,7 +47,7 @@ export default function AssistantBar() {
   const [silentMode, setSilentMode] = useState(false);
   const [recording, setRecording] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const stored = localStorage.getItem('silent_mode');
@@ -92,7 +92,7 @@ export default function AssistantBar() {
       setTimeout(() => {
         setInput('Would you like to schedule an appointment now? We have openings in 20 minutes or less.');
         setTimeout(() => {
-          router.push({ pathname: '/patient/appointments', query: { reason: 'urgent', source: 'rachel' } });
+          navigate('/patient/appointments?reason=urgent&source=rachel');
         }, 2000);
       }, 3000);
     }
@@ -103,7 +103,7 @@ export default function AssistantBar() {
     if (data?.autoConfirm && data.function) globalCommandMap[data.function]?.(data.payload);
 
     if (data?.action === 'navigate' && data.route?.startsWith('/patient')) {
-      router.push(data.route);
+      navigate(data.route);
     } else if (data?.action === 'runFunction' && data.function) {
       globalCommandMap[data.function]?.(data.payload);
 
@@ -152,7 +152,7 @@ export default function AssistantBar() {
           setResponse(result.response);
           if (!silentMode) speak(result.response);
           if (result.action === 'navigate' && result.route?.startsWith('/patient')) {
-            router.push(result.route);
+            navigate(result.route);
           } else if (result.action === 'runFunction' && result.function) {
             globalCommandMap[result.function]?.(result.payload);
           }
