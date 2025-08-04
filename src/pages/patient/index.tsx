@@ -49,7 +49,7 @@ export default function PatientDashboardIndex() {
 
       <section className="mt-12 px-4 sm:px-6 py-10 bg-gradient-to-br from-blue-50 via-white to-teal-50 rounded-xl shadow-xl border border-blue-100 overflow-x-hidden">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-900 tracking-tight animate-fade-in">
-          🧠 AI Power Tools & Smart Health Features (v2)
+          🧠 AI Power Tools & Smart Health Features (v3 - LATEST)
         </h2>
         {/* Deployment timestamp: ${new Date().toISOString()} */}
         <div className="space-y-12">
