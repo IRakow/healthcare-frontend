@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/hooks/useUser';
 import { fetchFromGemini } from '@/lib/ai/gemini';
-import { DownloadIcon, AlertCircleIcon } from 'lucide-react';
+import { DownloadIcon, AlertCircleIcon, CheckIcon, XIcon } from 'lucide-react';
 
 export default function SmartGroceryMode() {
   const { user } = useUser();
@@ -39,6 +39,14 @@ Also, personalize the recommendations based on the user's Mediterranean health p
     link.href = URL.createObjectURL(blob);
     link.download = 'smart-grocery-list.txt';
     link.click();
+  }
+
+  function acceptSuggestion(item: string) {
+    setGroceryList(prev => [...prev.filter(i => i !== item), `✅ ${item.slice(2)}`]);
+  }
+
+  function rejectSuggestion(item: string) {
+    setGroceryList(prev => prev.filter(i => i !== item));
   }
 
   return (
@@ -103,9 +111,34 @@ Also, personalize the recommendations based on the user's Mediterranean health p
             className="bg-white/90 p-6 rounded-xl shadow-lg border border-green-100"
           >
             <h2 className="text-xl font-semibold text-emerald-700 mb-4">🧺 Your Grocery List</h2>
-            <ul className="space-y-2 text-gray-800 text-sm list-disc list-inside">
+            <ul className="space-y-2 text-gray-800 text-sm">
               {groceryList.map((item, i) => (
-                <li key={i}>{item}</li>
+                <li
+                  key={i}
+                  className={
+                    item.startsWith('🧠') ? 'mt-6 text-indigo-700 font-semibold' :
+                    item.startsWith('🔹') ? 'ml-4 text-indigo-600 list-none flex items-center justify-between' :
+                    'list-disc list-inside'
+                  }
+                >
+                  <span>{item}</span>
+                  {item.startsWith('🔹') && (
+                    <span className="flex gap-2 ml-2">
+                      <button
+                        onClick={() => acceptSuggestion(item)}
+                        className="text-green-600 hover:text-green-800"
+                      >
+                        <CheckIcon className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => rejectSuggestion(item)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        <XIcon className="w-4 h-4" />
+                      </button>
+                    </span>
+                  )}
+                </li>
               ))}
             </ul>
             <p className="mt-6 text-xs text-gray-500 text-right italic">Synced with your meal plan for this week.</p>
@@ -114,23 +147,26 @@ Also, personalize the recommendations based on the user's Mediterranean health p
               <p className="text-sm text-gray-500 mb-2">Need to update your goal or dietary plan?</p>
               <Button
                 onClick={async () => {
-                const choice = prompt(`Which goal would you like to focus on?
-1) Gain lean muscle
-2) Improve heart health
-3) Lose belly fat`, '1');
-                const selectedGoal =
-                  choice === '1' ? 'gain lean muscle' :
-                  choice === '2' ? 'improve heart health' :
-                  choice === '3' ? 'lose belly fat' : '';
+                  const choice = prompt(`Which goal would you like to focus on?\n1) Gain lean muscle\n2) Improve heart health\n3) Lose belly fat`, '1');
+                  const selectedGoal =
+                    choice === '1' ? 'gain lean muscle' :
+                    choice === '2' ? 'improve heart health' :
+                    choice === '3' ? 'lose belly fat' : '';
 
-                if (!selectedGoal) return;
+                  if (!selectedGoal) return;
 
-                const res = await fetchFromGemini({
-                  prompt: `Based on the user's goal to ${selectedGoal}, adjust their grocery shopping categories accordingly. Recommend additions or substitutions under 🥦 Produce, 🐟 Proteins, 🥫 Pantry, 🍶 Other to support this objective. Provide detailed yet encouraging reasoning for each suggestion.`
-                });
+                  const res = await fetchFromGemini({
+                    prompt: `Based on the user's goal to ${selectedGoal}, adjust their grocery shopping categories accordingly. Recommend additions or substitutions under 🥦 Produce, 🐟 Proteins, 🥫 Pantry, 🍶 Other to support this objective. Provide detailed yet encouraging reasoning for each suggestion.`
+                  });
 
-                alert(res?.text || 'Rachel could not process your request.');
-              }}
+                  const suggestion = res?.text || 'Rachel could not process your request.';
+                  setGroceryList((prev) => [
+                    ...prev,
+                    '',
+                    '🧠 Rachel Suggests:',
+                    ...suggestion.split('\n').map((line) => `🔹 ${line}`)
+                  ]);
+                }}
                 className="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-full shadow"
               >
                 🎯 Adjust Goals with Rachel
