@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/hooks/useUser';
 import { fetchFromGemini } from '@/lib/ai/gemini';
-import { DownloadIcon, AlertCircleIcon, MicIcon } from 'lucide-react';
+import { DownloadIcon, AlertCircleIcon } from 'lucide-react';
 
 export default function SmartGroceryMode() {
   const { user } = useUser();
@@ -18,7 +18,9 @@ export default function SmartGroceryMode() {
 
   async function generateList() {
     setLoading(true);
-    const prompt = `You are a Mediterranean diet AI assistant. Based on this input: ${fridgeText}, generate a categorized grocery list in sections (🥦 Produce, 🐟 Proteins, 🥫 Pantry, 🍶 Other). Suggest at least 3 items per category and flag any nutritional gaps.`;
+    const prompt = `You are a Mediterranean diet AI assistant. Based on this input: ${fridgeText}, generate a categorized grocery list in sections (🥦 Produce, 🐟 Proteins, 🥫 Pantry, 🍶 Other). Suggest at least 3 items per category. Ensure the list aligns with a healthy weekly eating plan — rich in vegetables, lean proteins, legumes, whole grains, and healthy fats — and that each item could contribute to preparing balanced Mediterranean meals. Avoid isolated snacks or ingredients without pairing potential. Suggest any items that could help complete full meals across breakfast, lunch, and dinner. 
+
+Also, personalize the recommendations based on the user's Mediterranean health profile: age, weight, sex, and wellness goals. Make sure no ingredients violate their known allergies or stated food dislikes. Focus on helping them achieve long-term dietary success.`;
     const res = await fetchFromGemini({ prompt });
     const lines = res?.text?.split('\n').filter((l) => l.trim().length > 0) || [];
     setGroceryList(lines);
@@ -53,6 +55,20 @@ export default function SmartGroceryMode() {
         </p>
       </motion.div>
 
+      <div className="max-w-2xl mx-auto mb-10">
+        <div className="bg-white/70 border border-green-200 p-4 rounded-xl shadow text-sm text-gray-700">
+          <h3 className="text-emerald-800 font-semibold mb-2">📋 Your Profile Snapshot</h3>
+          <ul className="grid sm:grid-cols-2 gap-2">
+            <li><strong>Age:</strong> 42</li>
+            <li><strong>Weight:</strong> 190 lbs</li>
+            <li><strong>Sex:</strong> Male</li>
+            <li><strong>Goal:</strong> Lean muscle + reduced inflammation</li>
+            <li><strong>Diet Plan:</strong> Mediterranean Lifestyle</li>
+            <li><strong>Allergies:</strong> Shellfish, peanuts</li>
+          </ul>
+        </div>
+      </div>
+
       <div className="max-w-3xl mx-auto grid gap-6">
         <Card className="bg-white/80 border-none shadow-md">
           <CardContent className="p-6 space-y-4">
@@ -60,17 +76,22 @@ export default function SmartGroceryMode() {
             <Input
               value={fridgeText}
               onChange={(e) => setFridgeText(e.target.value)}
-              placeholder="e.g., chicken, lettuce, yogurt, black beans, granola"
+              placeholder="e.g., spinach, chicken, Greek yogurt, chickpeas, oats"
               className="bg-white border border-gray-300 rounded-md"
             />
             <div className="flex items-center gap-4">
               <Button onClick={generateList} disabled={loading} className="bg-emerald-600 hover:bg-emerald-700">
                 {loading ? 'Generating...' : 'Generate Grocery List'}
               </Button>
-              <Button variant="ghost" className="flex items-center gap-2 text-emerald-600">
-                <MicIcon className="w-4 h-4" /> Voice Fill (Coming Soon)
+              <Button variant="outline" onClick={exportList} disabled={groceryList.length === 0} className="text-emerald-600 flex gap-2 items-center">
+                <DownloadIcon className="w-4 h-4" /> Export
               </Button>
             </div>
+            {smartTip && (
+              <div className="flex items-center gap-2 mt-2 text-sm text-yellow-700 bg-yellow-100 p-2 rounded shadow-sm">
+                <AlertCircleIcon className="w-4 h-4" /> {smartTip}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -79,30 +100,15 @@ export default function SmartGroceryMode() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="bg-white/80 p-6 rounded-xl shadow-lg border border-green-100"
+            className="bg-white/90 p-6 rounded-xl shadow-lg border border-green-100"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-emerald-700">🧺 Your Smart Grocery List</h2>
-              <Button
-                onClick={exportList}
-                variant="outline"
-                className="flex items-center gap-2 text-emerald-600 border-emerald-300 hover:bg-emerald-50"
-              >
-                <DownloadIcon className="w-4 h-4" /> Export List
-              </Button>
-            </div>
+            <h2 className="text-xl font-semibold text-emerald-700 mb-4">🧺 Your Grocery List</h2>
             <ul className="space-y-2 text-gray-800 text-sm list-disc list-inside">
               {groceryList.map((item, i) => (
                 <li key={i}>{item}</li>
               ))}
             </ul>
-
-            {smartTip && (
-              <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
-                <AlertCircleIcon className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-amber-800">{smartTip}</p>
-              </div>
-            )}
+            <p className="mt-6 text-xs text-gray-500 text-right italic">Synced with your meal plan for this week.</p>
           </motion.div>
         )}
       </div>
