@@ -94,19 +94,31 @@ export default function MealGenerator() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
                   <h3 className="font-semibold text-yellow-700 text-sm mb-1">Hydration</h3>
-                  <p className="text-sm">7.5 cups/day average — looking hydrated!</p>
+<p className="text-sm">
+  7.5 cups/day average — looking hydrated!
+  <a href="/patient/vitals" className="text-yellow-600 underline ml-2 text-xs">View</a>
+</p>
                 </div>
                 <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
                   <h3 className="font-semibold text-yellow-700 text-sm mb-1">Protein</h3>
-                  <p className="text-sm">105g/day — great job hitting the muscle goals.</p>
+<p className="text-sm">
+  105g/day — great job hitting the muscle goals.
+  <a href="/patient/nutrition" className="text-yellow-600 underline ml-2 text-xs">View</a>
+</p>
                 </div>
                 <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
                   <h3 className="font-semibold text-yellow-700 text-sm mb-1">Sleep</h3>
-                  <p className="text-sm">Avg 7.9 hrs/night — consistency paying off.</p>
+<p className="text-sm">
+  Avg 7.9 hrs/night — consistency paying off.
+  <a href="/patient/timeline" className="text-yellow-600 underline ml-2 text-xs">View</a>
+</p>
                 </div>
                 <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
                   <h3 className="font-semibold text-yellow-700 text-sm mb-1">Movement</h3>
-                  <p className="text-sm">6,200 steps/day — want to push closer to 8k?</p>
+<p className="text-sm">
+  6,200 steps/day — want to push closer to 8k?
+  <a href="/patient/health" className="text-yellow-600 underline ml-2 text-xs">View</a>
+</p>
                 </div>
               </div>
 
