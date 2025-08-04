@@ -17,6 +17,7 @@ export default function PatientDashboardIndex() {
     if (!rachelMemory.sessionStarted) {
       setRachelMemory({ ...rachelMemory, sessionStarted: true });
       speak("Welcome back. I'm here if you need anything — just speak your request.");
+      console.log('Patient dashboard loaded at:', new Date().toISOString());
 
       handleThreadFollowup('patient-dashboard-landing', {
         context: 'patient-dashboard',
