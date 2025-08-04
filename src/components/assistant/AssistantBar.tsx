@@ -6,6 +6,17 @@ import { MicIcon, SendIcon } from 'lucide-react';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 
 const globalCommandMap: Record<string, (payload?: any) => void> = {
+  scrollToVitals: () => {
+    const el = document.querySelector('#vitals-panel');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  },
+  highlightVitals: () => {
+    const el = document.querySelector('#vitals-panel');
+    if (el) {
+      el.classList.add('ring-4', 'ring-sky-300');
+      setTimeout(() => el.classList.remove('ring-4', 'ring-sky-300'), 2000);
+    }
+  },
   addHydrationGoal: (payload) => {
     console.log('Hydration goal set to:', payload?.target);
     // e.g. update goal state or Supabase mutation
@@ -39,7 +50,16 @@ export default function AssistantBar() {
     const micReady = localStorage.getItem('microphone_ready') === 'true';
     if (last) setInput(last);
     if (micReady) setTimeout(() => handleVoice(), 3000);
+    const page = window.location.pathname;
+    if (page === '/patient/timeline') setTimeout(() => handleVoice(), 8000);
     setSilentMode(stored === 'true');
+
+    const idleInterval = setInterval(() => {
+      if (!input && !recording && !response && micReady) {
+        handleVoice();
+      }
+    }, 30000);
+    return () => clearInterval(idleInterval);
   }, []);
 
   useEffect(() => {
@@ -63,6 +83,10 @@ export default function AssistantBar() {
     const data = await res.json();
     setMessages(prev => [...prev, { role: 'rachel', text: data?.text }]);
     setResponse(data?.text);
+    setInput('');
+    if (data?.autoConfirm && data.function) {
+      globalCommandMap[data.function]?.(data.payload);
+    }
     localStorage.setItem('rachel_last_command', input);
     if (!silentMode) speak(data?.text || '');
     if (data?.action === 'navigate' && data.route?.startsWith('/patient')) {
@@ -92,6 +116,7 @@ export default function AssistantBar() {
         const result = await res.json();
         if (result?.text) {
           setInput(result.text);
+          setTimeout(() => handleSubmit(), 1000);
           setResponse(result.response);
           if (!silentMode) speak(result.response);
           if (result.action === 'navigate' && result.route?.startsWith('/patient')) {
@@ -153,3 +178,10 @@ export default function AssistantBar() {
     </div>
   );
 }
+
+/*
+ Use these in your AI payload:{
+  "action": "runFunction",
+  "function": "highlightVitals"
+}
+*/
