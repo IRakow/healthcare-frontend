@@ -113,7 +113,24 @@ Also, personalize the recommendations based on the user's Mediterranean health p
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-500 mb-2">Need to update your goal or dietary plan?</p>
               <Button
-                onClick={() => alert('Rachel voice/command goal adjustment coming soon.')}
+                onClick={async () => {
+                const choice = prompt(`Which goal would you like to focus on?
+1) Gain lean muscle
+2) Improve heart health
+3) Lose belly fat`, '1');
+                const selectedGoal =
+                  choice === '1' ? 'gain lean muscle' :
+                  choice === '2' ? 'improve heart health' :
+                  choice === '3' ? 'lose belly fat' : '';
+
+                if (!selectedGoal) return;
+
+                const res = await fetchFromGemini({
+                  prompt: `Based on the user's goal to ${selectedGoal}, adjust their grocery shopping categories accordingly. Recommend additions or substitutions under 🥦 Produce, 🐟 Proteins, 🥫 Pantry, 🍶 Other to support this objective. Provide detailed yet encouraging reasoning for each suggestion.`
+                });
+
+                alert(res?.text || 'Rachel could not process your request.');
+              }}
                 className="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-full shadow"
               >
                 🎯 Adjust Goals with Rachel
