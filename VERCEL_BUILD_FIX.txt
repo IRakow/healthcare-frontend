@@ -1,0 +1,5 @@
+This file exists to force Vercel to update.
+Build should use commit: 6a1dfb9
+Current time: ${new Date().toISOString()}
+
+The AssistantBarOverlay import has been fixed to use AssistantBar instead.
