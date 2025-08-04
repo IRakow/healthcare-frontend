@@ -1,0 +1,3 @@
+Vercel deployment trigger file
+Last updated: ${new Date().toISOString()}
+Current commit: 95e866d
