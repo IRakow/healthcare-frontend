@@ -1,12 +1,5 @@
-// src/pages/patient/index.tsx
+import { PatientDashboard } from '@/components/patient/PatientDashboard';
 
-import PatientLayout from '@/components/layout/PatientLayout';
-import PatientHealthDashboard from '@/components/patient/PatientHealthDashboard';
-
-export default function PatientDashboardIndex() {
-  return (
-    <PatientLayout>
-      <PatientHealthDashboard />
-    </PatientLayout>
-  );
+export default function PatientPage() {
+  return <PatientDashboard />;
 }
