@@ -1,7 +1,7 @@
 // src/pages/patient/PatientDashboard.tsx
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import AssistantBarOverlay from '@/components/ai/AssistantBarOverlay';

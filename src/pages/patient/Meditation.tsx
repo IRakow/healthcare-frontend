@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { fetchFromGemini } from '@/lib/ai/gemini';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { useUser } from '@/hooks/useUser';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 

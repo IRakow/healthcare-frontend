@@ -1,7 +1,7 @@
 // src/pages/patient/PatientTrends.tsx
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
