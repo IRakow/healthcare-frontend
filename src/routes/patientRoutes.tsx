@@ -1,4 +1,5 @@
 import PatientDashboardSimpleHybrid from '@/pages/patient/PatientDashboardSimpleHybrid';
+import PatientDashboardIndex from '@/pages/patient/index';
 import PatientRecords from '@/pages/patient/Records';
 import Meditation from '@/pages/patient/Meditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
@@ -38,7 +39,7 @@ import PatientCalendar from '@/pages/patient/PatientCalendar';
 import { AISummaryPanel } from '@/components/patient/AISummaryPanel';
 
 export const patientRoutes = [
-  { path: '/patient', element: <PatientDashboardSimpleHybrid /> },
+  { path: '/patient', element: <PatientDashboardIndex /> },
   { path: '/patient/dashboard', element: <PatientDashboardSimpleHybrid /> },
   { path: '/patient/records', element: <PatientRecords /> },
   { path: '/patient/health-dashboard', element: <HealthDashboard /> },
