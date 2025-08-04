@@ -109,6 +109,16 @@ Also, personalize the recommendations based on the user's Mediterranean health p
               ))}
             </ul>
             <p className="mt-6 text-xs text-gray-500 text-right italic">Synced with your meal plan for this week.</p>
+
+            <div className="mt-8 text-center">
+              <p className="text-sm text-gray-500 mb-2">Need to update your goal or dietary plan?</p>
+              <Button
+                onClick={() => alert('Rachel voice/command goal adjustment coming soon.')}
+                className="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-full shadow"
+              >
+                🎯 Adjust Goals with Rachel
+              </Button>
+            </div>
           </motion.div>
         )}
       </div>
