@@ -125,7 +125,9 @@ export default function AssistantBar() {
 
   async function handleVoice() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true }
+    });
       const recorder = new MediaRecorder(stream);
       const chunks: Blob[] = [];
 
@@ -166,8 +168,12 @@ export default function AssistantBar() {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 w-full z-50 bg-white/90 border-t border-gray-200 shadow backdrop-blur-lg">
-      <div className="max-w-2xl mx-auto flex items-center gap-2 p-3">
+    <div className="fixed bottom-0 left-0 w-full z-50 bg-white/90 border-t border-gray-200 shadow backdrop-blur-lg safe-bottom-pb">
+      {silentMode && (
+        <div className="absolute top-1 right-2 text-xs text-gray-400">🔇 Silent</div>
+      )}
+      <div onClick={() => inputRef.current?.focus()} className="w-full">
+        <div className="max-w-2xl mx-auto flex items-center gap-2 p-3">
         <input
           ref={inputRef}
           type="text"
@@ -175,6 +181,7 @@ export default function AssistantBar() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+          onFocus={() => window.scrollTo(0, 0)}
           className="flex-1 px-4 py-2 rounded-full border border-gray-300 text-sm focus:outline-none focus:ring focus:border-blue-300"
         />
         <button
@@ -189,6 +196,7 @@ export default function AssistantBar() {
         >
           <MicIcon className="w-4 h-4" />
         </button>
+        </div>
       </div>
       {messages.length > 0 && (
         <div className="bg-white/90 border-t border-gray-200 px-4 py-2 text-xs max-h-40 overflow-y-auto">

@@ -49,6 +49,11 @@ input, textarea, select {
   @apply rounded-2xl bg-white/30 backdrop-blur-md border border-white/40 shadow-md;
 }
 
+/* Safe area padding for iOS devices */
+.safe-bottom-pb {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 .section-heading {
   @apply text-xl font-semibold mb-2 text-gray-800;
 }
