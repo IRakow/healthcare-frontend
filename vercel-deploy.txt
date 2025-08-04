@@ -1,3 +1,1 @@
-Vercel deployment trigger file
-Last updated: ${new Date().toISOString()}
-Current commit: 95e866d
+Force rebuild at: Mon Aug  4 03:48:56 MST 2025
