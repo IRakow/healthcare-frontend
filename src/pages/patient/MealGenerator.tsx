@@ -96,28 +96,48 @@ export default function MealGenerator() {
                   <h3 className="font-semibold text-yellow-700 text-sm mb-1">Hydration</h3>
 <p className="text-sm">
   7.5 cups/day average — looking hydrated!
-  <a href="/patient/vitals" className="text-yellow-600 underline ml-2 text-xs">View</a>
+  <span className="relative group inline-block">
+    <a href="/patient/vitals" className="text-yellow-600 underline ml-2 text-xs">View</a>
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex bg-white border border-yellow-300 text-xs text-gray-800 shadow-lg rounded px-3 py-2 z-50 w-60">
+      Last 7-day hydration avg: 7.5 cups. Best day: Friday (8.3 cups).
+    </div>
+  </span>
 </p>
                 </div>
                 <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
                   <h3 className="font-semibold text-yellow-700 text-sm mb-1">Protein</h3>
 <p className="text-sm">
   105g/day — great job hitting the muscle goals.
-  <a href="/patient/nutrition" className="text-yellow-600 underline ml-2 text-xs">View</a>
+  <span className="relative group inline-block">
+    <a href="/patient/nutrition" className="text-yellow-600 underline ml-2 text-xs">View</a>
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex bg-white border border-yellow-300 text-xs text-gray-800 shadow-lg rounded px-3 py-2 z-50 w-64">
+      Daily protein avg: 105g. Peak day: Wednesday (118g).
+    </div>
+  </span>
 </p>
                 </div>
                 <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
                   <h3 className="font-semibold text-yellow-700 text-sm mb-1">Sleep</h3>
 <p className="text-sm">
   Avg 7.9 hrs/night — consistency paying off.
-  <a href="/patient/timeline" className="text-yellow-600 underline ml-2 text-xs">View</a>
+  <span className="relative group inline-block">
+    <a href="/patient/timeline" className="text-yellow-600 underline ml-2 text-xs">View</a>
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex bg-white border border-yellow-300 text-xs text-gray-800 shadow-lg rounded px-3 py-2 z-50 w-60">
+      Avg sleep: 7.9 hrs. Best night: Monday (8.4 hrs).
+    </div>
+  </span>
 </p>
                 </div>
                 <div className="bg-white border border-yellow-200 p-3 rounded shadow-sm">
                   <h3 className="font-semibold text-yellow-700 text-sm mb-1">Movement</h3>
 <p className="text-sm">
   6,200 steps/day — want to push closer to 8k?
-  <a href="/patient/health" className="text-yellow-600 underline ml-2 text-xs">View</a>
+  <span className="relative group inline-block">
+    <a href="/patient/health" className="text-yellow-600 underline ml-2 text-xs">View</a>
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex bg-white border border-yellow-300 text-xs text-gray-800 shadow-lg rounded px-3 py-2 z-50 w-64">
+      Movement avg: 6,200 steps. Best day: Sunday (8,150 steps).
+    </div>
+  </span>
 </p>
                 </div>
               </div>
