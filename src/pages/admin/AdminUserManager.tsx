@@ -1,7 +1,7 @@
 // src/pages/admin/AdminUserManager.tsx
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 import { executeAdminSkill } from '@/lib/voice/RachelAdminPowers';
 import { Card, CardContent } from '@/components/ui/card';
