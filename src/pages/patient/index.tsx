@@ -24,7 +24,7 @@ export default function PatientDashboardIndex() {
     <PatientLayout>
       <PatientHealthDashboard />
 
-      <section className="mt-12 px-6 py-10 bg-gradient-to-br from-blue-50 via-white to-teal-50 rounded-xl shadow-xl border border-blue-100">
+      <section className="mt-12 px-4 sm:px-6 py-10 bg-gradient-to-br from-blue-50 via-white to-teal-50 rounded-xl shadow-xl border border-blue-100 overflow-x-hidden">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-900 tracking-tight animate-fade-in">
           🧠 AI Power Tools & Smart Health Features
         </h2>
@@ -32,11 +32,12 @@ export default function PatientDashboardIndex() {
   <div>
     <h3 className="text-xl font-semibold text-blue-700 mb-4">🧘 Wellness</h3>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Link href="/patient/MeditationImmersive" className="glass-tile">Immersive Meditation</Link>
+      <Link href="/patient/MeditationImmersive" className="glass-tile w-full min-h-[88px] flex items-center justify-center text-center">Immersive Meditation</Link>
       <Link href="/patient/CustomMeditation" className="glass-tile">Custom Meditations</Link>
       <Link href="/patient/MeditationStart" className="glass-tile">Start Meditation</Link>
       <Link href="/patient/MeditationHistory" className="glass-tile">Meditation History</Link>
       <Link href="/patient/MeditationSessionLog" className="glass-tile">Session Log</Link>
+      <Link href="/patient/WeeklyGoals" className="glass-tile">Weekly Goals Tracker</Link>
     </div>
   </div>
 
@@ -93,7 +94,7 @@ export default function PatientDashboardIndex() {
   </div>
 </div>
       </section>
-      <AssistantBarOverlay />
+      <div className='fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto'><AssistantBarOverlay /></div>
     </PatientLayout>
   );
 }
