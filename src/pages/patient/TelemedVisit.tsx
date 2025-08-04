@@ -1,7 +1,7 @@
 // src/pages/patient/TelemedVisit.tsx
 
 import { useEffect, useRef, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/hooks/useUser';
@@ -12,7 +12,7 @@ export default function TelemedVisit() {
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const [roomStarted, setRoomStarted] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const { user } = useUser();
+  const { userId } = useUser();
 
   useEffect(() => {
     // Load WebRTC or pre-join signaling logic
@@ -24,14 +24,14 @@ export default function TelemedVisit() {
     if (localVideoRef.current) {
       navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then((stream) => {
-          localVideoRef.current\!.srcObject = stream;
-          localVideoRef.current\!.play();
+          localVideoRef.current!.srcObject = stream;
+          localVideoRef.current!.play();
         });
     }
   }
 
   async function handleEndVisit() {
-    const summaryPrompt = `Patient: ${user?.email}. Transcript: ${transcript}`;
+    const summaryPrompt = `Patient: ${userId}. Transcript: ${transcript}`;
     const response = await fetch('/api/ai/gemini', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -39,12 +39,14 @@ export default function TelemedVisit() {
     }).then(res => res.json());
 
     const { error } = await supabase.from('visit_notes').insert({
-      patient_id: user?.id,
+      patient_id: userId,
       summary: response.text,
       raw_transcript: transcript
     });
 
-    speak("Visit complete. Your summary has been saved.");
+    if (!error) {
+      speak("Visit complete. Your summary has been saved.");
+    }
     setRoomStarted(false);
   }
 
@@ -52,7 +54,7 @@ export default function TelemedVisit() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 p-6 pb-24">
       <h1 className="text-2xl font-bold text-center mb-6">Telemedicine Visit 🩺</h1>
 
-      {\!roomStarted ? (
+      {!roomStarted ? (
         <div className="text-center space-y-4">
           <p className="text-muted-foreground">Ready to connect with your provider?</p>
           <Button onClick={() => setRoomStarted(true)} className="text-white bg-blue-600 hover:bg-blue-700">
@@ -93,4 +95,3 @@ export default function TelemedVisit() {
     </div>
   );
 }
-ENDOFFILE < /dev/null
