@@ -34,7 +34,16 @@ export default function AppointmentForm() {
     // optional: open calendar event link
     const calendarURL = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Doctor+Appointment+-+${encodeURIComponent(appointmentReason)}&dates=${appointmentTime.toISOString().replace(/[-:]/g, '').slice(0, 15)}/${appointmentTime.toISOString().replace(/[-:]/g, '').slice(0, 15)}&details=Scheduled+via+Rachel&location=Virtual&sf=true&output=xml`;
     window.open(calendarURL, '_blank');
-
+    await fetch('/api/timeline/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'appointment',
+        title: 'AI Scheduled Appointment',
+        details: `Booked via Rachel: ${appointmentReason}`,
+        timestamp: new Date().toISOString()
+      })
+    });
     if (phone) {
       await fetch('/api/notifications/sms', {
         method: 'POST',
@@ -79,7 +88,13 @@ export default function AppointmentForm() {
         }
       }
     }
-
+    },
+        body: JSON.stringify({
+          to: phone,
+          message: `Your appointment for '${appointmentReason}' has been booked. Check your calendar.`
+        })
+      });
+    }
     alert(`Appointment booked: ${appointmentReason}`);
     router.push('/patient/confirmation');
   }
