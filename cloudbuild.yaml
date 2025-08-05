@@ -19,6 +19,7 @@ steps:
       'deploy',
       'healthcare-frontend',
       '--image', 'gcr.io/$PROJECT_ID/healthcare-frontend',
+      '--port', '8080',
       '--region', 'us-central1',
       '--platform', 'managed',
       '--allow-unauthenticated'
