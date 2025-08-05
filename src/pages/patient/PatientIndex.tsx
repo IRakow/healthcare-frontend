@@ -1,126 +1,89 @@
-// src/pages/patient/index.tsx
-
-import PatientLayout from '@/components/layout/PatientLayout';
-import PatientHealthDashboard from '@/components/patient/PatientHealthDashboard';
-import { Link } from 'react-router-dom';
-
-import AssistantBar from '@/components/assistant/AssistantBar';
-import { speak } from '@/lib/voice/RachelTTSQueue';
 import { useEffect } from 'react';
+import { speak } from '@/lib/voice/RachelTTSQueue';
 import { useRachelMemoryStore } from '@/lib/voice/useRachelMemoryStore';
 import { handleThreadFollowup } from '@/lib/voice/handleThreadFollowup';
 
-export default function PatientDashboardIndex() {
+import PatientLayoutSimple from '@/components/layout/PatientLayoutSimple';
+import StatCard from '@/components/ui/StatCard';
+import DietaryMacroChart from '@/components/nutrition/DietaryMacroChart';
+import MealPhotoUpload from '@/components/nutrition/MealPhotoUpload';
+import VoiceDietaryInput from '@/components/nutrition/VoiceDietaryInput';
+import FileUploadPanel from '@/components/patient/FileUploadPanel';
+import { MedicationManager } from '@/components/patient/MedicationManager';
+import { SmartIntakeForm } from '@/components/patient/SmartIntakeForm';
+import { BookingInterface } from '@/components/patient/BookingInterface';
+import { WeeklyGoalsTracker } from '@/components/patient/WeeklyGoalsTracker';
+import PatientLabViewer from '@/components/patient/PatientLabViewer';
+import PatientTimelineViewer from '@/components/patient/PatientTimelineViewer';
+
+export default function PatientIndex() {
   const rachelMemory = useRachelMemoryStore((s) => s.rachelMemory);
   const setRachelMemory = useRachelMemoryStore((s) => s.setRachelMemory);
   const sessionStarted = useRachelMemoryStore((s) => s.sessionStarted);
   const setSessionStarted = useRachelMemoryStore((s) => s.setSessionStarted);
+  const aiMode = useRachelMemoryStore((s) => s.aiMode);
+  const setAiMode = useRachelMemoryStore((s) => s.setAiMode);
 
   useEffect(() => {
     if (!sessionStarted) {
+      speak("Welcome back. I'm Rachel. Ask me anything — from labs and food to appointments and medications.");
       setSessionStarted(true);
-      speak("Welcome back. I'm here if you need anything — just speak your request.");
-      console.log('Patient dashboard loaded at:', new Date().toISOString());
-
-      handleThreadFollowup('patient-dashboard-landing', {
-        context: 'patient-dashboard',
-        source: 'supabase',
-        model: 'gemini-patient',
-        memory: {
-          userId: '',
-          preferences: {},
-          goals: [],
-          alerts: [],
-        },
-        routes: [
-          '/patient/appointments',
-          '/patient/medications',
-          '/patient/TimelineViewer',
-          '/patient/LabViewer',
-          '/patient/MealGenerator',
-          '/patient/MeditationImmersive',
-        ],
-        allowDomMutation: true,
-        allowPageNavigation: true,
-        allowSupabaseWrites: true
-      });
     }
   }, [sessionStarted, setSessionStarted]);
+
   return (
-    <PatientLayout>
-      <PatientHealthDashboard />
+    <PatientLayoutSimple title="My Dashboard">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
+        <StatCard title="Today's Protein" value="84g" subtitle="Goal: 100g" />
+        <StatCard title="Sleep Duration" value="7h 25m" subtitle="Last night" />
+        <StatCard title="Steps Walked" value="8,902" subtitle="So far today" />
+      </div>
 
-      <section className="mt-12 px-4 sm:px-6 py-10 bg-gradient-to-br from-blue-50 via-white to-teal-50 rounded-xl shadow-xl border border-blue-100 overflow-x-hidden">
-        <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-900 tracking-tight animate-fade-in">
-          🧠 AI Power Tools & Smart Health Features (v2)
-        </h2>
-        {/* Deployment timestamp: ${new Date().toISOString()} */}
-        <div className="space-y-12">
-  <div>
-    <h3 className="text-xl font-semibold text-blue-700 mb-4">🧘 Wellness</h3>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Link to="/patient/MeditationImmersive" className="glass-tile w-full min-h-[88px] flex items-center justify-center text-center">Immersive Meditation</Link>
-      <Link to="/patient/CustomMeditation" className="glass-tile">Custom Meditations</Link>
-      <Link to="/patient/MeditationStart" className="glass-tile">Start Meditation</Link>
-      <Link to="/patient/MeditationHistory" className="glass-tile">Meditation History</Link>
-      <Link to="/patient/MeditationSessionLog" className="glass-tile">Session Log</Link>
-    </div>
-  </div>
+      <WeeklyGoalsTracker />
 
-  <div>
-    <h3 className="text-xl font-semibold text-blue-700 mb-4">🥗 Nutrition & Meals</h3>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Link to="/patient/SmartGroceryMode" className="glass-tile">Smart Grocery Planner</Link>
-      <Link to="/patient/GroceryMode" className="glass-tile">Grocery Mode</Link>
-      <Link to="/patient/MealGenerator" className="glass-tile">AI Meal Generator</Link>
-      <Link to="/patient/MealPlanner" className="glass-tile">Meal Planner</Link>
-    </div>
-  </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div className="space-y-6">
+          <DietaryMacroChart />
+          <MealPhotoUpload />
+          <VoiceDietaryInput />
+        </div>
 
-  <div>
-    <h3 className="text-xl font-semibold text-blue-700 mb-4">🧠 AI Tools & Coaching</h3>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Link to="/patient/LifestyleAISummary" className="glass-tile">Lifestyle AI Coach</Link>
-      <Link to="/patient/PatientTrends" className="glass-tile">Health Trends</Link>
-      <Link to="/patient/EverythingFunctional" className="glass-tile">All Features Demo</Link>
-    </div>
-  </div>
+        <div className="space-y-6">
+          <SmartIntakeForm />
+          <MedicationManager />
+          <BookingInterface />
+        </div>
+      </div>
 
-  <div>
-    <h3 className="text-xl font-semibold text-blue-700 mb-4">💊 Health Management</h3>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Link to="/patient/MedicationManager" className="glass-tile">Medication Safety</Link>
-      <Link to="/patient/LabViewer" className="glass-tile">Lab Results</Link>
-      <Link to="/patient/Vitals" className="glass-tile">Vitals</Link>
-      <Link to="/patient/MediaCheck" className="glass-tile">Media Check</Link>
-      <Link to="/patient/Billing" className="glass-tile">Billing</Link>
-    </div>
-  </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <FileUploadPanel />
+        <PatientLabViewer />
+      </div>
 
-  <div>
-    <h3 className="text-xl font-semibold text-blue-700 mb-4">📞 Communication & Telehealth</h3>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Link to="/patient/TelemedVisit" className="glass-tile">Telemedicine Visit</Link>
-      <Link to="/patient/Chat" className="glass-tile">Chat</Link>
-      <Link to="/patient/PatientMessages" className="glass-tile">Secure Messages</Link>
-      <Link to="/patient/Messages" className="glass-tile">Messages</Link>
-    </div>
-  </div>
+      <div className="mt-6">
+        <PatientTimelineViewer />
+      </div>
 
-  <div>
-    <h3 className="text-xl font-semibold text-blue-700 mb-4">📂 Other Tools</h3>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Link to="/patient/TimelineViewer" className="glass-tile">Timeline Viewer</Link>
-      <Link to="/patient/PatientTimeline" className="glass-tile">Full Timeline</Link>
-      <Link to="/patient/Dashboard" className="glass-tile">Legacy Dashboard</Link>
-      <Link to="/patient/HealthHub" className="glass-tile">Health Hub</Link>
-      <Link to="/patient/health" className="glass-tile">Health Overview</Link>
-      <Link to="/patient/WearablesDashboard" className="glass-tile">Wearables Dashboard</Link>
-    </div>
-  </div>
-</div>
-      </section>
-      <div className='fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto'><AssistantBar /></div>
-    </PatientLayout>
+      <div className="mt-8 rounded-xl bg-white/40 p-4 shadow-sm border border-white/30 backdrop-blur-md">
+        <h2 className="font-semibold text-slate-700 mb-2">Rachel AI Assistant</h2>
+        <p className="text-slate-600 mb-2">
+          {rachelMemory
+            ? `Your last request was: "${rachelMemory}"`
+            : "Ask me about your meds, food, labs, or health goals!"}
+        </p>
+
+        <label className="block text-sm font-medium text-slate-600 mt-4 mb-1">
+          Voice Mode
+        </label>
+        <select
+          value={aiMode}
+          onChange={(e) => setAiMode(e.target.value as 'talk' | 'silent')}
+          className="rounded-md w-full max-w-xs bg-white/70 border border-slate-300 focus:ring-2 focus:ring-teal-400"
+        >
+          <option value="talk">Talk (with voice)</option>
+          <option value="silent">Silent (text only)</option>
+        </select>
+      </div>
+    </PatientLayoutSimple>
   );
 }
