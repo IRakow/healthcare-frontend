@@ -7,15 +7,18 @@ import { Link } from 'react-router-dom';
 import AssistantBar from '@/components/assistant/AssistantBar';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 import { useEffect } from 'react';
-import { useRachelMemory } from '@/lib/voice/useRachelMemoryStore';
+import { useRachelMemoryStore } from '@/lib/voice/useRachelMemoryStore';
 import { handleThreadFollowup } from '@/lib/voice/handleThreadFollowup';
 
 export default function PatientDashboardIndex() {
-  const { rachelMemory, setRachelMemory } = useRachelMemory();
+  const rachelMemory = useRachelMemoryStore((s) => s.rachelMemory);
+  const setRachelMemory = useRachelMemoryStore((s) => s.setRachelMemory);
+  const sessionStarted = useRachelMemoryStore((s) => s.sessionStarted);
+  const setSessionStarted = useRachelMemoryStore((s) => s.setSessionStarted);
 
   useEffect(() => {
-    if (!rachelMemory.sessionStarted) {
-      setRachelMemory({ ...rachelMemory, sessionStarted: true });
+    if (!sessionStarted) {
+      setSessionStarted(true);
       speak("Welcome back. I'm here if you need anything — just speak your request.");
       console.log('Patient dashboard loaded at:', new Date().toISOString());
 
@@ -24,10 +27,10 @@ export default function PatientDashboardIndex() {
         source: 'supabase',
         model: 'gemini-patient',
         memory: {
-          userId: rachelMemory.userId,
-          preferences: rachelMemory.preferences,
-          goals: rachelMemory.goals || [],
-          alerts: rachelMemory.alerts || [],
+          userId: '',
+          preferences: {},
+          goals: [],
+          alerts: [],
         },
         routes: [
           '/patient/appointments',
@@ -42,7 +45,7 @@ export default function PatientDashboardIndex() {
         allowSupabaseWrites: true
       });
     }
-  }, []);
+  }, [sessionStarted, setSessionStarted]);
   return (
     <PatientLayout>
       <PatientHealthDashboard />
