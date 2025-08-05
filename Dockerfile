@@ -1,25 +1,26 @@
-# Use glibc-based Node.js for compatibility (NOT Alpine)
+# Use Node with glibc (NOT Alpine, avoids musl issues)
 FROM node:18
 
-# Create working directory
+# Set working directory
 WORKDIR /app
 
-# Copy and install dependencies
+# Copy dependency files and install
 COPY package*.json ./
 RUN npm ci
 
-# Copy the full project source
+# Copy entire app source
 COPY . .
 
-# Build the project (Vite)
+# Build your Vite frontend
 RUN npm run build
 
-# Set environment variable for Vite preview server
+# Install static file server globally
+RUN npm install -g serve
+
+# Define environment and port for Cloud Run
 ENV NODE_ENV=production
 ENV PORT=8080
-
-# Expose port
 EXPOSE 8080
 
-# Start the preview server (or replace with your custom server if using SSR)
-CMD ["npm", "run", "preview"]
+# Serve the production build
+CMD ["serve", "-s", "dist", "-l", "8080"]

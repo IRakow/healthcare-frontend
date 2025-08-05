@@ -5,23 +5,24 @@ steps:
       '-t', 'gcr.io/$PROJECT_ID/healthcare-frontend',
       '.'
     ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'gcr.io/$PROJECT_ID/healthcare-frontend'
+    ]
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run',
+      'deploy',
+      'healthcare-frontend',
+      '--image', 'gcr.io/$PROJECT_ID/healthcare-frontend',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated'
+    ]
+
 images:
   - 'gcr.io/$PROJECT_ID/healthcare-frontend'
-
-# Optional automatic deploy to Cloud Run after build:
-# Uncomment below if you want CI/CD
-# substitutions:
-#   _REGION: us-central1
-#   _SERVICE: healthcare-frontend
-#   _PROJECT_ID: your-gcp-project-id
-# 
-# steps:
-#   - name: gcr.io/cloud-builders/gcloud
-#     args:
-#       - run
-#       - deploy
-#       - $_SERVICE
-#       - --image=gcr.io/$PROJECT_ID/healthcare-frontend
-#       - --region=$_REGION
-#       - --platform=managed
-#       - --allow-unauthenticated
