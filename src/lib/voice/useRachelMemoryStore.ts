@@ -1,29 +1,42 @@
-import { create } from 'zustand'
+// src/lib/voice/useRachelMemoryStore.ts
 
-interface RachelState {
-  lastSpoken: string
-  pendingThread?: {
-    intent: string
-    payload?: any
-  }
-  interrupt(): void
-  setLast(text: string): void
-  setThread(intent: string, payload?: any): void
-  clearThread(): void
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+type AiMode = 'talk' | 'silent';
+
+interface RachelMemoryState {
+  rachelMemory: string;
+  sessionStarted: boolean;
+  aiMode: AiMode;
+  setRachelMemory: (memory: string) => void;
+  setSessionStarted: (started: boolean) => void;
+  setAiMode: (mode: AiMode) => void;
+  clearMemory: () => void;
+  resetAll: () => void;
 }
 
-export const useRachelMemoryStore = create<RachelState>((set) => ({
-  lastSpoken: '',
-  pendingThread: undefined,
+export const useRachelMemoryStore = create<RachelMemoryState>()(
+  persist(
+    (set) => ({
+      rachelMemory: '',
+      sessionStarted: false,
+      aiMode: 'talk',
 
-  interrupt: () => {
-    window.speechSynthesis.cancel()
-  },
+      setRachelMemory: (memory) => set({ rachelMemory: memory }),
+      setSessionStarted: (started) => set({ sessionStarted: started }),
+      setAiMode: (mode) => set({ aiMode: mode }),
 
-  setLast: (text) => set({ lastSpoken: text }),
-
-  setThread: (intent, payload) =>
-    set({ pendingThread: { intent, payload } }),
-
-  clearThread: () => set({ pendingThread: undefined }),
-}))
+      clearMemory: () => set({ rachelMemory: '' }),
+      resetAll: () =>
+        set({
+          rachelMemory: '',
+          sessionStarted: false,
+          aiMode: 'talk',
+        }),
+    }),
+    {
+      name: 'rachel-memory-store', // localStorage key
+    }
+  )
+);
