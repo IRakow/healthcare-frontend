@@ -1,21 +1,25 @@
-FROM node:18-alpine
+# Use glibc-based Node.js for compatibility (NOT Alpine)
+FROM node:18
 
+# Create working directory
 WORKDIR /app
 
-# Copy package files
+# Copy and install dependencies
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies
-RUN npm ci --only=production
-
-# Copy app files
+# Copy the full project source
 COPY . .
 
-# Build the app
+# Build the project (Vite)
 RUN npm run build
 
-# Expose port
-EXPOSE 3000
+# Set environment variable for Vite preview server
+ENV NODE_ENV=production
+ENV PORT=8080
 
-# Start the app
-CMD ["npm", "start"]
+# Expose port
+EXPOSE 8080
+
+# Start the preview server (or replace with your custom server if using SSR)
+CMD ["npm", "run", "preview"]

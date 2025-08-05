@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "serve -s dist -l 3000"
+    "start": "serve -s dist -l 8080"
   },
   "dependencies": {
     "@deepgram/sdk": "^4.11.1",
