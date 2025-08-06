@@ -37,7 +37,7 @@ serve(async (req) => {
       });
     }
 
-    const openaiKey = Deno.env.get('PurityHealthOpenai');
+    const openaiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openaiKey) {
       return new Response(JSON.stringify({ error: 'Missing OpenAI API key' }), {
         status: 401,

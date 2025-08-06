@@ -32,7 +32,7 @@ serve(async (req) => {
     })
   }
 
-  const apiKey = Deno.env.get('PurityHealthOpenai')
+  const apiKey = Deno.env.get('OPENAI_API_KEY')
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'API key missing' }), {
       status: 500,
