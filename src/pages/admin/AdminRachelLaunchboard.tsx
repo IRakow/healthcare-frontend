@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { useEffect } from 'react'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
@@ -11,7 +10,7 @@ export default function AdminRachelLaunchboard() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
         <LayoutDashboard className="w-6 h-6 text-blue-700" /> Rachel Admin Launchboard
       </h1>
@@ -46,6 +45,6 @@ export default function AdminRachelLaunchboard() {
       </div>
 
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'launchboard')} context="launchboard" />
-    </AdminLayout>
+    </div>
   )
 }

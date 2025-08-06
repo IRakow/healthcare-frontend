@@ -1,5 +1,4 @@
 // File: src/pages/provider/dashboard.tsx (FULL PROVIDER STATION)
-import ProviderLayout from '@/components/layout/ProviderLayout'
 import { CommandBar } from '@/components/ai/CommandBar'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Section } from '@/components/ui/Section'
@@ -17,7 +16,7 @@ import { PatientRiskFlags } from '@/components/provider/PatientRiskFlags'
 
 export default function ProviderDashboard() {
   return (
-    <ProviderLayout>
+    <div className="p-6">
       <CommandBar />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 bg-black text-white">
 
@@ -61,6 +60,6 @@ export default function ProviderDashboard() {
           <AISummarySidebar />
         </div>
       </div>
-    </ProviderLayout>
+    </div>
   )
 }

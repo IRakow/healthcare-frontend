@@ -1,46 +1,19 @@
 // src/components/layout/PatientLayout.tsx
 
 import { ReactNode, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { AssistantBar } from '@/components/ai/AssistantBar'
-import {
-  CalendarDays,
-  FileText,
-  HeartPulse,
-  LayoutDashboard,
-  User,
-  Bot,
-  Camera,
-  Stethoscope,
-  Bell,
-  ScrollText,
-  LineChart,
-  Salad,
-  MessageCircle,
-  Menu,
-  X
-} from 'lucide-react'
+import { NavLink } from 'react-router-dom'
+import AssistantBar from '@/components/assistant/AssistantBar'
+import { patientSidebarLinks } from '@/config/patientSidebar'
+import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface PatientLayoutProps {
   children: ReactNode
+  title?: string
 }
 
-const links = [
-  { href: '/patient/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/patient/appointments', label: 'Appointments', icon: CalendarDays },
-  { href: '/patient/medications', label: 'Medications', icon: FileText },
-  { href: '/patient/health-dashboard', label: 'Health', icon: HeartPulse },
-  { href: '/patient/nutrition-log', label: 'Food Log', icon: Salad },
-  { href: '/patient/timeline', label: 'Timeline', icon: ScrollText },
-  { href: '/patient/scan', label: 'Camera Tools', icon: Camera },
-  { href: '/patient/ai-history', label: 'AI History', icon: Bot },
-  { href: '/patient/settings', label: 'Settings', icon: User },
-  { href: '/patient/notifications', label: 'Notifications', icon: Bell }
-]
-
-export default function PatientLayout({ children }: PatientLayoutProps) {
-  const location = useLocation()
+export default function PatientLayout({ children, title }: PatientLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -57,31 +30,32 @@ export default function PatientLayout({ children }: PatientLayoutProps) {
 
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out
+        fixed md:sticky md:top-0 inset-y-0 left-0 z-40 w-64 h-screen transform transition-transform duration-300 ease-in-out
         bg-white/80 backdrop-blur p-6 border-r shadow-xl
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        md:translate-x-0 md:relative md:block
+        md:translate-x-0
       `}>
         <div className="mb-6">
           <h2 className="text-xl font-bold text-sky-800 mb-1">Patient Portal</h2>
           <p className="text-sm text-gray-500">Navigation</p>
         </div>
-        <nav className="space-y-2">
-          {links.map(({ href, label, icon: Icon }) => {
-            const isActive = location.pathname === href || location.pathname.startsWith(href + '/')
-            return (
-              <Link
-                key={href}
-                to={href}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-sm
-                  ${isActive ? 'bg-sky-100 text-sky-800' : 'text-gray-700 hover:bg-sky-50'}`}
-              >
-                <Icon className="w-4 h-4" />
-                {label}
-              </Link>
-            )
-          })}
+        <nav className="space-y-1">
+          {patientSidebarLinks.map((item) => (
+            <NavLink
+              key={item.href}
+              to={item.href}
+              onClick={() => setSidebarOpen(false)}
+              className={({ isActive }) =>
+                cn(
+                  'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-sm',
+                  isActive ? 'bg-sky-100 text-sky-800' : 'text-gray-700 hover:bg-sky-50'
+                )
+              }
+            >
+              <item.icon className="w-4 h-4" />
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
         </nav>
       </aside>
 
@@ -94,7 +68,7 @@ export default function PatientLayout({ children }: PatientLayoutProps) {
       )}
 
       {/* Main content */}
-      <main className="flex-1 p-4 md:p-8 bg-white/60 backdrop-blur rounded-3xl shadow-inner">
+      <main className="flex-1 p-4 md:p-8 md:ml-0 bg-white/60 backdrop-blur rounded-3xl shadow-inner">
         {children}
       </main>
 

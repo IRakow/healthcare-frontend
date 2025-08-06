@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Users, Brain, FileText, Server, AlertTriangle, Download, RefreshCw, Mail } from 'lucide-react'
@@ -53,7 +52,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-800">Admin Command Hub</h1>
@@ -76,6 +75,6 @@ export default function AdminDashboard() {
           <Line data={aiChartData} options={chartOptions} />
         </div>
       </Card>
-    </AdminLayout>
+    </div>
   )
 }

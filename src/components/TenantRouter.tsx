@@ -16,7 +16,7 @@ export default function TenantRouter({ children }: TenantRouterProps) {
 
   const host = typeof window !== 'undefined' ? window.location.hostname : '';
   const isLocalOrPreview =
-    host.includes('vercel.app') || host.includes('vercel.sh') || host === 'localhost' || host === '127.0.0.1';
+    host.includes('vercel.app') || host.includes('vercel.sh') || host.includes('run.app') || host === 'localhost' || host === '127.0.0.1';
 
   // Inject favicon and brand CSS
   useEffect(() => {

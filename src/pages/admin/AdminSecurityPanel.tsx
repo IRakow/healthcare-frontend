@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { ShieldAlert, EyeOff, LockKeyhole, BarChart2 } from 'lucide-react'
@@ -42,7 +41,7 @@ export default function AdminSecurityPanel() {
   }
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
           <BarChart2 className="w-6 h-6 text-rose-600" /> Security & Access Events
@@ -63,6 +62,6 @@ export default function AdminSecurityPanel() {
           <p className="text-sm text-muted-foreground italic">No recent access threats or anomalies.</p>
         )}
       </div>
-    </AdminLayout>
+    </div>
   )
 }

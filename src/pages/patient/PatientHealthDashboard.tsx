@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import PatientLayout from '@/components/layout/PatientLayout';
 import { Stethoscope, Calendar, Bot, MessageSquare, Pill, Apple, FileText } from 'lucide-react';
 import StatCard from '@/components/ui/StatCard';
 import PatientTimelineViewer from '@/components/patient/PatientTimelineViewer';
@@ -21,10 +20,9 @@ import { format } from 'date-fns';
 export default function PatientHealthDashboard() {
   console.log('[PatientHealthDashboard] Component starting to render');
   
-  try {
-    const navigate = useNavigate();
-    const [tab, setTab] = useState('overview');
-    const [stats, setStats] = useState({
+  const navigate = useNavigate();
+  const [tab, setTab] = useState('overview');
+  const [stats, setStats] = useState({
       heartRate: '–',
       sleep: '–',
       protein: '–',
@@ -115,8 +113,7 @@ export default function PatientHealthDashboard() {
   }
   
   return (
-    <PatientLayout>
-      <div className="space-y-6 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
+    <div className="space-y-6 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">Welcome Back</h1>
@@ -236,23 +233,5 @@ export default function PatientHealthDashboard() {
           </Card>
         </div>
       </div>
-    </PatientLayout>
   );
-  } catch (error) {
-    console.error('[PatientHealthDashboard] Component render error:', error);
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-2">Error Loading Dashboard</h1>
-          <p className="text-gray-600">{error?.message || 'An unexpected error occurred'}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Reload Page
-          </button>
-        </div>
-      </div>
-    );
-  }
 }

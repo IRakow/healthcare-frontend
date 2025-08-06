@@ -1,4 +1,3 @@
-import AdminLayout from '@/layouts/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import VoiceHUDOverlay from '@/components/voice/VoiceHUDOverlay'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
@@ -27,7 +26,7 @@ export default function AdminAuditLogPage() {
   }, [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
           <ShieldCheckIcon className="w-6 h-6 text-emerald-600" /> Audit Log & Compliance
@@ -60,6 +59,6 @@ export default function AdminAuditLogPage() {
 
         <VoiceHUDOverlay interim={interimText} />
       </div>
-    </AdminLayout>
+    </div>
   )
 }

@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -47,7 +46,7 @@ export default function AdminInvoicesPage() {
   }
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
           <Banknote className="w-6 h-6 text-green-600" /> Invoices & Payments
@@ -87,6 +86,6 @@ export default function AdminInvoicesPage() {
           </Card>
         ))}
       </div>
-    </AdminLayout>
+    </div>
   )
 }

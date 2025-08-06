@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { useEffect } from 'react'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
@@ -11,7 +10,7 @@ export function AdminBackupPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <ArchiveRestore className="w-5 h-5 text-purple-600" /> Admin Backup Center
       </h1>
@@ -20,7 +19,7 @@ export function AdminBackupPage() {
         <p className="text-sm">Scheduled backups: Daily at 2:00 AM</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'backup')} context="backup" />
-    </AdminLayout>
+    </div>
   )
 }
 
@@ -29,7 +28,7 @@ export function AdminPdfExportPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <FileText className="w-5 h-5 text-slate-600" /> PDF Export History
       </h1>
@@ -38,7 +37,7 @@ export function AdminPdfExportPage() {
         <p className="text-sm">Export method: Voice request from Rachel</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'pdf')} context="pdf" />
-    </AdminLayout>
+    </div>
   )
 }
 
@@ -47,7 +46,7 @@ export function AdminReportsPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <PieChart className="w-5 h-5 text-indigo-600" /> Custom Reports
       </h1>
@@ -56,6 +55,6 @@ export function AdminReportsPage() {
         <p className="text-sm">Recent: Employer cost projection, Billing velocity Q3</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'reports')} context="reports" />
-    </AdminLayout>
+    </div>
   )
 }

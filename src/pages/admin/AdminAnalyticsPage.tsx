@@ -4,7 +4,6 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Download, RefreshCw, BarChart3, Brain, Users, Activity } from 'lucide-react'
 import { format } from 'date-fns'
-import AdminLayout from '@/components/layout/AdminLayout'
 
 interface Metric {
   label: string
@@ -76,7 +75,7 @@ export default function AdminAnalyticsPage() {
   }
 
   return (
-    <AdminLayout>
+    <div className="p-6">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-extrabold text-slate-800 flex items-center gap-3">
@@ -110,6 +109,6 @@ export default function AdminAnalyticsPage() {
               </Card>
             ))}
           </div>
-    </AdminLayout>
+    </div>
   )
 }

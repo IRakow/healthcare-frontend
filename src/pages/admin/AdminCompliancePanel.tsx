@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { Card } from '@/components/ui/card'
 import { useState, useEffect } from 'react'
 import { AlertTriangle, CheckCircle, BarChart3, ShieldCheck } from 'lucide-react'
@@ -38,7 +37,7 @@ export default function AdminCompliancePanel() {
   }, [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
           <ShieldCheck className="w-6 h-6 text-emerald-600" /> HIPAA Compliance Risk Panel
@@ -61,6 +60,6 @@ export default function AdminCompliancePanel() {
           <p className="text-sm text-muted-foreground italic">No compliance data available.</p>
         )}
       </div>
-    </AdminLayout>
+    </div>
   )
 }

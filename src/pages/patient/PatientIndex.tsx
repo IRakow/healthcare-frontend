@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
 import { speak } from '@/lib/voice/RachelTTSQueue';
 import { useRachelMemoryStore } from '@/lib/voice/useRachelMemoryStore';
-import { handleThreadFollowup } from '@/lib/voice/handleThreadFollowup';
-
-import PatientLayoutSimple from '@/components/layout/PatientLayoutSimple';
 import StatCard from '@/components/ui/StatCard';
 import DietaryMacroChart from '@/components/nutrition/DietaryMacroChart';
 import MealPhotoUpload from '@/components/nutrition/MealPhotoUpload';
@@ -32,7 +29,7 @@ export default function PatientIndex() {
   }, [sessionStarted, setSessionStarted]);
 
   return (
-    <PatientLayoutSimple title="My Dashboard">
+    <div className="p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
         <StatCard title="Today's Protein" value="84g" subtitle="Goal: 100g" />
         <StatCard title="Sleep Duration" value="7h 25m" subtitle="Last night" />
@@ -84,6 +81,6 @@ export default function PatientIndex() {
           <option value="silent">Silent (text only)</option>
         </select>
       </div>
-    </PatientLayoutSimple>
+    </div>
   );
 }

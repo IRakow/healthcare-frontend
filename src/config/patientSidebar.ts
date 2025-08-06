@@ -26,7 +26,7 @@ import {
 export const patientSidebarLinks = [
   {
     label: 'Dashboard',
-    href: '/patient',
+    href: '/patient/dashboard',
     icon: HomeIcon
   },
 

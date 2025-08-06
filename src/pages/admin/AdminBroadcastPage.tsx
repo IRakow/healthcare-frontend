@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import AdminLayout from '@/components/layout/AdminLayout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -48,7 +47,7 @@ export default function AdminBroadcastPage() {
   }
 
   return (
-    <AdminLayout>
+    <div className="p-6">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-extrabold text-yellow-800 flex items-center gap-3">
@@ -111,6 +110,6 @@ export default function AdminBroadcastPage() {
               )}
             </div>
           </div>
-    </AdminLayout>
+    </div>
   )
 }

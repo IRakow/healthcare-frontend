@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { fetchFromGemini } from '@/lib/ai/gemini';
 import { speak } from '@/lib/voice/RachelTTSQueue';
-import { SparklesCore } from '@/components/ui/visuals/SparklesCore';
+// import { SparklesCore } from '@/components/ui/visuals/SparklesCore'; // TODO: Create this component
 
 const voices = {
   Female: ['Bella', 'Arabella', 'Ana-Rita', 'Amelia'],
@@ -68,7 +68,7 @@ export default function MeditationImmersive() {
       style={{ backgroundImage: `url(${moodBackgrounds[mood]})` }}
     >
       <div className="absolute inset-0 bg-black/50 z-10" />
-      <SparklesCore background="transparent" minSize={0.4} maxSize={1.6} className="absolute inset-0 z-20 pointer-events-none" particleDensity={40} particleColor="#88f5d3" />
+      {/* <SparklesCore background="transparent" minSize={0.4} maxSize={1.6} className="absolute inset-0 z-20 pointer-events-none" particleDensity={40} particleColor="#88f5d3" /> */}
 
       <div className="relative z-30 flex flex-col items-center justify-center px-6 py-24 text-center text-white">
         <h1 className="text-4xl font-bold mb-4 drop-shadow-xl">🧘‍♀️ Guided Meditation</h1>

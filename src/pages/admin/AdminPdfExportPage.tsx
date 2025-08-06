@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { useEffect } from 'react'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
@@ -11,7 +10,7 @@ export default function AdminPdfExportPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <FileText className="w-5 h-5 text-slate-600" /> PDF Export History
       </h1>
@@ -20,6 +19,6 @@ export default function AdminPdfExportPage() {
         <p className="text-sm">Export method: Voice request from Rachel</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'pdf')} context="pdf" />
-    </AdminLayout>
+    </div>
   )
 }

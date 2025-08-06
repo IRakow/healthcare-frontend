@@ -3,7 +3,7 @@ export function useTenantSubdomain(): string | null {
 
   const host = window.location.hostname;
 
-  const isPreview = host.includes('vercel.app') || host.includes('vercel.sh') || host === 'localhost' || host === '127.0.0.1';
+  const isPreview = host.includes('vercel.app') || host.includes('vercel.sh') || host.includes('run.app') || host === 'localhost' || host === '127.0.0.1';
   if (isPreview) return null;
 
   const parts = host.split('.');

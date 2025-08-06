@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { useEffect } from 'react'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
@@ -11,7 +10,7 @@ export function AdminChartDashboardPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <BarChart2 className="w-5 h-5 text-pink-500" /> Chart & Usage Dashboard
       </h1>
@@ -21,7 +20,7 @@ export function AdminChartDashboardPage() {
         <p className="text-sm">Usage trend: +12% from last month</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'charts')} context="charts" />
-    </AdminLayout>
+    </div>
   )
 }
 
@@ -30,7 +29,7 @@ export function AdminComplianceDashboard() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <ShieldCheck className="w-5 h-5 text-lime-600" /> Compliance Center
       </h1>
@@ -40,7 +39,7 @@ export function AdminComplianceDashboard() {
         <p className="text-sm">Flagged records: 1 (user access override)</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'compliance')} context="compliance" />
-    </AdminLayout>
+    </div>
   )
 }
 
@@ -49,7 +48,7 @@ export function AdminSuperPanelPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <Cpu className="w-5 h-5 text-fuchsia-600" /> Super Admin Panel
       </h1>
@@ -59,7 +58,7 @@ export function AdminSuperPanelPage() {
         <p className="text-sm">Most active module: AI export processor</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'system')} context="system" />
-    </AdminLayout>
+    </div>
   )
 }
 
@@ -68,7 +67,7 @@ export function AdminVisualInspectorPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <Eye className="w-5 h-5 text-cyan-500" /> Visual Inspector
       </h1>
@@ -78,7 +77,7 @@ export function AdminVisualInspectorPage() {
         <p className="text-sm">Rachel: "Say 'highlight UI errors' to filter visually"</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'ui')} context="ui" />
-    </AdminLayout>
+    </div>
   )
 }
 
@@ -87,7 +86,7 @@ export function AdminRachelLaunchboard() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
         <LayoutDashboard className="w-6 h-6 text-blue-700" /> Rachel Admin Launchboard
       </h1>
@@ -122,6 +121,6 @@ export function AdminRachelLaunchboard() {
       </div>
 
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'launchboard')} context="launchboard" />
-    </AdminLayout>
+    </div>
   )
 }

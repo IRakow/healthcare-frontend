@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -69,7 +68,7 @@ export default function AdminAuditLogPage() {
   }
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
         <ShieldCheck className="w-6 h-6 text-blue-600" /> System Audit Logs
       </h1>
@@ -100,6 +99,6 @@ export default function AdminAuditLogPage() {
         )}
       </div>
       <AdminAssistantBar onAsk={handleVoiceQuery} context="audit" />
-    </AdminLayout>
+    </div>
   )
 }

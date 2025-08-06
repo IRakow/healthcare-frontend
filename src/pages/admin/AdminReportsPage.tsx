@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { useEffect } from 'react'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
@@ -11,7 +10,7 @@ export default function AdminReportsPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <PieChart className="w-5 h-5 text-indigo-600" /> Custom Reports
       </h1>
@@ -20,6 +19,6 @@ export default function AdminReportsPage() {
         <p className="text-sm">Recent: Employer cost projection, Billing velocity Q3</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'reports')} context="reports" />
-    </AdminLayout>
+    </div>
   )
 }

@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { AdminAiActivityFeed } from '@/components/admin/AdminAiActivityFeed'
 import { AdminAiSummaryGenerator } from '@/components/admin/AdminAiSummaryGenerator'
 import { AdminCustomReportPanel } from '@/components/admin/AdminCustomReportPanel'
@@ -10,7 +9,7 @@ import { Sparkles, Bot, History, Download } from 'lucide-react'
 
 export default function AdminAiCommandCenter() {
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="space-y-10">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-extrabold flex items-center gap-3 text-slate-800">
@@ -40,6 +39,6 @@ export default function AdminAiCommandCenter() {
           <AdminPinnedEmployers />
         </div>
       </div>
-    </AdminLayout>
+    </div>
   )
 }

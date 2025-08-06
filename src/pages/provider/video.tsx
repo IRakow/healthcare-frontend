@@ -1,6 +1,6 @@
 const ProviderVideoVisitPage: React.FC = () => {
     return (
-      <ProviderLayout>
+      <div className="p-6">
         <Head>
           <title>Telehealth Session</title>
         </Head>
@@ -14,7 +14,7 @@ const ProviderVideoVisitPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Telehealth Session</h1>
           <ProviderCameraPanel />
         </motion.div>
-      </ProviderLayout>
+      </div>
     );
   };
   

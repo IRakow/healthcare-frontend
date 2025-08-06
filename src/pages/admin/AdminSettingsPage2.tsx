@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { useEffect } from 'react'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
@@ -12,7 +11,7 @@ export default function AdminSettingsPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <Settings className="w-5 h-5 text-green-600" /> Admin Settings
       </h1>
@@ -21,6 +20,6 @@ export default function AdminSettingsPage() {
         <p className="text-sm">Voice assistant: <Badge variant="secondary">Rachel (active)</Badge></p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'settings')} context="settings" />
-    </AdminLayout>
+    </div>
   )
 }

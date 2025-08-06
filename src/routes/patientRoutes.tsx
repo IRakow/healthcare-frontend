@@ -1,7 +1,7 @@
-import PatientDashboardSimpleHybrid from '@/pages/patient/PatientDashboardSimpleHybrid';
+import UnifiedGlassDashboard from '@/pages/patient/UnifiedGlassDashboard';
 import PatientDashboardIndex from '@/pages/patient/PatientIndex';
 import PatientRecords from '@/pages/patient/Records';
-import Meditation from '@/pages/patient/Meditation';
+import MeditationImmersive from '@/pages/patient/MeditationImmersive';
 import NutritionLog from '@/pages/patient/NutritionLog';
 import NutritionDashboard from '@/pages/patient/NutritionDashboard';
 import AppointmentsPage from '@/pages/patient/appointments';
@@ -18,37 +18,38 @@ import TelemedVisit from '@/pages/patient/TelemedVisit';
 import ShareAccess from '@/pages/patient/ShareAccess';
 import SharedPatientView from '@/pages/patient/SharedPatientView';
 import ExportPDF from '@/pages/patient/ExportPDF';
-import HealthDashboard from '@/pages/patient/HealthDashboard';
 import VoiceScreen from '@/pages/patient/VoiceScreen';
 import VideoAssessment from '@/pages/patient/VideoAssessment';
 import WeeklyPlanner from '@/pages/patient/WeeklyPlanner';
 import MealQualityFeedback from '@/pages/patient/MealQualityFeedback';
 import LifestyleStreaks from '@/pages/patient/LifestyleStreaks';
 import Meditate from '@/pages/patient/Meditate';
-import Goals from '@/pages/patient/Goals';
-import Grocery from '@/pages/patient/Grocery';
+import WeeklyGoals from '@/pages/patient/WeeklyGoals';
+import SmartGroceryMode from '@/pages/patient/SmartGroceryMode';
 import Notifications from '@/pages/patient/Notifications';
 import Allergies from '@/pages/patient/Allergies';
 import AIHistory from '@/pages/patient/AIHistory';
 import MealPlan from '@/pages/patient/MealPlan';
-import UnifiedGlassDashboard from '@/pages/patient/UnifiedGlassDashboard';
 import Scan from '@/pages/patient/Scan';
 import FoodIntel from '@/pages/patient/FoodIntel';
 import ProgressPhotos from '@/pages/patient/ProgressPhotos';
 import PatientCalendar from '@/pages/patient/PatientCalendar';
-import { AISummaryPanel } from '@/components/patient/AISummaryPanel';
+import PatientTrends from '@/pages/patient/PatientTrends';
+import PatientHealthDashboard from '@/pages/patient/PatientHealthDashboard';
+import LifestyleAISummary from '@/pages/patient/LifestyleAISummary';
+import HealthHub from '@/pages/patient/HealthHub';
 
 export const patientRoutes = [
   { path: '/patient', element: <PatientDashboardIndex /> },
-  { path: '/patient/dashboard', element: <PatientDashboardSimpleHybrid /> },
+  { path: '/patient/dashboard', element: <UnifiedGlassDashboard /> },
   { path: '/patient/records', element: <PatientRecords /> },
-  { path: '/patient/health-dashboard', element: <HealthDashboard /> },
+  { path: '/patient/health', element: <PatientHealthDashboard /> },
   { path: '/patient/voice-screen', element: <VoiceScreen /> },
   { path: '/patient/video-assessment', element: <VideoAssessment /> },
   { path: '/patient/weekly-planner', element: <WeeklyPlanner /> },
   { path: '/patient/meal-feedback', element: <MealQualityFeedback /> },
   { path: '/patient/lifestyle-streaks', element: <LifestyleStreaks /> },
-  { path: '/patient/meditation', element: <Meditation /> },
+  { path: '/patient/meditation', element: <MeditationImmersive /> },
   { path: '/patient/nutrition', element: <NutritionDashboard /> },
   { path: '/patient/nutrition-log', element: <NutritionLog /> },
   { path: '/patient/appointments', element: <AppointmentsPage /> },
@@ -67,15 +68,20 @@ export const patientRoutes = [
   { path: '/patient/shared/:patientId', element: <SharedPatientView /> },
   { path: '/patient/export-pdf', element: <ExportPDF /> },
   { path: '/patient/meditate', element: <Meditate /> },
-  { path: '/patient/goals', element: <Goals /> },
-  { path: '/patient/grocery', element: <Grocery /> },
+  { path: '/patient/goals', element: <WeeklyGoals /> },
+  { path: '/patient/grocery', element: <SmartGroceryMode /> },
   { path: '/patient/notifications', element: <Notifications /> },
   { path: '/patient/allergies', element: <Allergies /> },
   { path: '/patient/ai-history', element: <AIHistory /> },
   { path: '/patient/meal-plan', element: <MealPlan /> },
-  { path: '/patient/unified-dashboard', element: <UnifiedGlassDashboard /> },
-  { path: '/patient/scan', element: <Scan /> },
   { path: '/patient/food-intel', element: <FoodIntel /> },
-  { path: '/patient/progress', element: <ProgressPhotos /> },
-  { path: '/patient/ai-summary', element: <AISummaryPanel /> }
+  { path: '/patient/summary', element: <LifestyleAISummary /> },
+  { path: '/patient/trends', element: <PatientTrends /> },
+  { path: '/patient/vitals', element: <PatientTrends /> },
+  { path: '/patient/photos', element: <ProgressPhotos /> },
+  { path: '/patient/camera', element: <Scan /> },
+  { path: '/patient/telemed', element: <TelemedVisit /> },
+  { path: '/patient/streaks', element: <LifestyleStreaks /> },
+  { path: '/patient/uploads', element: <Documents /> },
+  { path: '/patient/share', element: <ShareAccess /> }
 ];

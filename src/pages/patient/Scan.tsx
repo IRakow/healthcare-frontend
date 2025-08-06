@@ -1,13 +1,10 @@
 import React from 'react';
-import PatientLayout from '@/components/layout/PatientLayout';
 import { ScanNutritionLabel } from '@/components/patient/ScanNutritionLabel';
 
 export default function Scan() {
   return (
-    <PatientLayout>
-      <div className="max-w-4xl mx-auto">
-        <ScanNutritionLabel />
-      </div>
-    </PatientLayout>
+    <div className="max-w-4xl mx-auto p-6">
+      <ScanNutritionLabel />
+    </div>
   );
 }

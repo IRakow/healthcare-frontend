@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import AdminSmartChartPanel from '@/components/admin/AdminSmartChartPanel'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { handleAdminCommand } from '@/lib/voice/handleAdminCommandEnhanced'
@@ -15,7 +14,7 @@ export default function AdminAIReportsPage() {
   }, [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="max-w-5xl mx-auto px-4">
         <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
           <FileTextIcon className="w-6 h-6 text-blue-600" /> AI Reports & Trends
@@ -29,6 +28,6 @@ export default function AdminAIReportsPage() {
 
         <VoiceHUDOverlay interim={interimText} />
       </div>
-    </AdminLayout>
+    </div>
   )
 }

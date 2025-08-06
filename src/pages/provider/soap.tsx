@@ -2,13 +2,12 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import ProviderLayout from '@/components/layout/ProviderLayout';
 import { SOAPSummaryViewer } from '@/components/provider/SOAPSummaryViewer';
 import { motion } from 'framer-motion';
 
 const ProviderSOAPPage: React.FC = () => {
   return (
-    <ProviderLayout>
+    <div className="p-6">
       <Helmet>
         <title>SOAP Notes</title>
       </Helmet>
@@ -22,7 +21,7 @@ const ProviderSOAPPage: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-900">SOAP Notes</h1>
         <SOAPSummaryViewer />
       </motion.div>
-    </ProviderLayout>
+    </div>
   );
 };
 

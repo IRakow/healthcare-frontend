@@ -1,4 +1,3 @@
-import AdminLayout from '@/layouts/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
 import VoiceHUDOverlay from '@/components/voice/VoiceHUDOverlay'
@@ -64,7 +63,7 @@ export default function AdminEmployerTrendsPage() {
   }))
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-3xl font-bold mb-6">Employer Usage Trends</h1>
 
@@ -97,6 +96,6 @@ export default function AdminEmployerTrendsPage() {
 
         <VoiceHUDOverlay interim={interimText} />
       </div>
-    </AdminLayout>
+    </div>
   )
 }

@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import AdminAssistantBar from '@/components/AdminAssistantBar'
 import { useEffect } from 'react'
 import { useAdminVoiceCapture } from '@/lib/voice/useAdminVoiceCapture'
@@ -12,7 +11,7 @@ export default function AdminAuditPage() {
   useEffect(() => startListening(), [])
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <ClipboardList className="w-5 h-5 text-yellow-600" /> Admin Audit Log
       </h1>
@@ -21,6 +20,6 @@ export default function AdminAuditPage() {
         <p className="text-sm">Compliance mode: Enabled</p>
       </Card>
       <AdminAssistantBar onAsk={(text) => handleAdminCommand(text, 'audit')} context="audit" />
-    </AdminLayout>
+    </div>
   )
 }

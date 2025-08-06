@@ -10,6 +10,9 @@ import { patientRoutes } from '@/routes/patientRoutes';
 import { employerRoutes } from '@/routes/employerRoutes';
 import { ownerRoutes } from '@/routes/ownerRoutes';
 
+// Layout Wrapper
+import LayoutWrapper from '@/components/layout/LayoutWrapper';
+
 // Universal Pages
 import LoginPortalSelector from '@/pages/LoginPortalSelector';
 import ErrorPage from '@/pages/ErrorPage';
@@ -27,24 +30,24 @@ export default function AppRoutes() {
 
         {/* Role-Based Routing */}
         {adminRoutes.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
+          <Route key={path} path={path} element={<LayoutWrapper>{element}</LayoutWrapper>} />
         ))}
 
         {providerRoutes.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
+          <Route key={path} path={path} element={<LayoutWrapper>{element}</LayoutWrapper>} />
         ))}
 
         {patientRoutes.map(({ path, element }) => {
           console.log('[AppRoutes] Mapping patient route:', path);
-          return <Route key={path} path={path} element={element} />;
+          return <Route key={path} path={path} element={<LayoutWrapper>{element}</LayoutWrapper>} />;
         })}
 
         {employerRoutes.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
+          <Route key={path} path={path} element={<LayoutWrapper>{element}</LayoutWrapper>} />
         ))}
 
         {ownerRoutes.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
+          <Route key={path} path={path} element={<LayoutWrapper>{element}</LayoutWrapper>} />
         ))}
 
         {/* Catch-all route - must be last */}

@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -98,7 +97,7 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2 text-slate-800">
@@ -144,6 +143,6 @@ export default function AdminUsersPage() {
         )}
       </div>
       <AdminAssistantBar onAsk={handleVoiceQuery} context="users" />
-    </AdminLayout>
+    </div>
   )
 }

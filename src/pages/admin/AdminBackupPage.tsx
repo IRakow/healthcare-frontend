@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -75,7 +74,7 @@ export default function AdminBackupPage() {
   }
 
   return (
-    <AdminLayout>
+    <div className="p-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2 text-slate-800">
@@ -117,6 +116,6 @@ export default function AdminBackupPage() {
         )}
       </div>
       <AdminAssistantBar onAsk={handleVoiceQuery} context="backup" />
-    </AdminLayout>
+    </div>
   )
 }
