@@ -1,19 +1,23 @@
 FROM node:18
 
+# Set working directory
 WORKDIR /app
 
+# Copy and install dependencies
 COPY package*.json ./
 RUN npm ci
 
+# Copy full app
 COPY . .
 
+# Build frontend
 RUN npm run build
+
+# ✅ Install serve globally AFTER build step
 RUN npm install -g serve
 
 ENV NODE_ENV=production
-
-# Don't set a fixed PORT. Cloud Run will inject PORT=3000 or 8080 or another port
 EXPOSE 8080
 
-# ✅ Use shell so $PORT resolves dynamically
+# ✅ Start app using Cloud Run's assigned PORT
 CMD ["/bin/sh", "-c", "serve -s dist -l $PORT --single"]
