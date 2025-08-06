@@ -1,6 +1,6 @@
 # Email Service Integration Guide
 
-This guide documents how to integrate email services with the Insperity Health platform's invitation system.
+This guide documents how to integrate email services with the Purity Health platform's invitation system.
 
 ## Overview
 
@@ -19,7 +19,7 @@ const sg = new SendGridMail(Deno.env.get('SENDGRID_API_KEY'))
 export async function sendEmail({ to, subject, template, data }) {
   const msg = {
     to,
-    from: 'noreply@insperityhealth.com',
+    from: 'noreply@purityhealth.ai',
     subject,
     templateId: getTemplateId(template),
     dynamicTemplateData: data
@@ -39,7 +39,7 @@ const resend = new Resend(Deno.env.get('RESEND_API_KEY'))
 
 export async function sendEmail({ to, subject, template, data }) {
   await resend.emails.send({
-    from: 'Insperity Health <noreply@insperityhealth.com>',
+    from: 'Purity Health <noreply@purityhealth.ai>',
     to,
     subject,
     react: getEmailTemplate(template, data)
@@ -63,7 +63,7 @@ const client = new SESClient({
 
 export async function sendEmail({ to, subject, template, data }) {
   const command = new SendTemplatedEmailCommand({
-    Source: 'noreply@insperityhealth.com',
+    Source: 'noreply@purityhealth.ai',
     Destination: { ToAddresses: [to] },
     Template: template,
     TemplateData: JSON.stringify(data)
@@ -92,7 +92,7 @@ export async function sendEmail({ to, subject, template, data }) {
 <body>
   <div class="container">
     <div class="header">
-      <h1>Welcome to Insperity Health</h1>
+      <h1>Welcome to Purity Health</h1>
     </div>
     <div class="content">
       <h2>You're Invited!</h2>
@@ -106,7 +106,7 @@ export async function sendEmail({ to, subject, template, data }) {
       <p>If you have any questions, please contact your organization administrator.</p>
     </div>
     <div class="footer">
-      <p>© 2024 Insperity Health. All rights reserved.</p>
+      <p>© 2024 Purity Health. All rights reserved.</p>
       <p>This is an automated message. Please do not reply to this email.</p>
     </div>
   </div>
@@ -127,7 +127,7 @@ export async function sendEmail({ to, subject, template, data }) {
 <body>
   <div class="container">
     <div class="header">
-      <h1>Reminder: Your Insperity Health Invitation</h1>
+      <h1>Reminder: Your Purity Health Invitation</h1>
     </div>
     <div class="content">
       <h2>Don't Forget to Accept Your Invitation</h2>
@@ -140,7 +140,7 @@ export async function sendEmail({ to, subject, template, data }) {
       <p>If you're having trouble, please contact your organization administrator.</p>
     </div>
     <div class="footer">
-      <p>© 2024 Insperity Health. All rights reserved.</p>
+      <p>© 2024 Purity Health. All rights reserved.</p>
     </div>
   </div>
 </body>
@@ -176,13 +176,13 @@ import { sendEmail } from '../_shared/email.ts'
 // After creating the invitation...
 await sendEmail({
   to: email,
-  subject: 'You\'re invited to Insperity Health',
+  subject: 'You\'re invited to Purity Health',
   template: 'invitation',
   data: {
     inviteUrl,
     role,
     senderName: sender.full_name,
-    organizationName: organization?.name || 'Insperity Health'
+    organizationName: organization?.name || 'Purity Health'
   }
 })
 ```
@@ -199,7 +199,7 @@ Example DNS records:
 ```
 TXT @ "v=spf1 include:sendgrid.net ~all"
 TXT em._domainkey "k=rsa; p=MIGfMA0GCSq..."
-TXT _dmarc "v=DMARC1; p=quarantine; rua=mailto:dmarc@insperityhealth.com"
+TXT _dmarc "v=DMARC1; p=quarantine; rua=mailto:dmarc@purityhealth.ai"
 ```
 
 ## Testing

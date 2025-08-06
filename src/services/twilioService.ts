@@ -10,7 +10,7 @@ export const twilioService = {
   async sendSMS({ to, message, employerId, patientId }: SendSMSParams & { patientId?: string }) {
     try {
       // Get employer's notification sender name if employerId provided
-      let senderName = 'Insperity Health';
+      let senderName = 'Purity Health';
       
       if (employerId) {
         const { data: employer } = await supabase
@@ -82,7 +82,7 @@ export const twilioService = {
 
       // Get employer's notification sender name
       const employerId = appointment.patient.employer_id;
-      let senderName = 'Insperity Health';
+      let senderName = 'Purity Health';
       
       if (employerId) {
         const { data: employer } = await supabase
@@ -91,7 +91,7 @@ export const twilioService = {
           .eq('id', employerId)
           .single();
         
-        senderName = employer?.notification_sender_name || 'Insperity Health';
+        senderName = employer?.notification_sender_name || 'Purity Health';
       }
 
       // Format appointment reminder message

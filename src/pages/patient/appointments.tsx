@@ -48,7 +48,7 @@ export default function AppointmentForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: phone,
-          message: `Your appointment with a provider from Insperity Health has been booked. You'll get a reminder 30 minutes before.`
+          message: `Your appointment with a provider from Purity Health has been booked. You'll get a reminder 30 minutes before.`
         })
       });
 
@@ -59,7 +59,7 @@ export default function AppointmentForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: phone,
-          message: `⏰ Reminder: You have an appointment with Insperity Health in 30 minutes.`,
+          message: `⏰ Reminder: You have an appointment with Purity Health in 30 minutes.`,
           sendAt: reminderTime.toISOString()
         })
       });
@@ -79,7 +79,7 @@ export default function AppointmentForm() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               to: newPhone,
-              message: `Your appointment with a provider from Insperity Health has been booked. Check your calendar.`
+              message: `Your appointment with a provider from Purity Health has been booked. Check your calendar.`
             })
           });
           alert("Phone saved. You'll now receive SMS reminders.");

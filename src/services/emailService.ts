@@ -12,7 +12,7 @@ export const emailService = {
   async getEmployerBranding(employerId?: string) {
     if (!employerId) {
       return {
-        notification_sender_name: 'Insperity Health',
+        notification_sender_name: 'Purity Health',
         primary_color: '#3B82F6',
         logo_url: null,
         tagline: null
@@ -26,7 +26,7 @@ export const emailService = {
       .single();
 
     return {
-      notification_sender_name: employer?.notification_sender_name || 'Insperity Health',
+      notification_sender_name: employer?.notification_sender_name || 'Purity Health',
       primary_color: employer?.primary_color || '#3B82F6',
       logo_url: employer?.logo_url,
       tagline: employer?.tagline

@@ -92,7 +92,7 @@ serve(async (req) => {
     // In production, you would send this via email service like:
     // await sendEmail({
     //   to: email,
-    //   subject: 'You\'re invited to Insperity Health',
+    //   subject: 'You\'re invited to Purity Health',
     //   template: 'invitation',
     //   data: { inviteUrl, role, senderName: sender.name }
     // })

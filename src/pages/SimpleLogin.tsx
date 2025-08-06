@@ -47,7 +47,7 @@ export default function SimpleLogin() {
           <AnimatedLogoWithSound />
         </div>
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-4">Insperity Health AI</h1>
+          <h1 className="text-5xl font-bold text-white mb-4">Purity Health AI</h1>
           <p className="text-xl text-gray-300">Select your portal to continue</p>
         </div>
 

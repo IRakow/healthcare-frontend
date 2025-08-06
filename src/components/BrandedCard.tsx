@@ -47,7 +47,7 @@ export function BrandedHeader() {
           <img src={branding.logo_url} alt="Logo" className="h-8" />
         ) : (
           <h1 style={{ color: accentColor }} className="text-xl font-bold">
-            Insperity Health
+            Purity Health
           </h1>
         )}
         {branding?.tagline && (

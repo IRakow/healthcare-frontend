@@ -69,8 +69,8 @@ serve(async (req) => {
           },
         ],
         from: { 
-          email: 'invoices@insperityhealth.com', 
-          name: 'Insperity Health Billing' 
+          email: 'invoices@purityhealth.ai', 
+          name: 'Purity Health Billing' 
         },
         content: [
           {
@@ -93,7 +93,7 @@ serve(async (req) => {
               <body>
                 <div class="container">
                   <div class="header">
-                    <h1>Invoice from Insperity Health</h1>
+                    <h1>Invoice from Purity Health</h1>
                   </div>
                   
                   <div class="content">
@@ -121,8 +121,8 @@ serve(async (req) => {
                   
                   <div class="footer">
                     <p>Thank you for your business!</p>
-                    <p>Insperity Health | invoices@insperityhealth.com</p>
-                    ${employer.subdomain ? `<p>${employer.subdomain}.insperityhealth.com</p>` : ''}
+                    <p>Purity Health | invoices@purityhealth.ai</p>
+                    ${employer.subdomain ? `<p>${employer.subdomain}.purityhealth.ai</p>` : ''}
                   </div>
                 </div>
               </body>

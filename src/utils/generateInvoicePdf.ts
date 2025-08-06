@@ -41,7 +41,7 @@ export async function generateInvoicePdf(invoice: InvoiceData) {
   // Header with branding
   doc.setFontSize(16);
   doc.setTextColor(r, g, b);
-  doc.text(employer?.invoice_header || 'Insperity Health Invoice', 10, yOffset);
+  doc.text(employer?.invoice_header || 'Purity Health Invoice', 10, yOffset);
   
   // Reset to black for invoice details
   doc.setTextColor(0, 0, 0);
@@ -133,7 +133,7 @@ export async function generateInvoicePdf(invoice: InvoiceData) {
   doc.setTextColor(150, 150, 150);
   
   const footerText = employer?.invoice_footer || 
-    'Thank you for choosing Insperity Health. For questions, contact billing@insperityhealth.com';
+    'Thank you for choosing Purity Health. For questions, contact billing@purityhealth.ai';
   
   // Word wrap footer text
   const footerLines = doc.splitTextToSize(footerText, 180);

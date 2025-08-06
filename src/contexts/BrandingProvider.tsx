@@ -40,7 +40,7 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
   const [branding, setBranding] = useState<BrandingData>({
     favicon_url: '/favicon.ico',
     primary_color: '#3B82F6',
-    employer_name: 'Insperity Health',
+    employer_name: 'Purity Health',
   });
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       primary_color: data.primary_color || '#3B82F6',
       tagline: data.tagline || '',
       subdomain: data.subdomain || '',
-      employer_name: data.name || 'Insperity Health',
+      employer_name: data.name || 'Purity Health',
       voice_profile_id: data.voice_profile_id || undefined,
     });
   }

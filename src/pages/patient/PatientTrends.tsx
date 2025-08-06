@@ -12,9 +12,13 @@ export default function PatientTrends() {
   const [hydration, setHydration] = useState<any[]>([]);
   const [protein, setProtein] = useState<any[]>([]);
   const [summary, setSummary] = useState('');
+  
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    
+
     loadTrends();
   }, []);
 

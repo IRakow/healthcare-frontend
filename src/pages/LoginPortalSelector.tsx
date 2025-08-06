@@ -55,7 +55,7 @@ export default function LoginPortalSelector() {
         </div>
 
         <p className="mt-6 text-center text-xs text-gray-400">
-          Powered by AI • {branding.employer_name || 'Insperity Health'}
+          Powered by AI • {branding.employer_name || 'Purity Health AI'}
         </p>
       </motion.div>
     </div>

@@ -3068,7 +3068,7 @@ create table weekly_goals (
 
 -- START: 20240731_employer_notification_sender.sql
 
-alter table employers add column notification_sender_name text default 'Insperity Health';
+alter table employers add column notification_sender_name text default 'Purity Health';
 
 -- END: 20240731_employer_notification_sender.sql
 

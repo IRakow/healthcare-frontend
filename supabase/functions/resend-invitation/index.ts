@@ -85,7 +85,7 @@ serve(async (req) => {
     // In production, resend the email
     // await sendEmail({
     //   to: invitation.email,
-    //   subject: 'Reminder: You\'re invited to Insperity Health',
+    //   subject: 'Reminder: You\'re invited to Purity Health',
     //   template: 'invitation-reminder',
     //   data: { inviteUrl, role: invitation.role }
     // })

@@ -6,7 +6,7 @@ export default function AnimatedBrandLogo() {
     <div className="flex flex-col items-center">
       <img 
         src={insperityLogo} 
-        alt="Insperity Health AI" 
+        alt="Purity Health AI" 
         width={600} 
         height={600}
       />

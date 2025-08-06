@@ -56,7 +56,7 @@ export default function PatientLogin() {
             {branding.logo_url ? (
               <img src={branding.logo_url} alt="Logo" className="mx-auto h-12 mb-3" />
             ) : (
-              <h2 className="text-2xl font-bold text-[color:var(--brand-primary)]">Insperity Health</h2>
+              <h2 className="text-2xl font-bold text-[color:var(--brand-primary)]">Purity Health AI</h2>
             )}
             <CardTitle className="text-lg text-gray-800">Welcome back. Please log in.</CardTitle>
             {branding.tagline && (
