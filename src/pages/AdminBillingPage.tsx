@@ -1,5 +1,4 @@
 // Cleaned and fully enabled AI Billing Assistant
-import AdminLayout from '@/components/layout/AdminLayout'
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -126,7 +125,7 @@ export default function AdminBillingCenter() {
   }, [])
 
   return (
-    <AdminLayout>
+    <>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
           <Banknote className="w-6 h-6 text-green-600" /> Admin Billing Center
@@ -185,6 +184,6 @@ export default function AdminBillingCenter() {
         </form>
       </div>
 
-    </AdminLayout>
+    </>
   )
 }

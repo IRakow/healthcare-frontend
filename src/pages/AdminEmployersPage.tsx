@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
@@ -63,7 +62,7 @@ export default function AdminEmployersPage() {
   }
 
   return (
-    <AdminLayout>
+    <>
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2 text-slate-800">
@@ -91,6 +90,6 @@ export default function AdminEmployersPage() {
         ))}
         {filtered.length === 0 && <p className="text-sm text-muted-foreground italic">No employers found</p>}
       </div>
-    </AdminLayout>
+    </>
   )
 }

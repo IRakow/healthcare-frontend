@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/layout/AdminLayout'
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -38,7 +37,7 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <AdminLayout>
+    <>
       <div className="space-y-10">
         <h1 className="text-3xl font-bold text-slate-800">System Settings</h1>
 
@@ -96,6 +95,6 @@ export default function AdminSettingsPage() {
         </div>
       </div>
       <AdminAssistantBar onAsk={handleVoiceQuery} context="settings" />
-    </AdminLayout>
+    </>
   )
 }
