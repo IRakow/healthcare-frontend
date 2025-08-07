@@ -31,14 +31,30 @@ export function AssistantBar({ role = 'patient', context, compact = false, autoF
   }
 
   const sendToAI = async (inputText: string) => {
+    console.log('Sending to AI:', inputText)
     setIsLoading(true)
-    const { data } = await supabase.functions.invoke('ai-voice-navigator', {
-      body: { role, input: inputText, context }
-    })
-    const reply = data?.response || ''
-    setResponse(reply)
-    speak(reply)
-    setIsLoading(false)
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-voice-navigator', {
+        body: { role, input: inputText, context }
+      })
+      
+      if (error) {
+        console.error('Supabase function error:', error)
+        setResponse('Sorry, there was an error processing your request.')
+        setIsLoading(false)
+        return
+      }
+      
+      console.log('AI Response:', data)
+      const reply = data?.response || 'No response received from AI'
+      setResponse(reply)
+      speak(reply)
+    } catch (err) {
+      console.error('Error calling AI:', err)
+      setResponse('Sorry, I encountered an error.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleVoice = () => {
@@ -63,7 +79,12 @@ export function AssistantBar({ role = 'patient', context, compact = false, autoF
   }
 
   const handleSend = () => {
-    if (message.trim()) sendToAI(message)
+    console.log('handleSend called with message:', message)
+    if (message.trim()) {
+      const currentMessage = message
+      setMessage('') // Clear the input immediately
+      sendToAI(currentMessage)
+    }
   }
 
   const navConfig = {
