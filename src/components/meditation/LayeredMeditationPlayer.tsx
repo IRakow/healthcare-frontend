@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 
 export function LayeredMeditationPlayer({ voiceSrc, musicSrc }: { voiceSrc: string; musicSrc: string }) {
   const voiceRef = useRef<HTMLAudioElement>(null);
@@ -42,13 +41,29 @@ export function LayeredMeditationPlayer({ voiceSrc, musicSrc }: { voiceSrc: stri
       </div>
 
       <div>
-        <label className="text-sm font-medium">🗣 Voice Volume</label>
-        <Slider min={0} max={1} step={0.05} value={voiceVol} onChange={setVoiceVol} />
+        <label className="text-sm font-medium block mb-2">🗣 Voice Volume</label>
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.05}
+          value={voiceVol}
+          onChange={(e) => setVoiceVol(parseFloat(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+        />
       </div>
 
       <div>
-        <label className="text-sm font-medium">🎵 Music Volume</label>
-        <Slider min={0} max={1} step={0.05} value={musicVol} onChange={setMusicVol} />
+        <label className="text-sm font-medium block mb-2">🎵 Music Volume</label>
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.05}
+          value={musicVol}
+          onChange={(e) => setMusicVol(parseFloat(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+        />
       </div>
 
       <audio ref={voiceRef} src={voiceSrc} />
