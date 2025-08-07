@@ -1,24 +1,47 @@
 // File: src/pages/patient/Meditation.tsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import PatientLayoutSimple from '@/components/layout/PatientLayoutSimple';
 import { Bot, Music, Play, Volume2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
+const musicTracks = {
+  calm: '/audio/calm.mp3',
+  focus: '/audio/focus.mp3',
+  gratitude: '/audio/gratitude.mp3'
+};
+
 export default function MeditationPage() {
   const [topic, setTopic] = useState('relaxation and inner calm');
   const [voice, setVoice] = useState('Bella');
   const [includeMusic, setIncludeMusic] = useState(true);
+  const [selectedTrack, setSelectedTrack] = useState('calm');
+  const [musicReady, setMusicReady] = useState(false);
+  const [voiceReady, setVoiceReady] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [meditationText, setMeditationText] = useState<string>('');
+  const [musicStarted, setMusicStarted] = useState(false);
+
+  useEffect(() => {
+    // Simulate music loading when track changes
+    if (selectedTrack) {
+      setMusicReady(false);
+      const timer = setTimeout(() => {
+        setMusicReady(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedTrack]);
 
   async function generateMeditation() {
     setIsLoading(true);
     setAudioUrl(null);
     setMeditationText('');
+    setVoiceReady(false);
     
     try {
       const { data, error } = await supabase.functions.invoke('generate-meditation-audio', {
@@ -36,24 +59,31 @@ export default function MeditationPage() {
       if (data) {
         setAudioUrl(data.audio_url);
         setMeditationText(data.text);
+        setVoiceReady(true);
         
         // If music is requested, play background music alongside
         if (includeMusic && data.audio_url) {
-          const bgMusic = new Audio('/audio/meditation-bg.mp3');
+          const bgMusic = new Audio(musicTracks[selectedTrack]);
           bgMusic.volume = 0.15; // Very soft background
           bgMusic.loop = true;
           
           const voiceAudio = new Audio(data.audio_url);
           voiceAudio.volume = 1.0;
           
-          // Start both
-          voiceAudio.play();
-          bgMusic.play();
+          // Start both if music is ready
+          if (musicReady) {
+            voiceAudio.play();
+            bgMusic.play();
+            setIsPlaying(true);
+            setMusicStarted(true);
+          }
           
           // Stop music when voice ends
           voiceAudio.addEventListener('ended', () => {
             bgMusic.pause();
             bgMusic.currentTime = 0;
+            setIsPlaying(false);
+            setMusicStarted(false);
           });
         }
       }
@@ -115,6 +145,36 @@ export default function MeditationPage() {
             Include ambient background music
           </label>
 
+          {includeMusic && (
+            <div className="space-y-4">
+              <label htmlFor="music-select" className="block font-medium text-gray-700">
+                Choose Background Music
+              </label>
+              <select
+                id="music-select"
+                value={selectedTrack}
+                onChange={(e) => {
+                  setMusicReady(false);
+                  setSelectedTrack(e.target.value);
+                }}
+                className="w-full p-2 rounded border"
+              >
+                <option value="calm">🌊 Calm</option>
+                <option value="focus">🧘 Focus</option>
+                <option value="gratitude">🙏 Gratitude</option>
+              </select>
+
+              {!musicReady ? (
+                <div className="flex items-center gap-2 text-gray-500">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-teal-500" />
+                  <p>Preparing music...</p>
+                </div>
+              ) : (
+                <div className="text-green-600 text-sm">✓ Music ready</div>
+              )}
+            </div>
+          )}
+
           <Button className="w-full mt-4" onClick={generateMeditation} disabled={isLoading}>
             {isLoading ? 'Generating...' : 'Generate Meditation'}
           </Button>
@@ -126,6 +186,13 @@ export default function MeditationPage() {
               <Bot className="w-4 h-4" />
               AI Meditation Player
             </h3>
+            {!voiceReady ? (
+              <div className="text-center text-gray-500 animate-pulse mb-3">
+                <p>Loading voice...</p>
+              </div>
+            ) : (
+              <div className="text-green-600 text-sm mb-2">✓ Voice ready</div>
+            )}
             <audio src={audioUrl} controls className="w-full" autoPlay />
             <p className="text-xs text-gray-500 mt-1">Sit back and relax while your personalized session plays.</p>
             
