@@ -37,12 +37,37 @@ export default function CustomMeditation() {
       console.log('Function response:', data, error);
 
       if (error) {
-        console.error('Function error:', error);
-        alert(`Error: ${error.message || 'Failed to generate meditation'}`);
+        console.error('Supabase function error:', error);
+        console.error('Full error object:', JSON.stringify(error, null, 2));
+        
+        // Show more specific error messages
+        if (error.message?.includes('fetch')) {
+          alert('Network error: Unable to connect to the server. Please check your connection.');
+        } else if (error.message?.includes('unauthorized')) {
+          alert('Authentication error: Please log in and try again.');
+        } else {
+          alert(`Error: ${error.message || 'Failed to generate meditation'}`);
+        }
         setLoading(false);
         return;
       }
 
+      // Check if error is in the response data
+      if (data?.error) {
+        console.error('Error from function:', data.error);
+        console.error('Error details:', data.details);
+        
+        if (data.error?.includes('Gemini')) {
+          alert('There was an issue reaching Gemini. Please try again later.');
+        } else if (data.error?.includes('ElevenLabs')) {
+          alert('There was an issue generating audio. Please try again.');
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+        setLoading(false);
+        return;
+      }
+      
       const audio_url = data?.audio_url;
       if (!audio_url) {
         console.error('No audio URL in response:', data);
