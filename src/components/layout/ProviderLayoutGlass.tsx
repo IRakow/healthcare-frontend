@@ -40,8 +40,8 @@ export default function ProviderLayoutGlass({ children }: ProviderLayoutProps) {
   const { branding } = useBrandingContext();
 
   useEffect(() => {
-    if (branding?.voice_profile_id) {
-      console.log('[ProviderLayoutGlass] Voice ready:', branding.voice_profile_id);
+    if (branding?.voice_profile) {
+      console.log('[ProviderLayoutGlass] Voice ready:', branding.voice_profile);
     }
   }, [branding]);
 

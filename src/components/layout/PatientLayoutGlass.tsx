@@ -44,8 +44,8 @@ export default function PatientLayoutGlass({ children }: PatientLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (branding?.voice_profile_id) {
-      console.log('[PatientLayoutGlass] Voice ready:', branding.voice_profile_id);
+    if (branding?.voice_profile) {
+      console.log('[PatientLayoutGlass] Voice ready:', branding.voice_profile);
       // Optional: speak welcome message with ElevenLabs here
     }
   }, [branding]);

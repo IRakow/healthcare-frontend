@@ -14,7 +14,7 @@ interface BrandingData {
   tagline?: string;
   subdomain?: string;
   employer_name?: string;
-  voice_profile_id?: string;
+  voice_profile?: string;
 }
 
 interface BrandingContextType {
@@ -84,7 +84,7 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase
         .from('employers')
         .select(
-          'name, logo_url, favicon_url, primary_color, tagline, subdomain, voice_profile_id'
+          'name, logo_url, favicon_url, primary_color, tagline, subdomain, voice_profile'
         )
         .eq('id', id)
         .single();
@@ -101,7 +101,7 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase
         .from('employers')
         .select(
-          'name, logo_url, favicon_url, primary_color, tagline, subdomain, voice_profile_id'
+          'name, logo_url, favicon_url, primary_color, tagline, subdomain, voice_profile'
         )
         .eq('subdomain', subdomain)
         .single();
@@ -139,7 +139,7 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       tagline: data.tagline || '',
       subdomain: data.subdomain || '',
       employer_name: data.name || 'Purity Health',
-      voice_profile_id: data.voice_profile_id || undefined,
+      voice_profile: data.voice_profile || undefined,
     });
   }
 

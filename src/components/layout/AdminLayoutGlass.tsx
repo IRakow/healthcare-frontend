@@ -45,8 +45,8 @@ export default function AdminLayoutGlass({ children }: AdminLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
-    if (branding?.voice_profile_id) {
-      console.log('[AdminLayoutGlass] Voice profile loaded:', branding.voice_profile_id);
+    if (branding?.voice_profile) {
+      console.log('[AdminLayoutGlass] Voice profile loaded:', branding.voice_profile);
     }
   }, [branding]);
 
