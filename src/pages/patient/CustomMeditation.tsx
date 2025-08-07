@@ -24,31 +24,52 @@ export default function CustomMeditation() {
   async function generate() {
     setLoading(true);
     
-    // Get current user
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    const res = await fetch('/functions/v1/custom-meditation', {
-      method: 'POST',
-      body: JSON.stringify({ topic, voice, model, duration, includeMusic, userId: user?.id }),
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    const { audio_url } = await res.json();
-    setAudioUrl(audio_url);
-
-    if (user) {
-      await supabase.from('meditation_logs').insert({
-        user_id: user.id,
-        topic,
-        voice,
-        model,
-        duration_minutes: duration,
-        include_music: includeMusic,
-        audio_url
+    try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      console.log('Generating meditation with:', { topic, voice, model, duration, includeMusic });
+      
+      const { data, error } = await supabase.functions.invoke('custom-meditation', {
+        body: { topic, voice, model, duration, includeMusic, userId: user?.id }
       });
-    }
 
-    setLoading(false);
+      console.log('Function response:', data, error);
+
+      if (error) {
+        console.error('Function error:', error);
+        alert(`Error: ${error.message || 'Failed to generate meditation'}`);
+        setLoading(false);
+        return;
+      }
+
+      const audio_url = data?.audio_url;
+      if (!audio_url) {
+        console.error('No audio URL in response:', data);
+        alert('Error: No audio generated');
+        setLoading(false);
+        return;
+      }
+
+      setAudioUrl(audio_url);
+
+      if (user) {
+        await supabase.from('meditation_logs').insert({
+          user_id: user.id,
+          topic,
+          voice,
+          model,
+          duration_minutes: duration,
+          include_music: includeMusic,
+          audio_url
+        });
+      }
+    } catch (err) {
+      console.error('Error generating meditation:', err);
+      alert(`Error: ${err.message || 'Failed to generate meditation'}`);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
