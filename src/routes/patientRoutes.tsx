@@ -2,6 +2,7 @@ import UnifiedGlassDashboard from '@/pages/patient/UnifiedGlassDashboard';
 import PatientDashboardIndex from '@/pages/patient/PatientIndex';
 import PatientRecords from '@/pages/patient/Records';
 import MeditationImmersive from '@/pages/patient/MeditationImmersive';
+import CustomMeditation from '@/pages/patient/CustomMeditation';
 import NutritionLog from '@/pages/patient/NutritionLog';
 import NutritionDashboard from '@/pages/patient/NutritionDashboard';
 import AppointmentsPage from '@/pages/patient/appointments';
@@ -50,6 +51,7 @@ export const patientRoutes = [
   { path: '/patient/meal-feedback', element: <MealQualityFeedback /> },
   { path: '/patient/lifestyle-streaks', element: <LifestyleStreaks /> },
   { path: '/patient/meditation', element: <MeditationImmersive /> },
+  { path: '/patient/custom-meditation', element: <CustomMeditation /> },
   { path: '/patient/nutrition', element: <NutritionDashboard /> },
   { path: '/patient/nutrition-log', element: <NutritionLog /> },
   { path: '/patient/appointments', element: <AppointmentsPage /> },
