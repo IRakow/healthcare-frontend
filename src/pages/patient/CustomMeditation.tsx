@@ -3,7 +3,6 @@ import { supabase } from '@/lib/supabase';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { RxSpinner } from '@/components/ui/spinner/RxSpinner';
 import { LayeredMeditationPlayer } from '@/components/meditation/LayeredMeditationPlayer';
 
 function matchMusicToTopic(topic: string, voice: string) {
@@ -129,7 +128,11 @@ export default function CustomMeditation() {
         <Button className="mt-4" onClick={generate} disabled={loading}>Generate Session</Button>
       </Card>
 
-      {loading && <RxSpinner />}
+      {loading && (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      )}
       {audioUrl && (
         <Card title="Your Session">
           {includeMusic ? (
