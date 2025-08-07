@@ -19,22 +19,23 @@ export default function MeditationPage() {
   const [includeMusic, setIncludeMusic] = useState(true);
   const [selectedTrack, setSelectedTrack] = useState('calm');
   const [musicReady, setMusicReady] = useState(false);
-  const [voiceReady, setVoiceReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [voiceReady, setVoiceReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [meditationText, setMeditationText] = useState<string>('');
   const [musicStarted, setMusicStarted] = useState(false);
 
   useEffect(() => {
-    // Simulate music loading when track changes
-    if (selectedTrack) {
-      setMusicReady(false);
-      const timer = setTimeout(() => {
-        setMusicReady(true);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
+    const audio = new Audio(musicTracks[selectedTrack]);
+    audio.loop = true;
+    audio.oncanplaythrough = () => setMusicReady(true);
+    audio.load();
+
+    return () => {
+      audio.pause();
+      audio.src = '';
+    };
   }, [selectedTrack]);
 
   async function generateMeditation() {
@@ -170,7 +171,17 @@ export default function MeditationPage() {
                   <p>Preparing music...</p>
                 </div>
               ) : (
-                <div className="text-green-600 text-sm">✓ Music ready</div>
+                <Button
+                  onClick={() => {
+                    const audio = new Audio(musicTracks[selectedTrack]);
+                    audio.loop = true;
+                    audio.play();
+                    setIsPlaying(true);
+                  }}
+                  className="w-full"
+                >
+                  {isPlaying ? 'Music Playing...' : 'Start Music'}
+                </Button>
               )}
             </div>
           )}
