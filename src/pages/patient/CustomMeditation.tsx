@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { RxSpinner } from '@/components/ui/spinner';
+import { RxSpinner } from '@/components/ui/spinner/RxSpinner';
 import { LayeredMeditationPlayer } from '@/components/meditation/LayeredMeditationPlayer';
 
 function matchMusicToTopic(topic: string, voice: string) {
