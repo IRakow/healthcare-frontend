@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "serve -s dist"
+    "start": "npx serve -s dist -l ${PORT:-8080} --single --no-clipboard"
   },
   "dependencies": {
     "@deepgram/sdk": "^4.11.1",

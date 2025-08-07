@@ -13,14 +13,11 @@ COPY . .
 # Build frontend
 RUN npm run build
 
-# ✅ Install serve globally AFTER build step
-RUN npm install -g serve
-
-# Clean up build dependencies to reduce image size
-RUN npm prune --production
+# ✅ Install serve globally AND locally to ensure it's available
+RUN npm install -g serve && npm install serve
 
 ENV NODE_ENV=production
 EXPOSE 8080
 
-# ✅ Start app using Cloud Run's assigned PORT with fallback
-CMD ["/bin/sh", "-c", "serve -s dist -l ${PORT:-8080} --single --no-clipboard"]
+# ✅ Use npx to ensure serve is found, with Cloud Run's PORT
+CMD ["sh", "-c", "npx serve -s dist -l ${PORT:-8080} --single --no-clipboard"]
