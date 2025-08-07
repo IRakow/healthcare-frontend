@@ -35,7 +35,7 @@ serve(async (req) => {
   return new Response(
     JSON.stringify({
       content: data?.candidates?.[0]?.content?.parts?.[0]?.text || '',
-      model: 'gemini-pro'
+      model: 'gemini-1.5-flash'
     }),
     {
       headers: { 'Content-Type': 'application/json' }

@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const geminiKey = Deno.env.get('PurityHealthGemini') || Deno.env.get('GEMINI_API_KEY');
+    const geminiKey = Deno.env.get('GEMINI_API_KEY');
     
     if (!geminiKey) {
       throw new Error('Gemini API key not configured');
@@ -91,7 +91,7 @@ serve(async (req) => {
     }
 
     // Call Gemini API for summary
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiKey}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

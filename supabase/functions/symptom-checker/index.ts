@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const geminiKey = Deno.env.get('PurityHealthGemini') || Deno.env.get('GEMINI_API_KEY');
+    const geminiKey = Deno.env.get('GEMINI_API_KEY');
     
     if (!geminiKey) {
       throw new Error('Gemini API key not configured');

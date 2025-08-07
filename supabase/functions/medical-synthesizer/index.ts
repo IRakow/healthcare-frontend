@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const geminiKey = Deno.env.get('PurityHealthGemini')!;
+    const geminiKey = Deno.env.get('GEMINI_API_KEY')!;
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const client = createClient(supabaseUrl, serviceRoleKey);
@@ -37,7 +37,7 @@ DO NOT include any empathetic or fluffy language. Be professional, clear, and in
 Patient input: "${query}"
 `;
 
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiKey}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
@@ -58,7 +58,7 @@ Patient input: "${query}"
         patient_id: userId,
         type: 'ai',
         label: 'Medical Info Synthesis',
-        data: { input: query, output: reply, model: 'gemini-pro' },
+        data: { input: query, output: reply, model: 'gemini-1.5-flash' },
       });
     }
 

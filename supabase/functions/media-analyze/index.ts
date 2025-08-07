@@ -1,7 +1,7 @@
 import { serve } from 'https://deno.land/std/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
-const geminiKey = Deno.env.get('PurityHealthGemini')!;
+const geminiKey = Deno.env.get('GEMINI_API_KEY')!;
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL')!,
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -31,7 +31,7 @@ Do not diagnose. Only describe what you observe in medical terms.
 Suggest if medical consultation might be beneficial.
 `;
 
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${geminiKey}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -62,7 +62,7 @@ Suggest if medical consultation might be beneficial.
         await supabase.from('ai_logs').insert({
           user_id: user.id,
           role: 'patient',
-          model: 'Gemini Vision',
+          model: 'Gemini 1.5 Flash',
           action: 'Analyze Medical Image',
           input: `${type} analysis request`,
           output: summary,

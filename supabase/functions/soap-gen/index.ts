@@ -1,6 +1,6 @@
 import { serve } from 'https://deno.land/std/http/server.ts';
 
-const geminiKey = Deno.env.get('PurityHealthGemini')!;
+const geminiKey = Deno.env.get('GEMINI_API_KEY')!;
 
 serve(async (req) => {
   const { transcript } = await req.json();
@@ -20,7 +20,7 @@ Transcript:
 "${transcript}"
 `;
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiKey}`, {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
