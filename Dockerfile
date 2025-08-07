@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
@@ -16,8 +16,11 @@ RUN npm run build
 # ✅ Install serve globally AFTER build step
 RUN npm install -g serve
 
+# Clean up build dependencies to reduce image size
+RUN npm prune --production
+
 ENV NODE_ENV=production
 EXPOSE 8080
 
-# ✅ Start app using Cloud Run's assigned PORT
-CMD ["/bin/sh", "-c", "serve -s dist -l $PORT --single"]
+# ✅ Start app using Cloud Run's assigned PORT with fallback
+CMD ["/bin/sh", "-c", "serve -s dist -l ${PORT:-8080} --single --no-clipboard"]
