@@ -110,7 +110,14 @@ DO NOT write instructions — generate what the voice will say aloud.
     }
 
     const audioBuffer = await elevenRes.arrayBuffer();
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+    const uint8Array = new Uint8Array(audioBuffer);
+    let binary = '';
+    const chunkSize = 8192; // Process in chunks to avoid stack overflow
+    for (let i = 0; i < uint8Array.length; i += chunkSize) {
+      const chunk = uint8Array.slice(i, i + chunkSize);
+      binary += String.fromCharCode.apply(null, Array.from(chunk));
+    }
+    const base64 = btoa(binary);
     const url = `data:audio/mpeg;base64,${base64}`;
 
   // Log AI interaction
