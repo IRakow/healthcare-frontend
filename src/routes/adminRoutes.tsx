@@ -24,6 +24,7 @@ import AdminAiCommandCenter from '@/pages/admin/AdminAiCommandCenter';
 import AdminInvoicesPage from '@/pages/admin/AdminInvoicesPage';
 import AdminSecurityPanel from '@/pages/admin/AdminSecurityPanel';
 import AdminCompliancePanel from '@/pages/admin/AdminCompliancePanel';
+import TestAPIs from '@/pages/admin/test-apis';
 
 
 export const adminRoutes = [
@@ -51,5 +52,6 @@ export const adminRoutes = [
   { path: '/admin/calendar', element: <CalendarView /> },
   { path: '/admin/chart-logs', element: <ChartLogsPage /> },
   { path: '/admin/chart-export', element: <ChartExportPage /> },
-  { path: '/admin/chart-dashboard', element: <ChartDashboardPage /> }
+  { path: '/admin/chart-dashboard', element: <ChartDashboardPage /> },
+  { path: '/admin/test-apis', element: <TestAPIs /> }
 ];
