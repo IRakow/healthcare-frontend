@@ -5,11 +5,23 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { fetchFromGemini } from '@/lib/ai/gemini';
 import { speak } from '@/lib/voice/RachelTTSQueue';
+import { supabase } from '@/lib/supabase';
 // import { SparklesCore } from '@/components/ui/visuals/SparklesCore'; // TODO: Create this component
 
 const voices = {
   Female: ['Bella', 'Arabella', 'Ana-Rita', 'Amelia'],
   Male: ['Adam', 'Archimedes', 'Michael']
+};
+
+// Map voice names to ElevenLabs voice IDs
+const voiceIdMap: Record<string, string> = {
+  'Bella': 'EXAVITQu4vr4xnSDxMaL',
+  'Adam': '21m00Tcm4TlvDq8ikWAM',
+  'Arabella': 'XB0fDUnXU5powFXDhCwa',
+  'Ana-Rita': 'LcfcDJNUP1GQjkzn1xUU',
+  'Amelia': 'XrExE9yKIg1WjnnlVkGX',
+  'Archimedes': 'SOYHLrjzK2X1ezoPC6cr',
+  'Michael': 'flq6f7yk4E4fJM5XTYuZ'
 };
 
 const moods = ['Calm', 'Focus', 'Sleep', 'Gratitude'];
@@ -58,7 +70,35 @@ export default function MeditationImmersive() {
       }
       setSession(res.text);
       setPlaying(true);
-      if (!silentMode) speak(res.text, voice);
+      
+      // Use ElevenLabs for speech if not in silent mode
+      if (!silentMode) {
+        try {
+          // Call ElevenLabs to generate audio
+          const voiceId = voiceIdMap[voice] || '21m00Tcm4TlvDq8ikWAM'; // Use selected voice or default
+          const { data, error } = await supabase.functions.invoke('eleven-speak', {
+            body: { 
+              text: res.text,
+              voice: voiceId
+            }
+          });
+          
+          if (error) {
+            console.error('ElevenLabs error:', error);
+            // Fallback to browser TTS
+            speak(res.text, voice);
+          } else if (data?.audio_url) {
+            // Play the ElevenLabs audio
+            const audio = new Audio(data.audio_url);
+            audio.volume = voiceVolume;
+            audio.play();
+          }
+        } catch (err) {
+          console.error('Error with ElevenLabs:', err);
+          // Fallback to browser TTS
+          speak(res.text, voice);
+        }
+      }
     }
   }
 
