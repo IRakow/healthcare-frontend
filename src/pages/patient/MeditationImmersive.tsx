@@ -207,6 +207,12 @@ export default function MeditationImmersive() {
         autoPlay
         loop
         className="hidden"
+        onError={(e) => {
+          console.log(`Audio file not found for mood: ${mood}, using default meditation-bg.mp3`);
+          if (musicRef.current) {
+            musicRef.current.src = '/audio/meditation-bg.mp3';
+          }
+        }}
       />
     </div>
   );

@@ -1,166 +1,145 @@
-import { useState, useRef, useEffect } from 'react';
+// File: src/pages/patient/Meditation.tsx
+
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { fetchFromGemini } from '@/lib/ai/gemini';
+import PatientLayoutSimple from '@/components/layout/PatientLayoutSimple';
+import { Bot, Music, Play, Volume2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { useUser } from '@/hooks/useUser';
-import { speak } from '@/lib/voice/RachelTTSQueue';
 
-const voices = {
-  Female: ['Bella', 'Arabella', 'Ana-Rita', 'Amelia'],
-  Male: ['Adam', 'Archimedes', 'Michael']
-};
-
-const moods = ['Calm', 'Focus', 'Sleep', 'Gratitude'];
-const durations = [5, 10, 15, 20];
-
-const moodBackgrounds: Record<string, string> = {
-  Calm: '/assets/meditation-mountains.jpg',
-  Focus: '/assets/meditation-forest.jpg',
-  Sleep: '/assets/meditation-ocean.jpg',
-  Gratitude: '/assets/meditation-forest.jpg'
-};
-
-export default function Meditation() {
+export default function MeditationPage() {
+  const [topic, setTopic] = useState('relaxation and inner calm');
   const [voice, setVoice] = useState('Bella');
-  const [mood, setMood] = useState('Calm');
-  const [duration, setDuration] = useState(10);
-  const [session, setSession] = useState('');
-  const [playing, setPlaying] = useState(false);
-  const [musicVolume, setMusicVolume] = useState(0.5);
-  const [silentMode, setSilentMode] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const { user } = useUser();
+  const [includeMusic, setIncludeMusic] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [meditationText, setMeditationText] = useState<string>('');
 
-  useEffect(() => {
-    const saved = localStorage.getItem('silent_mode');
-    setSilentMode(saved === 'true');
-  }, []);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = musicVolume;
-    }
-  }, [musicVolume]);
-
-  async function generateSession() {
-    const prompt = `Create a guided ${duration}-minute meditation for ${mood} using ${voice}'s style. Keep it peaceful, immersive, and non-repetitive.`;
-    const res = await fetchFromGemini({ prompt });
-    if (res?.text) {
-      setSession(res.text);
-      setPlaying(true);
-
-      await supabase.from('meditation_sessions').insert({
-        user_id: user?.id,
-        voice,
-        mood,
-        duration
+  async function generateMeditation() {
+    setIsLoading(true);
+    setAudioUrl(null);
+    setMeditationText('');
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-meditation-audio', {
+        body: { 
+          topic, 
+          voice, 
+          includeMusic, 
+          model: 'gemini',
+          duration: 10
+        }
       });
 
-      if (!silentMode) speak(res.text, voice);
+      if (error) throw error;
+
+      if (data) {
+        setAudioUrl(data.audio_url);
+        setMeditationText(data.text);
+        
+        // If music is requested, play background music alongside
+        if (includeMusic && data.audio_url) {
+          const bgMusic = new Audio('/audio/meditation-bg.mp3');
+          bgMusic.volume = 0.15; // Very soft background
+          bgMusic.loop = true;
+          
+          const voiceAudio = new Audio(data.audio_url);
+          voiceAudio.volume = 1.0;
+          
+          // Start both
+          voiceAudio.play();
+          bgMusic.play();
+          
+          // Stop music when voice ends
+          voiceAudio.addEventListener('ended', () => {
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Failed to generate meditation:', e);
+      alert('Failed to generate meditation. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
-    <div
-      className="min-h-screen text-white overflow-hidden bg-black"
-      style={{
-        backgroundImage: `url(${moodBackgrounds[mood]})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed'
-      }}
-    >
-      <audio
-        ref={audioRef}
-        src={`/audio/${mood.toLowerCase()}.mp3`}
-        autoPlay
-        loop
-        className="hidden"
-      />
+    <PatientLayoutSimple>
+      <motion.div
+        className="max-w-2xl mx-auto p-6 space-y-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="text-3xl font-bold text-center text-emerald-800">🧘‍♀️ Guided Meditation</h1>
+        <p className="text-center text-sm text-gray-500">
+          Choose a topic and voice to generate your AI-guided session.
+        </p>
 
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-6 pb-28 text-center backdrop-blur-[2px]">
-        <h1 className="text-4xl font-bold mb-4 drop-shadow-md">🧘‍♀️ Your Sanctuary</h1>
-        <p className="text-sm text-blue-200 mb-6">Breathe in. Let's create your personalized meditation session.</p>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Topic</label>
+            <input
+              type="text"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              className="w-full p-2 border rounded-lg mt-1"
+              placeholder="e.g. deep sleep, anxiety relief"
+            />
+          </div>
 
-        <div className="grid gap-4 sm:grid-cols-3 text-sm mb-6 w-full max-w-2xl">
-          <Card className="bg-white/10">
-            <CardContent className="p-4">
-              <label className="block mb-2">Voice</label>
-              <select
-                className="w-full p-2 bg-black/20 text-white rounded-md"
-                value={voice}
-                onChange={(e) => setVoice(e.target.value)}
-              >
-                {Object.entries(voices).map(([gender, list]) => (
-                  <optgroup key={gender} label={gender}>
-                    {list.map((v) => (
-                      <option key={v} value={v}>{v}</option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-            </CardContent>
-          </Card>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Voice</label>
+            <select
+              value={voice}
+              onChange={(e) => setVoice(e.target.value)}
+              className="w-full p-2 border rounded-lg mt-1"
+            >
+              <option value="Bella">Bella (Soothing Female)</option>
+              <option value="Adam">Adam (Calm Male)</option>
+              <option value="Arabella">Arabella (Ethereal Female)</option>
+              <option value="Ana-Rita">Ana-Rita (Portuguese Calm)</option>
+              <option value="Michael">Michael (Urban UK)</option>
+            </select>
+          </div>
 
-          <Card className="bg-white/10">
-            <CardContent className="p-4">
-              <label className="block mb-2">Mood</label>
-              <select
-                className="w-full p-2 bg-black/20 text-white rounded-md"
-                value={mood}
-                onChange={(e) => setMood(e.target.value)}
-              >
-                {moods.map((m) => (
-                  <option key={m}>{m}</option>
-                ))}
-              </select>
-            </CardContent>
-          </Card>
+          <label className="flex items-center gap-2 mt-2">
+            <input
+              type="checkbox"
+              checked={includeMusic}
+              onChange={(e) => setIncludeMusic(e.target.checked)}
+            />
+            <Music className="w-4 h-4 text-blue-500" />
+            Include ambient background music
+          </label>
 
-          <Card className="bg-white/10">
-            <CardContent className="p-4">
-              <label className="block mb-2">Duration</label>
-              <select
-                className="w-full p-2 bg-black/20 text-white rounded-md"
-                value={duration}
-                onChange={(e) => setDuration(Number(e.target.value))}
-              >
-                {durations.map((d) => (
-                  <option key={d} value={d}>{d} min</option>
-                ))}
-              </select>
-            </CardContent>
-          </Card>
+          <Button className="w-full mt-4" onClick={generateMeditation} disabled={isLoading}>
+            {isLoading ? 'Generating...' : 'Generate Meditation'}
+          </Button>
         </div>
 
-        <div className="flex flex-col items-center space-y-4 mb-6">
-          <label className="text-xs text-blue-200">🎵 Music Volume</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={musicVolume}
-            onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
-            className="w-48"
-          />
-        </div>
-
-        <Button
-          onClick={generateSession}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg px-6 py-3 rounded-full shadow-xl"
-        >
-          {playing ? 'Restart Meditation' : 'Begin Meditation'}
-        </Button>
-
-        {session && (
-          <div className="mt-10 max-w-2xl text-left bg-white/10 p-6 rounded-lg backdrop-blur-md shadow-lg text-sm leading-relaxed text-blue-100 whitespace-pre-wrap">
-            {session}
+        {audioUrl && (
+          <div className="bg-white rounded-xl shadow p-4 mt-6">
+            <h3 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <Bot className="w-4 h-4" />
+              AI Meditation Player
+            </h3>
+            <audio src={audioUrl} controls className="w-full" autoPlay />
+            <p className="text-xs text-gray-500 mt-1">Sit back and relax while your personalized session plays.</p>
+            
+            {meditationText && (
+              <details className="mt-4">
+                <summary className="text-sm font-medium text-gray-600 cursor-pointer">View Meditation Script</summary>
+                <div className="mt-2 p-3 bg-gray-50 rounded text-sm text-gray-700 max-h-48 overflow-y-auto">
+                  {meditationText}
+                </div>
+              </details>
+            )}
           </div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </PatientLayoutSimple>
   );
 }

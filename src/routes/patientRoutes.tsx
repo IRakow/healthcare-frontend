@@ -39,6 +39,7 @@ import PatientTrends from '@/pages/patient/PatientTrends';
 import PatientHealthDashboard from '@/pages/patient/PatientHealthDashboard';
 import LifestyleAISummary from '@/pages/patient/LifestyleAISummary';
 import HealthHub from '@/pages/patient/HealthHub';
+import Meditation from '@/pages/patient/Meditation';
 
 export const patientRoutes = [
   { path: '/patient', element: <PatientDashboardIndex /> },
@@ -51,6 +52,7 @@ export const patientRoutes = [
   { path: '/patient/meal-feedback', element: <MealQualityFeedback /> },
   { path: '/patient/lifestyle-streaks', element: <LifestyleStreaks /> },
   { path: '/patient/meditation', element: <MeditationImmersive /> },
+  { path: '/patient/meditation-generator', element: <Meditation /> },
   { path: '/patient/custom-meditation', element: <CustomMeditation /> },
   { path: '/patient/nutrition', element: <NutritionDashboard /> },
   { path: '/patient/nutrition-log', element: <NutritionLog /> },

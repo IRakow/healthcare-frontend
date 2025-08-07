@@ -1,43 +1,73 @@
 // File: src/hooks/useAIStreaming.ts
-
 import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { getDeepgramTranscript } from '@/lib/deepgram';
+import { playTextToSpeech } from '@/lib/elevenlabs';
+import { useUserRole } from '@/hooks/useUserRole';
 
 export function useAIStreaming() {
   const [response, setResponse] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const role = useUserRole();
 
-  const streamAI = async (input: string) => {
-    setLoading(true);
-    setError(null);
+  const streamPrompt = async ({
+    input,
+    voice = false,
+  }: {
+    input: string;
+    voice?: boolean;
+  }) => {
+    setIsLoading(true);
     setResponse('');
 
     try {
-      const res = await fetch('/api/ai', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input })
+      // Use Supabase Edge Functions based on role
+      const useGemini = role === 'patient' || role === 'provider';
+      const endpoint = useGemini ? 'gemini-assistant' : 'ai-voice-navigator';
+      
+      const { data, error } = await supabase.functions.invoke(endpoint, {
+        body: { 
+          prompt: input,
+          query: input 
+        }
       });
 
-      if (!res.ok) throw new Error('AI request failed');
-
-      const reader = res.body?.getReader();
-      const decoder = new TextDecoder('utf-8');
-      let fullText = '';
-
-      while (reader) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value);
-        fullText += chunk;
-        setResponse(prev => prev + chunk);
+      if (error) {
+        throw new Error(error.message);
       }
-    } catch (err: any) {
-      setError(err.message || 'Unexpected error');
+
+      const fullResponse = data?.text || data?.response || 'I understand your request.';
+      
+      // Simulate streaming by adding text progressively
+      const words = fullResponse.split(' ');
+      let currentText = '';
+      
+      for (const word of words) {
+        currentText += (currentText ? ' ' : '') + word;
+        setResponse(currentText);
+        await new Promise(resolve => setTimeout(resolve, 30)); // Small delay for streaming effect
+      }
+
+      // Save conversation to Supabase
+      await supabase.from('ai_conversations').insert({
+        role,
+        input,
+        response: fullResponse,
+      });
+
+      if (voice) {
+        await playTextToSpeech(fullResponse);
+      }
+    } catch (err) {
+      console.error(err);
+      setResponse('⚠️ Something went wrong.');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  return { response, streamAI, loading, error };
+  // Keep backward compatibility
+  const streamAI = (input: string) => streamPrompt({ input, voice: true });
+
+  return { response, isLoading, streamPrompt, streamAI };
 }
