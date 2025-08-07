@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Users, Brain, FileText, Server, AlertTriangle, Download, RefreshCw, Mail } from 'lucide-react'
+import { Users, Brain, FileText, Server, AlertTriangle, Download, RefreshCw, Mail, TestTube2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
@@ -67,6 +67,7 @@ export default function AdminDashboard() {
         {metricCard('Errors Today', '3', <AlertTriangle className="w-6 h-6 text-red-500" />, '', () => navigate('/admin/audit-log'))}
         {metricCard('System Uptime', '99.97%', <Server className="w-6 h-6 text-green-600" />, '')}
         {metricCard('Open Broadcasts', '2', <Mail className="w-6 h-6 text-yellow-500" />, '', () => navigate('/admin/broadcast'))}
+        {metricCard('Test APIs', 'Check', <TestTube2 className="w-6 h-6 text-indigo-600" />, '', () => navigate('/admin/test-apis'))}
       </div>
 
       <Card className="mt-6 sm:mt-8 lg:mt-10 p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg">
