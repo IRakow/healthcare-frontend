@@ -3,10 +3,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
 serve(async (req) => {
-  const { text, voice = 'Rachel', model_id = 'eleven_monolingual_v1' } = await req.json();
+  const { text, query, voice = '21m00Tcm4TlvDq8ikWAM', model_id = 'eleven_monolingual_v1' } = await req.json();
+  const textToSpeak = text || query;
 
-  const apiKey = Deno.env.get('ELEVEN_LABS_API_KEY');
-  if (!apiKey || !text) {
+  const apiKey = Deno.env.get('ELEVENLABS_API_KEY');
+  if (!apiKey || !textToSpeak) {
     return new Response(JSON.stringify({ error: 'Missing API key or text input' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' }
@@ -21,7 +22,7 @@ serve(async (req) => {
       'Accept': 'audio/mpeg'
     },
     body: JSON.stringify({
-      text,
+      text: textToSpeak,
       model_id,
       voice_settings: {
         stability: 0.4,
