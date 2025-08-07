@@ -52,9 +52,11 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       // Optional: check subdomain when no user is logged in
       const host = window?.location.hostname;
       const subdomain = host?.split('.')[0];
-      const isLocal = host === 'localhost';
+      const isLocal = host === 'localhost' || host === '127.0.0.1';
+      const isCloudRun = host?.includes('.run.app');
+      const isPreview = host?.includes('vercel.app');
 
-      if (subdomain && !isLocal && subdomain !== 'www') {
+      if (subdomain && !isLocal && !isCloudRun && !isPreview && subdomain !== 'www') {
         loadBrandingBySubdomain(subdomain);
       }
     }

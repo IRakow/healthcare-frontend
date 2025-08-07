@@ -50,16 +50,17 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const host = window?.location.hostname;
     const isPreview = host?.includes('vercel.app') || host === 'localhost' || host === '127.0.0.1';
+    const isCloudRun = host?.includes('.run.app');
 
     if (employerId) {
       loadBrandingByEmployerId(employerId);
-    } else if (!isPreview && host?.includes('.')) {
+    } else if (!isPreview && !isCloudRun && host?.includes('.')) {
       const subdomain = host.split('.')[0];
       if (subdomain && subdomain !== 'www') {
         loadBrandingBySubdomain(subdomain);
       }
     } else {
-      console.log('[Branding] Skipping subdomain check on preview/dev environment:', host);
+      console.log('[Branding] Skipping subdomain check on preview/dev/CloudRun environment:', host);
     }
   }, [employerId]);
 
